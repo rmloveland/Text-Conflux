@@ -1,0 +1,443 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use autodie;
+use feature qw< say state >;
+use Getopt::Long;
+
+my ($stylesheet, $toc, $wrap);
+GetOptions(
+	   "stylesheet:s" => \$stylesheet,
+	   "toc" => \$toc,
+	   "wrap" => \$wrap,
+);
+
+my @output;
+my $toc_marker = "<!-- TOC -->";
+my @toc_lines;
+my $toc_min = 0;
+my $toc_max = 10;
+my $toc_pat = "3.14159";
+
+if ($wrap) {
+  push @output, "<html><head><link href=\"$stylesheet\" rel=\"stylesheet\"></head><body>\n";
+}
+
+LINE: while (<>) {
+  state $code = 0;
+  state $info = 0;
+  state $tip = 0;
+  state $note = 0;
+  state $warning = 0;
+  state $htmlcomment = 0;
+  state $table = 0;
+
+  next LINE if /{panel.*/;
+  if (/{toc.*/) {
+    push @output, $_;
+    next LINE;
+  }
+
+  ## External links
+  s{\[([\.\?a-zA-Z0-9 \-]+)\|([_#a-zA-Z/\-:0-9\.\?= &]+)\]}
+   {<a href="$2">$1</a>}gis;
+
+  ## Regular wiki links with no space key, e.g. `[Mobile Ad Call Reference]'.
+  s{\[([&a-zA-Z\ ]+)\]}
+   {qq[<a href="] . eunicize($1) . qq[">$1</a>]}gise;
+
+  ## Links to headers on the same page
+  s{\[#([a-zA-Z:&#0-9\. ]+)\]}
+   {<a href="#$1">$1</a>}gis;
+
+  ## Images
+  s{^\!([A-Za-z0-9\-| \.]+.(png|jpg)).*\!}
+   {<br /><br /><img src="../img/$1"/><br /><br />}gis;
+
+  ## Lists of links, optionally followed by descriptions
+  s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
+
+  ## Lists of non-link items
+  s/^\* ?(.*)$/\<li>$1<\/li>/g;
+
+  ## Bold elements
+  s/\*([A-Za-z0-9\- :>\.\"]+)\*/<strong>$1<\/strong>/g;
+
+  ## Italic elements
+  s/ \_([A-Za-z0-9\- :>\.\"]+)\_([ \.])/ <em>$1<\/em>$2/g;
+
+  ## Tables
+  s{^\|\|}{<tr><th><strong>}gis; # Beginning of table
+  s{\|\| ?\n}{</strong></th></tr>}gis;
+  s{\|\|}{<th><strong>}gis; # Middle of columns
+  s{\| ?\n}{</td></tr>}gis;
+  s{\|}{<td>}gis;
+
+  ## Headers
+  if (/h1. (.*)$/) {
+    my $new = qq[<h1><a name="$1">$1</a></h1>];
+    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+    push @toc_lines, [1, $toc_line];
+    s/h1. (.*)$/$new/;
+  }
+
+  if (/h2. (.*)$/) {
+    my $new = qq[<h2><a name="$1">$1</a></h2>];
+    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+    push @toc_lines, [2, $toc_line];
+    s/h2. (.*)$/$new/;
+  }
+
+  if (/h3. (.*)$/) {
+    my $new = qq[<h3><a name="$1">$1</a></h3><p>];
+    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+    push @toc_lines, [3, $toc_line];
+    s/h3. (.*)$/$new/;
+  }
+
+  if (/h4. (.*)$/) {
+    my $new = qq[<h4><a name="$1">$1</a></h4><p>];
+    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+    push @toc_lines, [4, $toc_line];
+    s/h4. (.*)$/$new/;
+  }
+
+  if (/h5. (.*)$/) {
+    my $new = qq[<h5><a name="$1">$1</a></h5><p>];
+    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+    push @toc_lines, [5, $toc_line];
+    s/h5. (.*)$/$new/;
+  }
+
+  if (/h6. (.*)$/) {
+    my $new = qq[<h6><a name="$1">$1</a></h6><p>];
+    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+    push @toc_lines, [6, $toc_line];
+    s/h6. (.*)$/$new/;
+  }
+
+  ## Monospace and code
+  s/{{([\\!\@\$0-9\+A-Z\.,\-\/>a-z_=:"\(\) \<\>\n]+)}}/<code>$1<\/code>/g;
+  s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s; # Single line code blocks
+
+  ## Multiline code blocks
+  $code++ if /\{code\}/;
+
+  if ($code % 2 != 0) { ## Inside code block
+    # Escape embedded XML tags first, if any.
+    s/</&lt;/g;
+    s/>/&gt;/g;
+    s{\n}{}g;
+    s/\{code\}/<pre>/;
+  }
+  elsif ($code % 2 == 0) { ## Close code block
+    s/\{code\}/<\/pre>/;
+  }
+
+  ## Div-ify Confluence macros
+  $info++ if /{info}/;
+  if ($info % 2 != 0) {
+    s/{info}/<div id="info"><p>/;
+  }
+  elsif ($info % 2 == 0) {
+    s/{info}/<\/p><\/div>/;
+  }
+
+  $note++ if /{note}/;
+  if ($note % 2 != 0) {
+    s/{note}/<div id="note"><p>/;
+  }
+  elsif ($note % 2 == 0) {
+    s/{note}/<\/p><\/div>/;
+  }
+
+  $tip++ if /{tip}/;
+  if ($tip % 2 != 0) {
+    s/{tip}/<div id="tip"><p>/;
+  }
+  elsif ($tip % 2 == 0) {
+    s/{tip}/<\/p><\/div>/;
+  }
+
+  $warning++ if /{warning}/;
+  if ($warning % 2 != 0) {
+    s/{warning}/<div id="warning"><p>/;
+  }
+  elsif ($warning % 2 == 0) {
+    s/{warning}/<\/p><\/div>/;
+  }
+
+  $htmlcomment++ if /{htmlcomment}/;
+  if ($htmlcomment % 2 != 0) {
+    s/{htmlcomment}/<!--/;
+  }
+  elsif ($htmlcomment % 2 == 0) {
+    s/{htmlcomment}/-->/;
+  }
+
+  $table++ if /{table-plus}/;
+  if ($table % 2 != 0) {
+    s/{table-plus}/<br \/><br \/><table>/;
+  }
+  elsif ($table % 2 == 0) {
+    s/{table-plus}/<\/table>/;
+  }
+
+  s/{indent}//g;
+
+  push @output, $_;
+}
+
+if ($wrap) {
+  push @output, "</body></html>";
+}
+
+for my $line (@output) {
+  if ($line =~ /{toc/) {
+    my @result = parse_toc($line);
+    my $toc_min = $result[0];
+    my $toc_max = $result[1];
+    my $toc_pat = $result[2];
+    $line = replace_toc_line($line, $toc_min, $toc_max, $toc_pat);
+  }
+  say $line;
+}
+
+sub eunicize {
+  ## String -> String
+  my $title = shift;
+  $title =~ s/ /-/g;
+  $title =~ s/-{2,}/-/g;
+  $title =~ s/[^-\w]//gi;
+  $title .= '.html';
+  return lc $title;
+}
+
+sub replace_toc_line {
+  ## String, Int, Int, Regex -> String
+  my ($line, $min, $max, $pat) = @_;
+  my $result = qq{<div id="toc"><strong>On This Page</strong>};
+
+  for my $toc_line (@toc_lines) {
+    my $line_level = $toc_line->[0];
+    my $line_text = $toc_line->[1];
+    if ($toc && ($min <= $line_level && $line_level <= $max) && $line_text !~ $pat) {
+      $result .= "$line_text\n";
+    }
+  }
+  $result .= qq{</div>};
+  $line = $result;
+  return $line;
+}
+
+sub parse_toc {
+  ## String -> Array
+  ## {toc:minlevel=3|maxlevel=4|Exclude=.*}
+  ## -> ($min, $max, $pat)
+  my $s = shift;
+  my @result = ($toc_min, $toc_max, $toc_pat);
+  if ($s =~ /\{toc:minlevel=(\d+)\|maxlevel=(\d+)\|exclude=(.*)\}/) {
+    @result = ($1, $2, $3);
+  }
+  elsif ($s =~ /\{toc:minlevel=(\d)\|maxlevel=(\d).*/) {
+    @result = ($1, $2, "3.14159");
+  }
+  elsif ($s =~ /\{toc:minlevel=(\d).*/) {
+    @result = ($1, 10, "3.14159");
+  }
+  else {
+    return @result;
+  }
+
+  return @result;
+}
+
+__END__
+
+=head1 NAME
+
+confluence2html - convert text using a subset of Confluence markup to HTML
+
+=head1 SYNOPSIS
+
+  confluence2html < wiki-file.txt > wiki-file.html
+
+=head1 DESCRIPTION
+
+Confluence2html is a command line filter that takes as its input a
+stream of text marked up with a subset of Confluence markup and
+produces as its output a stream of HTML text.
+
+The supported subset of Confluence markup is defined as follows:
+
+=over
+
+=item headers
+
+The h1-h6 header format is supported, as in `h2. Introduction'. No
+other formatting inside the header text is supported. For example,
+`h2. Introduction to {{confluence2html}}' will not work.
+
+=item links
+
+Standard links are supported, e.g., `[Link to other page]'. This will
+be rewritten to link to a local file named
+`link-to-other-page.html'. If no such file exists, this will be a
+broken link until the file is created. The easiest way to do this is
+to have a file of Confluence markup named `link-to-other-page.txt',
+which is generated in the same directory using a tool such as C<make>
+(or a shell script, or even another Perl script!).
+
+External links are supported as expected, e.g.,
+
+    [Perl home page|http://www.perl.org].
+
+However, Confluence space keys are not allowed. This is in part
+because the concept of ``spaces'' has no meaning in terms of processing a
+stream of text. Such a feature could be added by a more sophisticated
+application built by using/modifying this script.
+
+Finally, links do not automatically have line breaks inserted
+afterward. This is to allow you to embed these links in regular
+text. If you want to use them as functional subheaders or miniature
+tables of contents (without using the `toc' macro), put them in a
+bulleted list.
+
+=item macros
+
+A few macros are supported, but only as single tags on their
+own line. For example,
+
+    {info}
+    Have some informative text!
+    {info}.
+
+No arguments of the form `{info:title=FOO}' are supported.
+
+Supported macros include:
+
+=over
+
+=item code
+
+=item info
+
+=item tip
+
+=item note
+
+=item warning
+
+=item htmlcomment
+
+=item table-plus
+
+=item toc
+
+=back
+
+Note that these macros generate C<div> tags with class names that
+correspond to the macro name for easy CSS styling. For example:
+
+    <div id="info"><p>
+    These instructions assume that you have already installed and
+    correctly configured... For more information, see ...
+    </p></div>
+
+See below for more information about the `toc' macro.
+
+=item table of contents macro
+
+Prints a table of contents comprised of selected headers on the page,
+inside a `div' with a `toc' id, e.g. `<div id =``toc''>'. A subset of
+the arguments to the `toc' macro are supported: `minlevel',
+`maxlevel', and `exclude' -- in that order. In other words, you must
+use the `toc' macro in one of the following ways:
+
+=over
+
+=item `{toc}'
+
+Prints a table of contents using all headers on the page.
+
+=item `{toc:minlevel=$N|maxlevel=$M|exclude=$REGEX}'
+
+Where C<$N> and C<$M> are integers between 1 and 6, and C<$REGEX> is a
+perl regular expression -- note that the regular expression is not
+surrounded by quotes. This prints a table of contents with a minimum
+header size of C<$N> and a maximum header size of C<$M>, with any
+headers matching C<$REGEX> being excluded.
+
+=item `{toc:minlevel=$N|maxlevel=$M}'
+
+Where C<$N> and C<$M> are integers between 1 and 6. This prints a
+table of contents with a minimum header size of C<$N> and a maximum
+header size of C<$M>.
+
+=item `{toc:minlevel=$N}'
+
+Where C<$N> is an integer between 1 and 6. This prints a
+table of contents with a minimum header size of C<$N>.
+
+=back
+
+=item lists
+
+Only unordered lists are supported at this time. This should be fixed
+in the future.
+
+Furthermore, no bold items can be used as list elements; the following
+will not work:
+
+    `* *First item*...'
+
+=item line breaks
+
+The line breaks that appear in the HTML output are those that appear
+in the text file. There is no support for `\\' (Confluence syntax for
+a forced line break).
+
+=item tables
+
+Tables are fully supported. The only requirement is that you must wrap
+the table itself in the `{table-plus}' macro. (This decision is a
+compromise based on the fact that it's a real Confluence macro
+available from a third-party developer.)
+
+=back
+
+=head1 COMMAND LINE ARGUMENTS
+
+=over
+
+=item --stylesheet, -s
+
+The location of the CSS stylesheet, e.g.,
+
+    ./confluence2html --stylesheet=bootstrap.css
+
+=item --toc
+
+Whether to process the table of contents macro.
+
+=item --wrap
+
+Whether to wrap the body of the resulting HTML in `html', `head',
+and `body' tags. This includes a link to the stylesheet specified by
+the `--stylesheet' option, so it's meaningless to specify a stylesheet
+unless you use this argument.
+
+=back
+
+=head1 BUGS
+
+Many bugs are lurking in this code; it's a total hack. On the roadmap:
+tests, refactoring, and perhaps even real parsing. Please open a
+Github issue to report a bug or request a feature:
+
+L<http://github.com/rmloveland/confluence2html>
+
+=head1 AUTHOR
+
+Rich Loveland, L<r@rmloveland.com>
