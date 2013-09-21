@@ -6,12 +6,18 @@ use autodie;
 use feature qw< say state >;
 use Getopt::Long;
 
+#--------------------------------------------------------------------
+# Option parsing.
+
 my ($stylesheet, $toc, $wrap);
 GetOptions(
 	   "stylesheet:s" => \$stylesheet,
 	   "toc" => \$toc,
 	   "wrap" => \$wrap,
 );
+
+#--------------------------------------------------------------------
+# Variables.
 
 my @output;
 my $toc_marker = "<!-- TOC -->";
@@ -20,8 +26,19 @@ my $toc_min = 0;
 my $toc_max = 10;
 my $toc_pat = "3.14159";
 
+my $wiki_link_pat = "&|/\-:. ";
+my $header_link_pat = $wiki_link_pat . "#";
+
+my $external_link_text_pat = "\\.\\?\\- ";
+my $external_link_target_pat = $external_link_text_pat . "#_/:=&";
+
+my $image_pat = "\\-|\\. ";
+
+my $bold_pat = qq{\\- :>\\.\\"};
+my $italic_pat = $bold_pat;
+
 if ($wrap) {
-  push @output, "<html><head><link href=\"$stylesheet\" rel=\"stylesheet\"></head><body>\n";
+  push @output, qq{<html><head><link href="$stylesheet" rel="stylesheet"></head><body>\n};
 }
 
 LINE: while (<>) {
@@ -32,6 +49,7 @@ LINE: while (<>) {
   state $warning = 0;
   state $htmlcomment = 0;
   state $table = 0;
+  state $para = 0;
 
   next LINE if /{panel.*/;
   if (/{toc.*/) {
@@ -39,21 +57,31 @@ LINE: while (<>) {
     next LINE;
   }
 
+  ## AppNexus-specific wiki link processing
+  s{\[api:([[:alnum:]$wiki_link_pat]+)\]}
+   {<a href="https:\/\/wiki.appnexus.com\/display\/api\/$1">$1</a>}gis;
+
+  s{\[console:([[:alnum:]$wiki_link_pat]+)\]}
+   {<a href="https:\/\/wiki.appnexus.com\/display\/console\/$1">$1</a>}gis;
+
   ## External links
-  s{\[([\.\?a-zA-Z0-9 \-]+)\|([_#a-zA-Z/\-:0-9\.\?= &]+)\]}
+  s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
    {<a href="$2">$1</a>}gis;
 
   ## Regular wiki links with no space key, e.g. `[Mobile Ad Call Reference]'.
-  s{\[([&a-zA-Z\ ]+)\]}
+  s{\[([[:alnum:]$wiki_link_pat]+)\]}
    {qq[<a href="] . eunicize($1) . qq[">$1</a>]}gise;
 
   ## Links to headers on the same page
-  s{\[#([a-zA-Z:&#0-9\. ]+)\]}
+  s{\[#([[:alnum:]$header_link_pat]+)\]}
    {<a href="#$1">$1</a>}gis;
 
   ## Images
-  s{^\!([A-Za-z0-9\-| \.]+.(png|jpg)).*\!}
+  s{^\!([[:alnum:]$image_pat]+.(png|jpg)).*\!}
    {<br /><br /><img src="../img/$1"/><br /><br />}gis;
+
+  ## Bold elements
+  s/\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
 
   ## Lists of links, optionally followed by descriptions
   s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
@@ -61,11 +89,8 @@ LINE: while (<>) {
   ## Lists of non-link items
   s/^\* ?(.*)$/\<li>$1<\/li>/g;
 
-  ## Bold elements
-  s/\*([A-Za-z0-9\- :>\.\"]+)\*/<strong>$1<\/strong>/g;
-
   ## Italic elements
-  s/ \_([A-Za-z0-9\- :>\.\"]+)\_([ \.])/ <em>$1<\/em>$2/g;
+  s/ \_([[:alnum:]$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
 
   ## Tables
   s{^\|\|}{<tr><th><strong>}gis; # Beginning of table
@@ -76,42 +101,42 @@ LINE: while (<>) {
 
   ## Headers
   if (/h1. (.*)$/) {
-    my $new = qq[<h1><a name="$1">$1</a></h1>];
+    my $new = qq[<h1><hr size="1" color="#C0C0C0" /><a name="$1">$1</a></h1>];
     my $toc_line = qq[<li><a href="#$1">$1</a></li>];
     push @toc_lines, [1, $toc_line];
     s/h1. (.*)$/$new/;
   }
 
   if (/h2. (.*)$/) {
-    my $new = qq[<h2><a name="$1">$1</a></h2>];
+    my $new = qq[<h2><hr size="1" color="#C0C0C0" /><a name="$1">$1</a></h2>];
     my $toc_line = qq[<li><a href="#$1">$1</a></li>];
     push @toc_lines, [2, $toc_line];
     s/h2. (.*)$/$new/;
   }
 
   if (/h3. (.*)$/) {
-    my $new = qq[<h3><a name="$1">$1</a></h3><p>];
+    my $new = qq[<h3><a name="$1"><font color="#990000">$1</font></a></h3>];
     my $toc_line = qq[<li><a href="#$1">$1</a></li>];
     push @toc_lines, [3, $toc_line];
     s/h3. (.*)$/$new/;
   }
 
   if (/h4. (.*)$/) {
-    my $new = qq[<h4><a name="$1">$1</a></h4><p>];
+    my $new = qq[<h4><a name="$1"><font color="#990000">$1</font></a></h4>];
     my $toc_line = qq[<li><a href="#$1">$1</a></li>];
     push @toc_lines, [4, $toc_line];
     s/h4. (.*)$/$new/;
   }
 
   if (/h5. (.*)$/) {
-    my $new = qq[<h5><a name="$1">$1</a></h5><p>];
+    my $new = qq[<h5><a name="$1">$1</a></h5>];
     my $toc_line = qq[<li><a href="#$1">$1</a></li>];
     push @toc_lines, [5, $toc_line];
     s/h5. (.*)$/$new/;
   }
 
   if (/h6. (.*)$/) {
-    my $new = qq[<h6><a name="$1">$1</a></h6><p>];
+    my $new = qq[<h6><a name="$1">$1</a></h6>];
     my $toc_line = qq[<li><a href="#$1">$1</a></li>];
     push @toc_lines, [6, $toc_line];
     s/h6. (.*)$/$new/;
@@ -168,6 +193,7 @@ LINE: while (<>) {
     s/{warning}/<\/p><\/div>/;
   }
 
+  # Add HTML comments
   $htmlcomment++ if /{htmlcomment}/;
   if ($htmlcomment % 2 != 0) {
     s/{htmlcomment}/<!--/;
@@ -176,16 +202,27 @@ LINE: while (<>) {
     s/{htmlcomment}/-->/;
   }
 
+  # HTML tables
   $table++ if /{table-plus}/;
   if ($table % 2 != 0) {
-    s/{table-plus}/<br \/><br \/><table>/;
+    s/{table-plus}/<br \/><br \/><table border="1">/;
   }
   elsif ($table % 2 == 0) {
     s/{table-plus}/<\/table>/;
   }
 
-  s/{indent}//g;
+  s{\n+}{\n}gis; # Necessary?
 
+  # Use newlines as an ugly proxy for paragraph breaks
+  $para++ if /\n+/;
+  if ($para % 2 != 0) {
+    s{\n}{</p>}gis unless $para == 1;
+  }
+  elsif ($para % 2 == 0) {
+    s{\n}{<p>}gis;
+  }
+
+  s/{indent}//g;
   push @output, $_;
 }
 
