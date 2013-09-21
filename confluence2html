@@ -9,11 +9,11 @@ use Getopt::Long;
 #--------------------------------------------------------------------
 # Option parsing.
 
-my ($stylesheet, $toc, $wrap);
+my ( $stylesheet, $toc, $wrap );
 GetOptions(
-	   "stylesheet:s" => \$stylesheet,
-	   "toc" => \$toc,
-	   "wrap" => \$wrap,
+    "stylesheet:s" => \$stylesheet,
+    "toc"          => \$toc,
+    "wrap"         => \$wrap,
 );
 
 #--------------------------------------------------------------------
@@ -26,268 +26,275 @@ my $toc_min = 0;
 my $toc_max = 10;
 my $toc_pat = "3.14159";
 
-my $wiki_link_pat = "&|/\-:. ";
+my $wiki_link_pat   = "&|/\-:. ";
 my $header_link_pat = $wiki_link_pat . "#";
 
-my $external_link_text_pat = "\\.\\?\\- ";
+my $external_link_text_pat   = "\\.\\?\\- ";
 my $external_link_target_pat = $external_link_text_pat . "#_/:=&";
 
 my $image_pat = "\\-|\\. ";
 
-my $bold_pat = qq{\\- :>\\.\\"};
+my $bold_pat   = qq{\\- :>\\.\\"};
 my $italic_pat = $bold_pat;
 
 if ($wrap) {
-  push @output, qq{<html><head><link href="$stylesheet" rel="stylesheet"></head><body>\n};
+    push @output,
+      qq{<html><head><link href="$stylesheet" rel="stylesheet"></head><body>\n};
 }
 
 LINE: while (<>) {
-  state $code = 0;
-  state $info = 0;
-  state $tip = 0;
-  state $note = 0;
-  state $warning = 0;
-  state $htmlcomment = 0;
-  state $table = 0;
-  state $para = 0;
+    state $code        = 0;
+    state $info        = 0;
+    state $tip         = 0;
+    state $note        = 0;
+    state $warning     = 0;
+    state $htmlcomment = 0;
+    state $table       = 0;
+    state $para        = 0;
 
-  next LINE if /{panel.*/;
-  if (/{toc.*/) {
-    push @output, $_;
-    next LINE;
-  }
+    next LINE if /{panel.*/;
+    if (/{toc.*/) {
+        push @output, $_;
+        next LINE;
+    }
 
-  ## AppNexus-specific wiki link processing
-  s{\[api:([[:alnum:]$wiki_link_pat]+)\]}
+    # AppNexus-specific wiki link processing
+    s{\[api:([[:alnum:]$wiki_link_pat]+)\]}
    {<a href="https:\/\/wiki.appnexus.com\/display\/api\/$1">$1</a>}gis;
 
-  s{\[console:([[:alnum:]$wiki_link_pat]+)\]}
+    s{\[console:([[:alnum:]$wiki_link_pat]+)\]}
    {<a href="https:\/\/wiki.appnexus.com\/display\/console\/$1">$1</a>}gis;
 
-  ## External links
-  s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
+    # External links
+s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
    {<a href="$2">$1</a>}gis;
 
-  ## Regular wiki links with no space key, e.g. `[Mobile Ad Call Reference]'.
-  s{\[([[:alnum:]$wiki_link_pat]+)\]}
+    # Regular wiki links with no space key, e.g. `[Mobile Ad Call Reference]'.
+    s{\[([[:alnum:]$wiki_link_pat]+)\]}
    {qq[<a href="] . eunicize($1) . qq[">$1</a>]}gise;
 
-  ## Links to headers on the same page
-  s{\[#([[:alnum:]$header_link_pat]+)\]}
+    # Links to headers on the same page
+    s{\[#([[:alnum:]$header_link_pat]+)\]}
    {<a href="#$1">$1</a>}gis;
 
-  ## Images
-  s{^\!([[:alnum:]$image_pat]+.(png|jpg)).*\!}
+    # Images
+    s{^\!([[:alnum:]$image_pat]+.(png|jpg)).*\!}
    {<br /><br /><img src="../img/$1"/><br /><br />}gis;
 
-  ## Bold elements
-  s/\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
+    # Bold elements
+    s/\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
 
-  ## Lists of links, optionally followed by descriptions
-  s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
+    # Lists of links, optionally followed by descriptions
+    s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
 
-  ## Lists of non-link items
-  s/^\* ?(.*)$/\<li>$1<\/li>/g;
+    # Lists of non-link items
+    s/^\* ?(.*)$/\<li>$1<\/li>/g;
 
-  ## Italic elements
-  s/ \_([[:alnum:]$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
+    # Italic elements
+    s/ \_([[:alnum:]$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
 
-  ## Tables
-  s{^\|\|}{<tr><th><strong>}gis; # Beginning of table
-  s{\|\| ?\n}{</strong></th></tr>}gis;
-  s{\|\|}{<th><strong>}gis; # Middle of columns
-  s{\| ?\n}{</td></tr>}gis;
-  s{\|}{<td>}gis;
+    # Tables
+    s{^\|\|}{<tr><th><strong>}gis;    # Beginning of table
+    s{\|\| ?\n}{</strong></th></tr>}gis;
+    s{\|\|}{<th><strong>}gis;         # Middle of columns
+    s{\| ?\n}{</td></tr>}gis;
+    s{\|}{<td>}gis;
 
-  ## Headers
-  if (/h1. (.*)$/) {
-    my $new = qq[<h1><hr size="1" color="#C0C0C0" /><a name="$1">$1</a></h1>];
-    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
-    push @toc_lines, [1, $toc_line];
-    s/h1. (.*)$/$new/;
-  }
+    # Headers
+    if (/h1. (.*)$/) {
+        my $new =
+          qq[<h1><hr size="1" color="#C0C0C0" /><a name="$1">$1</a></h1>];
+        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        push @toc_lines, [ 1, $toc_line ];
+        s/h1. (.*)$/$new/;
+    }
 
-  if (/h2. (.*)$/) {
-    my $new = qq[<h2><hr size="1" color="#C0C0C0" /><a name="$1">$1</a></h2>];
-    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
-    push @toc_lines, [2, $toc_line];
-    s/h2. (.*)$/$new/;
-  }
+    if (/h2. (.*)$/) {
+        my $new =
+          qq[<h2><hr size="1" color="#C0C0C0" /><a name="$1">$1</a></h2>];
+        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        push @toc_lines, [ 2, $toc_line ];
+        s/h2. (.*)$/$new/;
+    }
 
-  if (/h3. (.*)$/) {
-    my $new = qq[<h3><a name="$1"><font color="#990000">$1</font></a></h3>];
-    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
-    push @toc_lines, [3, $toc_line];
-    s/h3. (.*)$/$new/;
-  }
+    if (/h3. (.*)$/) {
+        my $new = qq[<h3><a name="$1"><font color="#990000">$1</font></a></h3>];
+        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        push @toc_lines, [ 3, $toc_line ];
+        s/h3. (.*)$/$new/;
+    }
 
-  if (/h4. (.*)$/) {
-    my $new = qq[<h4><a name="$1"><font color="#990000">$1</font></a></h4>];
-    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
-    push @toc_lines, [4, $toc_line];
-    s/h4. (.*)$/$new/;
-  }
+    if (/h4. (.*)$/) {
+        my $new = qq[<h4><a name="$1"><font color="#990000">$1</font></a></h4>];
+        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        push @toc_lines, [ 4, $toc_line ];
+        s/h4. (.*)$/$new/;
+    }
 
-  if (/h5. (.*)$/) {
-    my $new = qq[<h5><a name="$1">$1</a></h5>];
-    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
-    push @toc_lines, [5, $toc_line];
-    s/h5. (.*)$/$new/;
-  }
+    if (/h5. (.*)$/) {
+        my $new      = qq[<h5><a name="$1">$1</a></h5>];
+        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        push @toc_lines, [ 5, $toc_line ];
+        s/h5. (.*)$/$new/;
+    }
 
-  if (/h6. (.*)$/) {
-    my $new = qq[<h6><a name="$1">$1</a></h6>];
-    my $toc_line = qq[<li><a href="#$1">$1</a></li>];
-    push @toc_lines, [6, $toc_line];
-    s/h6. (.*)$/$new/;
-  }
+    if (/h6. (.*)$/) {
+        my $new      = qq[<h6><a name="$1">$1</a></h6>];
+        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        push @toc_lines, [ 6, $toc_line ];
+        s/h6. (.*)$/$new/;
+    }
 
-  ## Monospace and code
-  s/{{([\\!\@\$0-9\+A-Z\.,\-\/>a-z_=:"\(\) \<\>\n]+)}}/<code>$1<\/code>/g;
-  s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s; # Single line code blocks
+    # Monospace and code
+    s/{{([\\!\@\$0-9\+A-Z\.,\-\/>a-z_=:"\(\) \<\>\n]+)}}/<code>$1<\/code>/g;
+    s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s
+      ;    # Single line code blocks
 
-  ## Multiline code blocks
-  $code++ if /\{code\}/;
+    # Multiline code blocks
+    $code++ if /\{code\}/;
 
-  if ($code % 2 != 0) { ## Inside code block
-    # Escape embedded XML tags first, if any.
-    s/</&lt;/g;
-    s/>/&gt;/g;
-    s{\n}{}g;
-    s/\{code\}/<pre>/;
-  }
-  elsif ($code % 2 == 0) { ## Close code block
-    s/\{code\}/<\/pre>/;
-  }
+    if ( $code % 2 != 0 ) {    # Inside code block
+                               # Escape embedded XML tags first, if any.
+        s/</&lt;/g;
+        s/>/&gt;/g;
+        s{\n}{}g;
+        s/\{code\}/<pre>/;
+    }
+    elsif ( $code % 2 == 0 ) {    # Close code block
+        s/\{code\}/<\/pre>/;
+    }
 
-  ## Div-ify Confluence macros
-  $info++ if /{info}/;
-  if ($info % 2 != 0) {
-    s/{info}/<div id="info"><p>/;
-  }
-  elsif ($info % 2 == 0) {
-    s/{info}/<\/p><\/div>/;
-  }
+    # Div-ify Confluence macros
+    $info++ if /{info}/;
+    if ( $info % 2 != 0 ) {
+        s/{info}/<div id="info"><p>/;
+    }
+    elsif ( $info % 2 == 0 ) {
+        s/{info}/<\/p><\/div>/;
+    }
 
-  $note++ if /{note}/;
-  if ($note % 2 != 0) {
-    s/{note}/<div id="note"><p>/;
-  }
-  elsif ($note % 2 == 0) {
-    s/{note}/<\/p><\/div>/;
-  }
+    $note++ if /{note}/;
+    if ( $note % 2 != 0 ) {
+        s/{note}/<div id="note"><p>/;
+    }
+    elsif ( $note % 2 == 0 ) {
+        s/{note}/<\/p><\/div>/;
+    }
 
-  $tip++ if /{tip}/;
-  if ($tip % 2 != 0) {
-    s/{tip}/<div id="tip"><p>/;
-  }
-  elsif ($tip % 2 == 0) {
-    s/{tip}/<\/p><\/div>/;
-  }
+    $tip++ if /{tip}/;
+    if ( $tip % 2 != 0 ) {
+        s/{tip}/<div id="tip"><p>/;
+    }
+    elsif ( $tip % 2 == 0 ) {
+        s/{tip}/<\/p><\/div>/;
+    }
 
-  $warning++ if /{warning}/;
-  if ($warning % 2 != 0) {
-    s/{warning}/<div id="warning"><p>/;
-  }
-  elsif ($warning % 2 == 0) {
-    s/{warning}/<\/p><\/div>/;
-  }
+    $warning++ if /{warning}/;
+    if ( $warning % 2 != 0 ) {
+        s/{warning}/<div id="warning"><p>/;
+    }
+    elsif ( $warning % 2 == 0 ) {
+        s/{warning}/<\/p><\/div>/;
+    }
 
-  # Add HTML comments
-  $htmlcomment++ if /{htmlcomment}/;
-  if ($htmlcomment % 2 != 0) {
-    s/{htmlcomment}/<!--/;
-  }
-  elsif ($htmlcomment % 2 == 0) {
-    s/{htmlcomment}/-->/;
-  }
+    # Add HTML comments
+    $htmlcomment++ if /{htmlcomment}/;
+    if ( $htmlcomment % 2 != 0 ) {
+        s/{htmlcomment}/<!--/;
+    }
+    elsif ( $htmlcomment % 2 == 0 ) {
+        s/{htmlcomment}/-->/;
+    }
 
-  # HTML tables
-  $table++ if /{table-plus}/;
-  if ($table % 2 != 0) {
-    s/{table-plus}/<br \/><br \/><table border="1">/;
-  }
-  elsif ($table % 2 == 0) {
-    s/{table-plus}/<\/table>/;
-  }
+    # HTML tables
+    $table++ if /{table-plus}/;
+    if ( $table % 2 != 0 ) {
+        s/{table-plus}/<br \/><br \/><table border="1">/;
+    }
+    elsif ( $table % 2 == 0 ) {
+        s/{table-plus}/<\/table>/;
+    }
 
-  s{\n+}{\n}gis; # Necessary?
+    s{\n+}{\n}gis;    # Necessary?
 
-  # Use newlines as an ugly proxy for paragraph breaks
-  $para++ if /\n+/;
-  if ($para % 2 != 0) {
-    s{\n}{</p>}gis unless $para == 1;
-  }
-  elsif ($para % 2 == 0) {
-    s{\n}{<p>}gis;
-  }
+    # Use newlines as an ugly proxy for paragraph breaks
+    $para++ if /\n+/;
+    if ( $para % 2 != 0 ) {
+        s{\n}{</p>}gis unless $para == 1;
+    }
+    elsif ( $para % 2 == 0 ) {
+        s{\n}{<p>}gis;
+    }
 
-  s/{indent}//g;
-  push @output, $_;
+    s/{indent}//g;
+    push @output, $_;
 }
 
 if ($wrap) {
-  push @output, "</body></html>";
+    push @output, "</body></html>";
 }
 
 for my $line (@output) {
-  if ($line =~ /{toc/) {
-    my @result = parse_toc($line);
-    my $toc_min = $result[0];
-    my $toc_max = $result[1];
-    my $toc_pat = $result[2];
-    $line = replace_toc_line($line, $toc_min, $toc_max, $toc_pat);
-  }
-  say $line;
+    if ( $line =~ /{toc/ ) {
+        my @result  = parse_toc($line);
+        my $toc_min = $result[0];
+        my $toc_max = $result[1];
+        my $toc_pat = $result[2];
+        $line = replace_toc_line( $line, $toc_min, $toc_max, $toc_pat );
+    }
+    say $line;
 }
 
 sub eunicize {
-  ## String -> String
-  my $title = shift;
-  $title =~ s/ /-/g;
-  $title =~ s/-{2,}/-/g;
-  $title =~ s/[^-\w]//gi;
-  $title .= '.html';
-  return lc $title;
+    # String -> String
+    my $title = shift;
+    $title =~ s/ /-/g;
+    $title =~ s/-{2,}/-/g;
+    $title =~ s/[^-\w]//gi;
+    $title .= '.html';
+    return lc $title;
 }
 
 sub replace_toc_line {
-  ## String, Int, Int, Regex -> String
-  my ($line, $min, $max, $pat) = @_;
-  my $result = qq{<div id="toc"><strong>On This Page</strong>};
+    # String, Int, Int, Regex -> String
+    my ( $line, $min, $max, $pat ) = @_;
+    my $result = qq{<div id="toc"><strong>On This Page</strong>};
 
-  for my $toc_line (@toc_lines) {
-    my $line_level = $toc_line->[0];
-    my $line_text = $toc_line->[1];
-    if ($toc && ($min <= $line_level && $line_level <= $max) && $line_text !~ $pat) {
-      $result .= "$line_text\n";
+    for my $toc_line (@toc_lines) {
+        my $line_level = $toc_line->[0];
+        my $line_text  = $toc_line->[1];
+        if (   $toc
+            && ( $min <= $line_level && $line_level <= $max )
+            && $line_text !~ $pat )
+        {
+            $result .= "$line_text\n";
+        }
     }
-  }
-  $result .= qq{</div>};
-  $line = $result;
-  return $line;
+    $result .= qq{</div>};
+    $line = $result;
+    return $line;
 }
 
 sub parse_toc {
-  ## String -> Array
-  ## {toc:minlevel=3|maxlevel=4|Exclude=.*}
-  ## -> ($min, $max, $pat)
-  my $s = shift;
-  my @result = ($toc_min, $toc_max, $toc_pat);
-  if ($s =~ /\{toc:minlevel=(\d+)\|maxlevel=(\d+)\|exclude=(.*)\}/) {
-    @result = ($1, $2, $3);
-  }
-  elsif ($s =~ /\{toc:minlevel=(\d)\|maxlevel=(\d).*/) {
-    @result = ($1, $2, "3.14159");
-  }
-  elsif ($s =~ /\{toc:minlevel=(\d).*/) {
-    @result = ($1, 10, "3.14159");
-  }
-  else {
-    return @result;
-  }
+    # String -> Array
+    # `{toc:minlevel=3|maxlevel=4|Exclude=.*}'
+    # -> ($min, $max, $pat)
+    my $s = shift;
+    my @result = ( $toc_min, $toc_max, $toc_pat );
+    if ( $s =~ /\{toc:minlevel=(\d+)\|maxlevel=(\d+)\|exclude=(.*)\}/ ) {
+        @result = ( $1, $2, $3 );
+    }
+    elsif ( $s =~ /\{toc:minlevel=(\d)\|maxlevel=(\d).*/ ) {
+        @result = ( $1, $2, "3.14159" );
+    }
+    elsif ( $s =~ /\{toc:minlevel=(\d).*/ ) {
+        @result = ( $1, 10, "3.14159" );
+    }
+    else {
+        return @result;
+    }
 
-  return @result;
+    return @result;
 }
 
 __END__
