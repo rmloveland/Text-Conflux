@@ -460,10 +460,10 @@ Whether to process the table of contents macro.
 
 =item --wrap
 
-Whether to wrap the body of the resulting HTML in `html', `head',
-and `body' tags. This includes a link to the stylesheet specified by
-the `--stylesheet' option, so it's meaningless to specify a stylesheet
-unless you use this argument.
+Whether to wrap the body of the resulting HTML in `html', `head', and
+`body' tags. This includes a link to the stylesheet specified by the
+`--stylesheet' option, so if you use this argument you probably want
+to specify a stylesheet.
 
 =back
 
