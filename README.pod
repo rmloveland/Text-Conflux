@@ -1,0 +1,186 @@
+=head1 NAME
+
+confluence2html - convert text using a subset of Confluence markup to HTML
+
+=head1 SYNOPSIS
+
+  confluence2html < wiki-file.txt > wiki-file.html
+
+=head1 DESCRIPTION
+
+Confluence2html is a command line filter that takes as its input a
+stream of text marked up with a subset of Confluence markup and
+produces as its output a stream of HTML text.
+
+The supported subset of Confluence markup is defined as follows:
+
+=over
+
+=item headers
+
+The h1-h6 header format is supported, as in `h2. Introduction'. No
+other formatting inside the header text is supported. For example,
+`h2. Introduction to {{confluence2html}}' will not work.
+
+=item links
+
+Standard links are supported, e.g., `[Link to other page]'. This will
+be rewritten to link to a local file named
+`link-to-other-page.html'. If no such file exists, this will be a
+broken link until the file is created. The easiest way to do this is
+to have a file of Confluence markup named `link-to-other-page.txt',
+which is generated in the same directory using a tool such as C<make>
+(or a shell script, or even another Perl script!).
+
+External links are supported as expected, e.g.,
+
+    [Perl home page|http://www.perl.org].
+
+However, Confluence space keys are not allowed. This is in part
+because the concept of ``spaces'' has no meaning in terms of processing a
+stream of text. Such a feature could be added by a more sophisticated
+application built by using/modifying this script.
+
+Finally, links do not automatically have line breaks inserted
+afterward. This is to allow you to embed these links in regular
+text. If you want to use them as functional subheaders or miniature
+tables of contents (without using the `toc' macro), put them in a
+bulleted list.
+
+=item macros
+
+A few macros are supported, but only as single tags on their
+own line. For example,
+
+    {info}
+    Have some informative text!
+    {info}.
+
+No arguments of the form `{info:title=FOO}' are supported.
+
+Supported macros include:
+
+=over
+
+=item code
+
+=item info
+
+=item tip
+
+=item note
+
+=item warning
+
+=item htmlcomment
+
+=item table-plus
+
+=item toc
+
+=back
+
+Note that these macros generate C<div> tags with class names that
+correspond to the macro name for easy CSS styling. For example:
+
+    <div id="info"><p>
+    These instructions assume that you have already installed and
+    correctly configured... For more information, see ...
+    </p></div>
+
+See below for more information about the `toc' macro.
+
+=item table of contents macro
+
+Prints a table of contents comprised of selected headers on the page,
+inside a `div' with a `toc' id, e.g. `<div id =``toc''>'. A subset of
+the arguments to the `toc' macro are supported: `minlevel',
+`maxlevel', and `exclude' -- in that order. In other words, you must
+use the `toc' macro in one of the following ways:
+
+=over
+
+=item `{toc}'
+
+Prints a table of contents using all headers on the page.
+
+=item `{toc:minlevel=$N|maxlevel=$M|exclude=$REGEX}'
+
+Where C<$N> and C<$M> are integers between 1 and 6, and C<$REGEX> is a
+perl regular expression -- note that the regular expression is not
+surrounded by quotes. This prints a table of contents with a minimum
+header size of C<$N> and a maximum header size of C<$M>, with any
+headers matching C<$REGEX> being excluded.
+
+=item `{toc:minlevel=$N|maxlevel=$M}'
+
+Where C<$N> and C<$M> are integers between 1 and 6. This prints a
+table of contents with a minimum header size of C<$N> and a maximum
+header size of C<$M>.
+
+=item `{toc:minlevel=$N}'
+
+Where C<$N> is an integer between 1 and 6. This prints a
+table of contents with a minimum header size of C<$N>.
+
+=back
+
+=item lists
+
+Only unordered lists are supported at this time. This should be fixed
+in the future.
+
+Furthermore, no bold items can be used as list elements; the following
+will not work:
+
+    `* *First item*...'
+
+=item line breaks
+
+The line breaks that appear in the HTML output are those that appear
+in the text file. There is no support for `\\' (Confluence syntax for
+a forced line break).
+
+=item tables
+
+Tables are fully supported. The only requirement is that you must wrap
+the table itself in the `{table-plus}' macro. (This decision is a
+compromise based on the fact that it's a real Confluence macro
+available from a third-party developer.)
+
+=back
+
+=head1 COMMAND LINE ARGUMENTS
+
+=over
+
+=item --stylesheet, -s
+
+The location of the CSS stylesheet, e.g.,
+
+    ./confluence2html --stylesheet=bootstrap.css
+
+=item --toc
+
+Whether to process the table of contents macro.
+
+=item --wrap
+
+Whether to wrap the body of the resulting HTML in `html', `head',
+and `body' tags. This includes a link to the stylesheet specified by
+the `--stylesheet' option, so it's meaningless to specify a stylesheet
+unless you use this argument.
+
+=back
+
+=head1 BUGS
+
+Many bugs are lurking in this code; it's a total hack. On the roadmap:
+tests, refactoring, and perhaps even real parsing. Please open a
+Github issue to report a bug or request a feature:
+
+L<http://github.com/rmloveland/confluence2html>
+
+=head1 AUTHOR
+
+Rich Loveland, L<r@rmloveland.com>
