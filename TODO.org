@@ -1,0 +1,83 @@
+#+title: Confluence2{html,markdown} TODOs
+#+author: Rich Loveland
+#+email: loveland.richard@gmail.com
+  
+* TODO Note ALL of the differences with Confluence markup in POD
+
+  - Cannot use any special formatting or links in h{1-6} headers
+  - No space keys are allowed in links (since spaces are not supported)
+  - Must put macro tags on own line, e.g., `{info}'
+  - No ``arguments'' for macros are supported
+  - No bold items in itemized lists, e.g., `* *First*: ...'
+  - No support for `\\'
+  - Need to wrap tables in `{table-plus}'
+  - `toc' macro subset is working (minlevel, maxlevel, exclude -- in
+    that order)
+  - Links do not automatically have line breaks inserted
+    afterward. This is to allow you to embed these links in regular
+    text. If you want to use them as subheaders, make a bulleted list.
+
+* TODO Add unit tests
+
+  These can be super-high-level and just test the script's output.
+
+* TODO Refactor this ugly bastard
+
+  There are lots of substeps needed here; here's a list:
+
+  - [ ] Extract common regular expressions into variables
+
+* TODO Implement ordered lists (1., 2., ...)
+
+  Right now we just turn them into unordered lists. This should be fixed.
+
+* TODO Can't link to headers in another page
+
+  I think the solution will be to transform
+
+  [Network Analytics|Network Reporting#Network Analytics Report]
+
+  to
+
+  <a href="network-reporting.html#Network Analytics Report">Network Analytics</a>
+
+* DONE Implement `toc' macro
+
+  Supported syntax:
+  `{toc:minlevel=3|maxlevel=4|exclude=Related.*}'
+  
+* DONE Add command line options
+
+  | Option       | Behavior                                             | Done? |
+  |--------------+------------------------------------------------------+-------|
+  | --wrap       | whether to wrap page in outer `html' and `body' tags |       |
+  | --stylesheet | location of the stylesheet to use                    | X     |
+  |              |                                                      |       |
+
+* DONE Update build script to massage the Markdown
+
+   1. Relative image links in Markdown
+
+      perl -p -i.bak -e 's{!\[\]\(}{![](img/}g' *.markdown
+   
+
+   2. Link to Markdown, not HTML
+
+      perl -p -i.bak -e 's{\.html}{\.markdown}g' *.markdown
+
+* DONE Fix bug where ', in a list element causes a line break
+
+  More precisely, the regex stops matching at those characters and
+  wraps its match thus far in tags.
+
+* DONE Implement `htmlcomment' macro
+
+* DONE Evaluate options other than Markdown
+
+  Realizing it's not too, er, featureful...
+
+* DONE Can't do relative links in same page
+
+  See SDK troubleshooting page's links to iOS and Android tables
+
+  Resolution: there was a space at the end of the header name. This is not allowed.
