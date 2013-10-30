@@ -1,4 +1,4 @@
-#+title: Confluence2{html,markdown} TODOs
+#+title: confluence2html TODOs
 #+author: Rich Loveland
 #+email: loveland.richard@gmail.com
   
@@ -17,6 +17,8 @@
     afterward. This is to allow you to embed these links in regular
     text. If you want to use them as subheaders, make a bulleted list.
 
+* TODO Generate a parse tree/AST that can be re-used
+
 * TODO Add unit tests
 
   These can be super-high-level and just test the script's output.
@@ -27,7 +29,9 @@
 
   - [ ] Extract common regular expressions into variables
 
-* TODO Implement ordered lists (1., 2., ...)
+* TODO Implement underlining
+
+* TODO Implement ordered lists
 
   Right now we just turn them into unordered lists. This should be fixed.
 
@@ -40,6 +44,12 @@
   to
 
   <a href="network-reporting.html#Network Analytics Report">Network Analytics</a>
+
+* TODO Make this a proper package
+
+  - Maybe even rewrite using Moo*?
+    - Probably too slow -- this is called a lot!
+    - Then again, if we're generating ASTs...
 
 * DONE Implement `toc' macro
 
