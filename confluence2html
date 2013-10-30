@@ -58,47 +58,55 @@ LINE: while (<>) {
         next LINE;
     }
 
-    # AppNexus-specific wiki link processing
-    s{\[api:([[:alnum:]$wiki_link_pat]+)\]}
-   {<a href="https:\/\/wiki.appnexus.com\/display\/api\/$1">$1</a>}gis;
+    ## We wrap the below link-making code in a block so that text is
+    ## not modified in any way while we're inside a code block.
+    do {
+      # AppNexus-specific wiki link processing
+      s{\[api:([[:alnum:]$wiki_link_pat]+)\]}
+       {<a href="https:\/\/wiki.appnexus.com\/display\/api\/$1">$1</a>}gis;
 
-    s{\[console:([[:alnum:]$wiki_link_pat]+)\]}
-   {<a href="https:\/\/wiki.appnexus.com\/display\/console\/$1">$1</a>}gis;
+      s{\[console:([[:alnum:]$wiki_link_pat]+)\]}
+       {<a href="https:\/\/wiki.appnexus.com\/display\/console\/$1">$1</a>}gis;
 
-    # External links
-s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
-   {<a href="$2">$1</a>}gis;
+      s{\[adnexusdocumentation:([[:alnum:]$wiki_link_pat]+)\]}
+       {<a href="https:\/\/wiki.appnexus.com\/display\/adnexusdocumentation\/$1">$1</a>}gis;
 
-    # Regular wiki links with no space key, e.g. `[Mobile Ad Call Reference]'.
-    s{\[([[:alnum:]$wiki_link_pat]+)\]}
-   {qq[<a href="] . eunicize($1) . qq[">$1</a>]}gise;
+      # External links
+      s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
+       {<a href="$2">$1</a>}gis;
 
-    # Links to headers on the same page
-    s{\[#([[:alnum:]$header_link_pat]+)\]}
-   {<a href="#$1">$1</a>}gis;
+      # Regular wiki links with no space key, e.g. `[Mobile Ad Call Reference]'.
+      s{\[([[:alnum:]$wiki_link_pat]+)\]}
+       {qq[<a href="] . eunicize($1) . qq[">$1</a>]}gise;
 
-    # Images
-    s{^\!([[:alnum:]$image_pat]+.(png|jpg)).*\!}
-   {<br /><br /><img src="../img/$1"/><br /><br />}gis;
+      # Links to headers on the same page
+      s{\[#([[:alnum:]$header_link_pat]+)\]}
+       {<a href="#$1">$1</a>}gis;
 
-    # Bold elements
-    s/\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
+      # Images
+      s{^\!([[:alnum:]$image_pat]+.(png|jpg)).*\!}
+       {<br /><br /><img src="../img/$1"/><br /><br />}gis;
 
-    # Lists of links, optionally followed by descriptions
-    s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
+      # Bold elements
+      s/\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
 
-    # Lists of non-link items
-    s/^\* ?(.*)$/\<li>$1<\/li>/g;
+      # Lists of links, optionally followed by descriptions
+      s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
 
-    # Italic elements
-    s/ \_([[:alnum:]$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
+      # Lists of non-link items
+      s/^\* ?(.*)$/\<li>$1<\/li>/g;
 
-    # Tables
-    s{^\|\|}{<tr><th><strong>}gis;    # Beginning of table
-    s{\|\| ?\n}{</strong></th></tr>}gis;
-    s{\|\|}{<th><strong>}gis;         # Middle of columns
-    s{\| ?\n}{</td></tr>}gis;
-    s{\|}{<td>}gis;
+      # Italic elements
+      s/ \_([[:alnum:]$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
+
+      # Tables
+      s{^\|\|}{<tr><th><strong>}gis;    # Beginning of table
+      s{\|\| ?\n}{</strong></th></tr>}gis;
+      s{\|\|}{<th><strong>}gis;         # Middle of columns
+      s{\| ?\n}{</td></tr>}gis;
+      s{\|}{<td>}gis;
+
+    } unless $code % 2 != 0;
 
     # Headers
     if (/h1. (.*)$/) {
@@ -217,8 +225,8 @@ s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]
 
     s{\n+}{\n}gis;    # Necessary?
 
-    # Use newlines as an ugly proxy for paragraph breaks
-    $para++ if /\n+/;
+#     # Use newlines as an ugly proxy for paragraph breaks
+    $para++ if /\n\n+/;
     if ( $para % 2 != 0 ) {
         s{\n}{</p>}gis unless $para == 1;
     }
