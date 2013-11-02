@@ -206,12 +206,12 @@ LINE: while (<>) {
     }
 
     # HTML tables
-    $table++ if /{table-plus}/;
+    $table++ if /{table}/;
     if ( $table % 2 != 0 ) {
-        s/{table-plus}/<table>/;
+        s/{table}/<table>/;
     }
     elsif ( $table % 2 == 0 ) {
-        s/{table-plus}/<\/table>/;
+        s/{table}/<\/table>/;
     }
 
     s{\n+}{\n}gis;    # Necessary?
@@ -374,7 +374,7 @@ Supported macros include:
 
 =item htmlcomment
 
-=item table-plus
+=item table
 
 =item toc
 
@@ -443,10 +443,9 @@ a forced line break).
 
 =item tables
 
-Tables are fully supported. The only requirement is that you must wrap
-the table itself in the `{table-plus}' macro. (This decision is a
-compromise based on the fact that it's a real Confluence macro
-available from a third-party developer.)
+Tables are supported. The only requirement is that you must wrap the
+table itself in the `{table}' macro. (This decision is a compromise
+based on the fact that it makes tables simpler to parse.)
 
 =back
 
