@@ -146,10 +146,11 @@ LINE: while (<>) {
         s/h6. (.*)$/$new/;
     }
 
-    # Monospace and code
+    # Monospace
     s/{{([\\!\@\$0-9\+A-Z\.,\-\/>a-z_=:"\(\) \<\>\n]+)}}/<code>$1<\/code>/g;
-    s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s
-      ;    # Single line code blocks
+
+    # Single line code blocks
+    s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s;
 
     # Multiline code blocks
     $code++ if /\{code\}/;
