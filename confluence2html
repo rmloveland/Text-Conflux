@@ -102,7 +102,7 @@ LINE: while (<>) {
     # Headers
     if (/h1. (.*)$/) {
         my $new =
-          qq[<h1><hr size="1" color="#C0C0C0" /><a name="$1">$1</a></h1>];
+          qq[<h1><a name="$1">$1</a></h1>];
         my $toc_line = qq[<li><a href="#$1">$1</a></li>];
         push @toc_lines, [ 1, $toc_line ];
         s/h1. (.*)$/$new/;
@@ -110,21 +110,21 @@ LINE: while (<>) {
 
     if (/h2. (.*)$/) {
         my $new =
-          qq[<h2><hr size="1" color="#C0C0C0" /><a name="$1">$1</a></h2>];
+          qq[<h2><a name="$1">$1</a></h2>];
         my $toc_line = qq[<li><a href="#$1">$1</a></li>];
         push @toc_lines, [ 2, $toc_line ];
         s/h2. (.*)$/$new/;
     }
 
     if (/h3. (.*)$/) {
-        my $new = qq[<h3><a name="$1"><font color="#990000">$1</font></a></h3>];
+        my $new = qq[<h3><a name="$1">$1</a></h3>];
         my $toc_line = qq[<li><a href="#$1">$1</a></li>];
         push @toc_lines, [ 3, $toc_line ];
         s/h3. (.*)$/$new/;
     }
 
     if (/h4. (.*)$/) {
-        my $new = qq[<h4><a name="$1"><font color="#990000">$1</font></a></h4>];
+        my $new = qq[<h4><a name="$1">$1</a></h4>];
         my $toc_line = qq[<li><a href="#$1">$1</a></li>];
         push @toc_lines, [ 4, $toc_line ];
         s/h4. (.*)$/$new/;
