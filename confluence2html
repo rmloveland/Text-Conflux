@@ -259,7 +259,7 @@ sub eunicize {
 sub replace_toc_line {
     # String, Int, Int, Regex -> String
     my ( $line, $min, $max, $pat ) = @_;
-    my $result = qq{<div id="toc"><strong>On This Page</strong>};
+    my $result = qq{<div id="toc"><strong>On This Page</strong><ul>};
 
     for my $toc_line (@toc_lines) {
         my $line_level = $toc_line->[0];
@@ -272,7 +272,7 @@ sub replace_toc_line {
             $result .= "$line_text\n";
 	  }
     }
-    $result .= qq{</div>};
+    $result .= qq{</ul></div>};
     $line = $result;
     return $line;
 }
