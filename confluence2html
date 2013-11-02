@@ -16,7 +16,7 @@ GetOptions(
 );
 
 #--------------------------------------------------------------------
-# Variables.
+# Global Variables.
 
 my @output;
 my @toc_lines;
@@ -42,6 +42,9 @@ if ($wrap) {
       qq{<html><head><link href="$stylesheet" rel="stylesheet"></head><body>\n};
 }
 
+#-------------------------------------------------------------------
+# Ye Olde Main Input Processing Loop.
+
 LINE: while (<>) {
     state $code        = 0;
     state $info        = 0;
@@ -58,41 +61,45 @@ LINE: while (<>) {
         next LINE;
     }
 
-    ## We wrap the below link-making code in a block so that text is
-    ## never modified in any way while we're inside a code block.
-    ## This was prompted by an attempt to format some Objective-C code
-    ## in one of our projects.
+    ## We wrap the link-making code below in a DO block so that text
+    ## is never modified in any way while we're inside a `{code}'
+    ## block.  This change was prompted by an attempt to format some
+    ## Objective-C code in one of our projects.
 
     do {
-      # External links
+      # External links.
       s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
        {<a href="$2">$1</a>}gis;
 
-      # Regular wiki links with no space key, e.g. `[Mobile Ad Call Reference]'.
+      # Internal links, e.g. `[Mobile Ad Call Reference]'.  See below
+      # for the definition of EUNICIZE.
       s{\[([[:alnum:]$wiki_link_pat]+)\]}
        {qq[<a href="] . eunicize($1) . qq[">$1</a>]}gise;
 
-      # Links to headers on the same page
+      # Links to headers on the same page.  We don't support anchors
+      # (yet).
       s{\[#([[:alnum:]$header_link_pat]+)\]}
        {<a href="#$1">$1</a>}gis;
 
-      # Images
+      # Images.
       s{^\!([[:alnum:]$image_pat]+.(png|jpg)).*\!}
        {<br /><br /><img src="../img/$1"/><br /><br />}gis;
 
-      # Bold elements
+      # Bold elements.
       s/\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
 
-      # Lists of links, optionally followed by descriptions
+      # Lists of links, optionally followed by a colon or slash, then
+      # descriptive text.
       s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
 
-      # Lists of non-link items
+      # Lists of non-link items.
       s/^\* ?(.*)$/\<li>$1<\/li>/g;
 
-      # Italic elements
+      # Italic elements.
       s/ \_([[:alnum:]$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
 
-      # Tables
+      # Tables.  These still have to be wrapped in a `{table}' macro.
+      # Hopefully not for long.
       s{^\|\|}{<tr><th><strong>}gis;    # Beginning of table
       s{\|\| ?\n}{</strong></th></tr>}gis;
       s{\|\|}{<th><strong>}gis;         # Middle of columns
@@ -101,7 +108,9 @@ LINE: while (<>) {
 
     } unless $code % 2 != 0;
 
-    # Headers
+    # Headers, 1-6.  We add an appropriate ID to each header's LI tag
+    # so that we can use CSS's TEXT-INDENT to create a nice
+    # indentation in the table of contents.
     if (/h1. (.*)$/) {
         my $new =
           qq[<h1><a name="$1">$1</a></h1>];
@@ -146,27 +155,29 @@ LINE: while (<>) {
         s/h6. (.*)$/$new/;
     }
 
-    # Monospace
+    # Monospace.
     s/{{([\\!\@\$0-9\+A-Z\.,\-\/>a-z_=:"\(\) \<\>\n]+)}}/<code>$1<\/code>/g;
 
-    # Single line code blocks
+    # Same-line code blocks.
     s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s;
 
-    # Multiline code blocks
+    # Multiline code blocks.
     $code++ if /\{code\}/;
 
-    if ( $code % 2 != 0 ) {    # Inside code block
-                               # Escape embedded XML tags first, if any.
+    if ( $code % 2 != 0 ) {
+      # Escape embedded HTML/XML tags inside the code block.  This was
+      # necessitated by some XML build cruft for an Android project.
         s/</&lt;/g;
         s/>/&gt;/g;
         s{\n}{}g;
         s/\{code\}/<pre>/;
     }
-    elsif ( $code % 2 == 0 ) {    # Close code block
+    elsif ( $code % 2 == 0 ) {
         s/\{code\}/<\/pre>/;
     }
 
-    # Div-ify Confluence macros
+    # Div-ify the Confluence macros INFO, NOTE, TIP, and WARNING so
+    # that we can give them the appropriate colors using CSS.
     $info++ if /{info}/;
     if ( $info % 2 != 0 ) {
         s/{info}/<div id="info"><p>/;
@@ -199,7 +210,7 @@ LINE: while (<>) {
         s/{warning}/<\/p><\/div>/;
     }
 
-    # Add HTML comments
+    # Support HTML comments. This is one of my favorite macros.
     $htmlcomment++ if /{htmlcomment}/;
     if ( $htmlcomment % 2 != 0 ) {
         s/{htmlcomment}/<!--/;
@@ -208,7 +219,7 @@ LINE: while (<>) {
         s/{htmlcomment}/-->/;
     }
 
-    # HTML tables
+    # HTML tables need to be wrapped in `{table}' tags.
     $table++ if /{table}/;
     if ( $table % 2 != 0 ) {
         s/{table}/<table>/;
@@ -219,7 +230,8 @@ LINE: while (<>) {
 
     s{\n+}{\n}gis;    # Necessary?
 
-    # Use newlines as an ugly proxy for paragraph breaks
+    # Use newlines as an ugly proxy for paragraph breaks.  It's not a
+    # hack, it's a ``heuristic''.  :-}
     $para++ if /\n+/;
     if ( $para % 2 != 0 ) {
         s{\n}{</p>}gis unless $para == 1;
@@ -236,6 +248,9 @@ if ($wrap) {
     push @output, "</body></html>";
 }
 
+#-------------------------------------------------------------------
+# Ye Olde Main Output Processing Loop.
+
 for my $line (@output) {
     if ( $line =~ /{toc/ ) {
         my @result  = parse_toc($line);
@@ -247,6 +262,9 @@ for my $line (@output) {
     say $line;
 }
 
+#-------------------------------------------------------------------
+# Turn a [Wiki Link] into a <a href="wiki-link.html">Wiki Link</a>.
+
 sub eunicize {
     # String -> String
     my $title = shift;
@@ -256,6 +274,9 @@ sub eunicize {
     $title .= '.html';
     return lc $title;
 }
+
+#-------------------------------------------------------------------
+# Table of contents processing goes here.
 
 sub replace_toc_line {
     # String, Int, Int, Regex -> String
