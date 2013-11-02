@@ -35,6 +35,8 @@ my $image_pat = "\\-|\\. ";
 my $bold_pat   = qq{\\- :>\\.\\"};
 my $italic_pat = $bold_pat;
 
+$wrap++ if $stylesheet;
+
 if ($wrap) {
     push @output,
       qq{<html><head><link href="$stylesheet" rel="stylesheet"></head><body>\n};
