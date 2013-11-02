@@ -9,10 +9,9 @@ use Getopt::Long;
 #--------------------------------------------------------------------
 # Option parsing.
 
-my ( $stylesheet, $toc, $wrap );
+my ( $stylesheet, $wrap );
 GetOptions(
     "stylesheet:s" => \$stylesheet,
-    "toc"          => \$toc,
     "wrap"         => \$wrap,
 );
 
@@ -209,7 +208,7 @@ LINE: while (<>) {
     # HTML tables
     $table++ if /{table-plus}/;
     if ( $table % 2 != 0 ) {
-        s/{table-plus}/<br \/><br \/><table border="1">/;
+        s/{table-plus}/<table>/;
     }
     elsif ( $table % 2 == 0 ) {
         s/{table-plus}/<\/table>/;
@@ -218,7 +217,7 @@ LINE: while (<>) {
     s{\n+}{\n}gis;    # Necessary?
 
     # Use newlines as an ugly proxy for paragraph breaks
-    $para++ if /\n\n+/;
+    $para++ if /\n+/;
     if ( $para % 2 != 0 ) {
         s{\n}{</p>}gis unless $para == 1;
     }
@@ -263,12 +262,13 @@ sub replace_toc_line {
     for my $toc_line (@toc_lines) {
         my $line_level = $toc_line->[0];
         my $line_text  = $toc_line->[1];
-        if (   $toc
-            && ( $min <= $line_level && $line_level <= $max )
+        if (( $min <= $line_level
+	      &&
+	      $line_level <= $max )
             && $line_text !~ $pat )
-        {
+	  {
             $result .= "$line_text\n";
-        }
+	  }
     }
     $result .= qq{</div>};
     $line = $result;
@@ -277,8 +277,7 @@ sub replace_toc_line {
 
 sub parse_toc {
     # String -> Array
-    # `{toc:minlevel=3|maxlevel=4|Exclude=.*}'
-    # -> ($min, $max, $pat)
+    # {toc:minlevel=3|maxlevel=4|Exclude=.*} -> ($min, $max, $pat)
     my $s = shift;
     my @result = ( $toc_min, $toc_max, $toc_pat );
     if ( $s =~ /\{toc:minlevel=(\d+)\|maxlevel=(\d+)\|exclude=(.*)\}/ ) {
@@ -460,10 +459,6 @@ available from a third-party developer.)
 The location of the CSS stylesheet, e.g.,
 
     ./confluence2html --stylesheet=bootstrap.css
-
-=item --toc
-
-Whether to process the table of contents macro.
 
 =item --wrap
 
