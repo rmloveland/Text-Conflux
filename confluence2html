@@ -20,7 +20,6 @@ GetOptions(
 # Variables.
 
 my @output;
-my $toc_marker = "<!-- TOC -->";
 my @toc_lines;
 my $toc_min = 0;
 my $toc_max = 10;
@@ -59,18 +58,11 @@ LINE: while (<>) {
     }
 
     ## We wrap the below link-making code in a block so that text is
-    ## not modified in any way while we're inside a code block.
+    ## never modified in any way while we're inside a code block.
+    ## This was prompted by an attempt to format some Objective-C code
+    ## in one of our projects.
+
     do {
-      # AppNexus-specific wiki link processing
-      s{\[api:([[:alnum:]$wiki_link_pat]+)\]}
-       {<a href="https:\/\/wiki.appnexus.com\/display\/api\/$1">$1</a>}gis;
-
-      s{\[console:([[:alnum:]$wiki_link_pat]+)\]}
-       {<a href="https:\/\/wiki.appnexus.com\/display\/console\/$1">$1</a>}gis;
-
-      s{\[adnexusdocumentation:([[:alnum:]$wiki_link_pat]+)\]}
-       {<a href="https:\/\/wiki.appnexus.com\/display\/adnexusdocumentation\/$1">$1</a>}gis;
-
       # External links
       s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
        {<a href="$2">$1</a>}gis;
@@ -225,7 +217,7 @@ LINE: while (<>) {
 
     s{\n+}{\n}gis;    # Necessary?
 
-#     # Use newlines as an ugly proxy for paragraph breaks
+    # Use newlines as an ugly proxy for paragraph breaks
     $para++ if /\n\n+/;
     if ( $para % 2 != 0 ) {
         s{\n}{</p>}gis unless $para == 1;
