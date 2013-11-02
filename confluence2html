@@ -114,7 +114,7 @@ LINE: while (<>) {
     if (/h1. (.*)$/) {
         my $new =
           qq[<h1><a name="$1">$1</a></h1>];
-        my $toc_line = qq[<li id="h1"><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li class="h1"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 1, $toc_line ];
         s/h1. (.*)$/$new/;
     }
@@ -122,35 +122,35 @@ LINE: while (<>) {
     if (/h2. (.*)$/) {
         my $new =
           qq[<h2><a name="$1">$1</a></h2>];
-        my $toc_line = qq[<li id="h2"><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li class="h2"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 2, $toc_line ];
         s/h2. (.*)$/$new/;
     }
 
     if (/h3. (.*)$/) {
         my $new = qq[<h3><a name="$1">$1</a></h3>];
-        my $toc_line = qq[<li id="h3"><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li class="h3"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 3, $toc_line ];
         s/h3. (.*)$/$new/;
     }
 
     if (/h4. (.*)$/) {
         my $new = qq[<h4><a name="$1">$1</a></h4>];
-        my $toc_line = qq[<li id="h4"><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li class="h4"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 4, $toc_line ];
         s/h4. (.*)$/$new/;
     }
 
     if (/h5. (.*)$/) {
         my $new      = qq[<h5><a name="$1">$1</a></h5>];
-        my $toc_line = qq[<li id="h5"><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li class="h5"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 5, $toc_line ];
         s/h5. (.*)$/$new/;
     }
 
     if (/h6. (.*)$/) {
         my $new      = qq[<h6><a name="$1">$1</a></h6>];
-        my $toc_line = qq[<li id="h6"><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li class="h6"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 6, $toc_line ];
         s/h6. (.*)$/$new/;
     }
@@ -180,7 +180,7 @@ LINE: while (<>) {
     # that we can give them the appropriate colors using CSS.
     $info++ if /{info}/;
     if ( $info % 2 != 0 ) {
-        s/{info}/<div id="info"><p>/;
+        s/{info}/<div class="info"><p>/;
     }
     elsif ( $info % 2 == 0 ) {
         s/{info}/<\/p><\/div>/;
@@ -188,7 +188,7 @@ LINE: while (<>) {
 
     $note++ if /{note}/;
     if ( $note % 2 != 0 ) {
-        s/{note}/<div id="note"><p>/;
+        s/{note}/<div class="note"><p>/;
     }
     elsif ( $note % 2 == 0 ) {
         s/{note}/<\/p><\/div>/;
@@ -196,7 +196,7 @@ LINE: while (<>) {
 
     $tip++ if /{tip}/;
     if ( $tip % 2 != 0 ) {
-        s/{tip}/<div id="tip"><p>/;
+        s/{tip}/<div class="tip"><p>/;
     }
     elsif ( $tip % 2 == 0 ) {
         s/{tip}/<\/p><\/div>/;
@@ -204,7 +204,7 @@ LINE: while (<>) {
 
     $warning++ if /{warning}/;
     if ( $warning % 2 != 0 ) {
-        s/{warning}/<div id="warning"><p>/;
+        s/{warning}/<div class="warning"><p>/;
     }
     elsif ( $warning % 2 == 0 ) {
         s/{warning}/<\/p><\/div>/;
@@ -407,7 +407,7 @@ Supported macros include:
 Note that these macros generate C<div> tags with class names that
 correspond to the macro name for easy CSS styling. For example:
 
-    <div id="info"><p>
+    <div class="info"><p>
     These instructions assume that you have already installed and
     correctly configured... For more information, see ...
     </p></div>
