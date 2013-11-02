@@ -462,6 +462,8 @@ The location of the CSS stylesheet, e.g.,
 
     ./confluence2html --stylesheet=bootstrap.css
 
+If you pass this argument, --wrap is automatically passed as well.
+
 =item --wrap
 
 Whether to wrap the body of the resulting HTML in `html', `head', and

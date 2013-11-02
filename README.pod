@@ -74,7 +74,7 @@ Supported macros include:
 
 =item htmlcomment
 
-=item table-plus
+=item table
 
 =item toc
 
@@ -143,10 +143,9 @@ a forced line break).
 
 =item tables
 
-Tables are fully supported. The only requirement is that you must wrap
-the table itself in the `{table-plus}' macro. (This decision is a
-compromise based on the fact that it's a real Confluence macro
-available from a third-party developer.)
+Tables are supported. The only requirement is that you must wrap the
+table itself in the `{table}' macro. (This decision is a compromise
+based on the fact that it makes tables simpler to parse.)
 
 =back
 
@@ -160,9 +159,7 @@ The location of the CSS stylesheet, e.g.,
 
     ./confluence2html --stylesheet=bootstrap.css
 
-=item --toc
-
-Whether to process the table of contents macro.
+If you pass this argument, --wrap is automatically passed as well.
 
 =item --wrap
 
