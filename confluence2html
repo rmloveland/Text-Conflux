@@ -105,7 +105,7 @@ LINE: while (<>) {
     if (/h1. (.*)$/) {
         my $new =
           qq[<h1><a name="$1">$1</a></h1>];
-        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li id="h1"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 1, $toc_line ];
         s/h1. (.*)$/$new/;
     }
@@ -113,35 +113,35 @@ LINE: while (<>) {
     if (/h2. (.*)$/) {
         my $new =
           qq[<h2><a name="$1">$1</a></h2>];
-        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li id="h2"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 2, $toc_line ];
         s/h2. (.*)$/$new/;
     }
 
     if (/h3. (.*)$/) {
         my $new = qq[<h3><a name="$1">$1</a></h3>];
-        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li id="h3"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 3, $toc_line ];
         s/h3. (.*)$/$new/;
     }
 
     if (/h4. (.*)$/) {
         my $new = qq[<h4><a name="$1">$1</a></h4>];
-        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li id="h4"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 4, $toc_line ];
         s/h4. (.*)$/$new/;
     }
 
     if (/h5. (.*)$/) {
         my $new      = qq[<h5><a name="$1">$1</a></h5>];
-        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li id="h5"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 5, $toc_line ];
         s/h5. (.*)$/$new/;
     }
 
     if (/h6. (.*)$/) {
         my $new      = qq[<h6><a name="$1">$1</a></h6>];
-        my $toc_line = qq[<li><a href="#$1">$1</a></li>];
+        my $toc_line = qq[<li id="h6"><a href="#$1">$1</a></li>];
         push @toc_lines, [ 6, $toc_line ];
         s/h6. (.*)$/$new/;
     }
