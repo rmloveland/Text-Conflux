@@ -100,9 +100,9 @@ LINE: while (<>) {
 
       # Tables.  These still have to be wrapped in a `{table}' macro.
       # Hopefully not for long.
-      s{^\|\|}{<tr><th><strong>}gis;    # Beginning of table
-      s{\|\| ?\n}{</strong></th></tr>}gis;
-      s{\|\|}{<th><strong>}gis;         # Middle of columns
+      s{^\|\|}{<tr><th>}gis;    # Beginning of table
+      s{\|\| ?\n}{</th></tr>}gis;
+      s{\|\|}{</th><th>}gis;         # Middle of columns
       s{\| ?\n}{</td></tr>}gis;
       s{\|}{<td>}gis;
 
