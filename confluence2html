@@ -104,7 +104,7 @@ LINE: while (<>) {
       s{\|\| ?\n}{</th></tr>}gis;
       s{\|\|}{</th><th>}gis;         # Middle of columns
       s{\| ?\n}{</td></tr>}gis;
-      s{\|}{<td>}gis;
+      s{\|}{<tr><td>}gis;
 
     } unless $code % 2 != 0;
 
