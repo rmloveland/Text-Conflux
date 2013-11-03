@@ -53,7 +53,6 @@ LINE: while (<>) {
     state $warning     = 0;
     state $htmlcomment = 0;
     state $table       = 0;
-    state $para        = 0;
 
     next LINE if /{panel.*/;
     if (/{toc.*/) {
@@ -230,15 +229,12 @@ LINE: while (<>) {
 
     s{\n+}{\n}gis;    # Necessary?
 
-    # Use newlines as an ugly proxy for paragraph breaks.  It's not a
-    # hack, it's a ``heuristic''.  :-}
-    $para++ if /\n+/;
-    if ( $para % 2 != 0 ) {
-        s{\n}{</p>}gis unless $para == 1;
-    }
-    elsif ( $para % 2 == 0 ) {
-        s{\n}{<p>}gis;
-    }
+    # Since all the other transformations are complete, we now know
+    # that we can wrap lines of text that are surrounded by newlines
+    # in paragraph tags (with a few simple exceptions).
+
+    s{^([\w <\/>\.,="&#]+\n+)}
+     {<p>$1</p>}g unless m!(h[0-9]|</?pre>|</?table>)!;
 
     s/{indent}//g;
     push @output, $_;
