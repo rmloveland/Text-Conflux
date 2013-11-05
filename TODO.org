@@ -19,9 +19,19 @@
 
 * TODO Generate a parse tree/AST that can be re-used
 
+  Idea, Tue Nov 5 09:11:42 2013: What if, instead of generating HTML
+  straightaway, we dynamically write the text of a Perl data
+  structure, which we then read in using EVAL?
+
 * TODO Add unit tests
 
-  These can be super-high-level and just test the script's output.
+  Some of the edge cases we need to test for:
+
+  - [ ] Macro usage inside table cells (info, tip, note, warning, code)
+  - [ ] Formatting inside table cells (monospace, italic, bold)
+  - [ ] Correctly wrap paragraphs, even if those paragraphs already
+    contain elements of wiki markup that have already been processed
+    (i.e., that are already HTML)
 
 * TODO Refactor this ugly bastard
 
