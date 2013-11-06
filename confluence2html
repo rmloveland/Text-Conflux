@@ -32,7 +32,7 @@ my $external_link_target_pat = $external_link_text_pat . "#_/:=&";
 
 my $image_pat = "\\-|\\. ";
 
-my $bold_pat   = qq{\\- &,:>\\.\\"};
+my $bold_pat   = qq{\\- &,:'?>\\.\\"};
 my $italic_pat = $bold_pat;
 
 $wrap++ if $stylesheet;
@@ -84,8 +84,11 @@ LINE: while (<>) {
       s{^\!([[:alnum:]$image_pat]+.(png|jpg)).*\!}
        {<br /><br /><img src="../img/$1"/><br /><br />}gis;
 
-      # Bold elements.
+      # Bold elements (Sometimes they occur at the beginning of a
+      # line, so we process them before we get to the list section
+      # below.
       s/\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
+      s/^\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
 
       # Lists of links, optionally followed by a colon or slash, then
       # descriptive text.
@@ -149,34 +152,34 @@ LINE: while (<>) {
     # that we can give them the appropriate colors using CSS.
     $info++ if /{info}/;
     if ( $info % 2 != 0 ) {
-        s/{info}/<div class="info"><p>/;
+        s/{info}/<div class="info">/;
     }
     elsif ( $info % 2 == 0 ) {
-        s/{info}/<\/p><\/div>/;
+        s/{info}/<\/div>/;
     }
 
     $note++ if /{note}/;
     if ( $note % 2 != 0 ) {
-        s/{note}/<div class="note"><p>/;
+        s/{note}/<div class="note">/;
     }
     elsif ( $note % 2 == 0 ) {
-        s/{note}/<\/p><\/div>/;
+        s/{note}/<\/div>/;
     }
 
     $tip++ if /{tip}/;
     if ( $tip % 2 != 0 ) {
-        s/{tip}/<div class="tip"><p>/;
+        s/{tip}/<div class="tip">/;
     }
     elsif ( $tip % 2 == 0 ) {
-        s/{tip}/<\/p><\/div>/;
+        s/{tip}/<\/div>/;
     }
 
     $warning++ if /{warning}/;
     if ( $warning % 2 != 0 ) {
-        s/{warning}/<div class="warning"><p>/;
+        s/{warning}/<div class="warning">/;
     }
     elsif ( $warning % 2 == 0 ) {
-        s/{warning}/<\/p><\/div>/;
+        s/{warning}/<\/div>/;
     }
 
     # Support HTML comments. This is one of my favorite macros.
@@ -203,8 +206,15 @@ LINE: while (<>) {
     # that we can wrap lines of text that are surrounded by newlines
     # in paragraph tags (with a few simple exceptions).
 
-    s{^([\w <\/>\.,="&#]+\n+)}
-     {<p>$1</p>}g unless m!(h[0-9]|</?pre>|</?table>)!;
+    if (/(<\/?h[0-9]>|<\/?pre>|<\/?table>|<\/?li>|<\/?div)/) {
+      push @output, $_;
+      next LINE;
+    }
+
+    unless($_ =~ /^(<h[0-9]|<\/?pre>|<\/?table><\/?div)/) {
+      s{^([\w <\/>\.,'\_\-!=:"&#]+\n+)}
+       {<p>$1</p>}g;
+    }
 
     s/{indent}//g;
     push @output, $_;
@@ -373,10 +383,10 @@ Supported macros include:
 Note that these macros generate C<div> tags with class names that
 correspond to the macro name for easy CSS styling. For example:
 
-    <div class="info"><p>
+    <div class="info">
     These instructions assume that you have already installed and
     correctly configured... For more information, see ...
-    </p></div>
+    </div>
 
 See below for more information about the `toc' macro.
 
