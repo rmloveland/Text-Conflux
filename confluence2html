@@ -27,7 +27,7 @@ my $toc_pat = "3.14159";
 my $wiki_link_pat   = "&|/\-:. ";
 my $header_link_pat = $wiki_link_pat . "#";
 
-my $external_link_text_pat   = "\\.\\?\\- ";
+my $external_link_text_pat   = "\\.\\?#!\\- ";
 my $external_link_target_pat = $external_link_text_pat . "#_/:=&";
 
 my $image_pat = "\\-|\\. ";
@@ -112,51 +112,16 @@ LINE: while (<>) {
 
     } unless $code % 2 != 0;
 
-    # Headers, 1-6.  We add an appropriate ID to each header's LI tag
-    # so that we can use CSS's TEXT-INDENT to create a nice
+    # Process headers, 1-6.  We add an appropriate ID to each header's
+    # LI tag so that we can use CSS's TEXT-INDENT to create a nice
     # indentation in the table of contents.
-    if (/h1. (.*)$/) {
+
+    if (/h([0-9]). (.*)$/) {
         my $new =
-          qq[<h1><a name="$1">$1</a></h1>];
-        my $toc_line = qq[<li class="h1"><a href="#$1">$1</a></li>];
-        push @toc_lines, [ 1, $toc_line ];
-        s/h1. (.*)$/$new/;
-    }
-
-    if (/h2. (.*)$/) {
-        my $new =
-          qq[<h2><a name="$1">$1</a></h2>];
-        my $toc_line = qq[<li class="h2"><a href="#$1">$1</a></li>];
-        push @toc_lines, [ 2, $toc_line ];
-        s/h2. (.*)$/$new/;
-    }
-
-    if (/h3. (.*)$/) {
-        my $new = qq[<h3><a name="$1">$1</a></h3>];
-        my $toc_line = qq[<li class="h3"><a href="#$1">$1</a></li>];
-        push @toc_lines, [ 3, $toc_line ];
-        s/h3. (.*)$/$new/;
-    }
-
-    if (/h4. (.*)$/) {
-        my $new = qq[<h4><a name="$1">$1</a></h4>];
-        my $toc_line = qq[<li class="h4"><a href="#$1">$1</a></li>];
-        push @toc_lines, [ 4, $toc_line ];
-        s/h4. (.*)$/$new/;
-    }
-
-    if (/h5. (.*)$/) {
-        my $new      = qq[<h5><a name="$1">$1</a></h5>];
-        my $toc_line = qq[<li class="h5"><a href="#$1">$1</a></li>];
-        push @toc_lines, [ 5, $toc_line ];
-        s/h5. (.*)$/$new/;
-    }
-
-    if (/h6. (.*)$/) {
-        my $new      = qq[<h6><a name="$1">$1</a></h6>];
-        my $toc_line = qq[<li class="h6"><a href="#$1">$1</a></li>];
-        push @toc_lines, [ 6, $toc_line ];
-        s/h6. (.*)$/$new/;
+          qq[<h$1><a name="$2">$2</a></h$1>];
+        my $toc_line = qq[<li class="h$1"><a href="#$2">$2</a></li>];
+        push @toc_lines, [ $1, $toc_line ];
+        s/h$1. (.*)$/$new/;
     }
 
     # Monospace.
