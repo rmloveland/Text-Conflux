@@ -32,7 +32,7 @@ my $external_link_target_pat = $external_link_text_pat . "#_/:=&";
 
 my $image_pat = "\\-|\\. ";
 
-my $bold_pat   = qq{!@#$%^\(\)+\\- &,:'?>\\.\\"};
+my $bold_pat   = qq{_!@#$%^\(\)+\\- &,:=`'?>\\.\\"};
 my $italic_pat = $bold_pat;
 
 my $panel_pat = "{panel.*";
@@ -216,7 +216,7 @@ LINE: while (<>) {
     }
 
     unless($_ =~ /^(<h[0-9]|<\/?pre>|<\/?table><\/?div)/) {
-      s{^([\w <\/>\.,'\_\-!=:"&#]+\n+)}
+      s{^([\w <\/>\.,`'\-!=:"&#]+\n+)}
        {<p>$1</p>}g;
     }
 
