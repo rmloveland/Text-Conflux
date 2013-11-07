@@ -22,7 +22,7 @@ my @output;
 my @toc_lines;
 my $toc_min = 0;
 my $toc_max = 10;
-my $toc_pat = "3.14159";
+my $toc_exclude_pat;
 
 my $wiki_link_pat   = "&|/\-:. ";
 my $header_link_pat = $wiki_link_pat . "#";
@@ -34,6 +34,9 @@ my $image_pat = "\\-|\\. ";
 
 my $bold_pat   = qq{\\- &,:'?>\\.\\"};
 my $italic_pat = $bold_pat;
+
+my $panel_pat = "{panel.*";
+my $toc_pat = "{toc.*";
 
 $wrap++ if $stylesheet;
 
@@ -54,8 +57,9 @@ LINE: while (<>) {
     state $htmlcomment = 0;
     state $table       = 0;
 
-    next LINE if /{panel.*/;
-    if (/{toc.*/) {
+    next LINE if /$panel_pat/;
+
+    if (/$toc_pat/) {
         push @output, $_;
         next LINE;
     }
@@ -228,12 +232,12 @@ if ($wrap) {
 # Ye Olde Main Output Processing Loop.
 
 for my $line (@output) {
-    if ( $line =~ /{toc/ ) {
+    if ( $line =~ /$toc_pat/ ) {
         my @result  = parse_toc($line);
         my $toc_min = $result[0];
         my $toc_max = $result[1];
-        my $toc_pat = $result[2];
-        $line = replace_toc_line( $line, $toc_min, $toc_max, $toc_pat );
+        my $toc_exclude_pat = $result[2];
+        $line = replace_toc_line( $line, $toc_min, $toc_max, $toc_exclude_pat );
     }
     say $line;
 }
@@ -279,7 +283,7 @@ sub parse_toc {
     # String -> Array
     # {toc:minlevel=3|maxlevel=4|Exclude=.*} -> ($min, $max, $pat)
     my $s = shift;
-    my @result = ( $toc_min, $toc_max, $toc_pat );
+    my @result = ( $toc_min, $toc_max, $toc_exclude_pat );
     if ( $s =~ /\{toc:minlevel=(\d+)\|maxlevel=(\d+)\|exclude=(.*)\}/ ) {
         @result = ( $1, $2, $3 );
     }
