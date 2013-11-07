@@ -1,0 +1,290 @@
+h2. Install the Android SDK
+
+This SDK lets you show ads in your Android app. Below we describe the steps required to install it and start showing ads.
+
+If you have trouble installing or using the SDK, see [Troubleshoot].
+
+For the full list of our SDK docs, see [AppNexus Mobile SDKs].
+
+{tip}
+*Discussion Forum*
+For help and support, join our [forum|https://groups.google.com/forum/#!forum/appnexussdk].
+{tip}
+
+{info}
+These instructions assume that you have already installed and correctly configured the Android SDK on your machine. For more information, see the official [Android SDK|http://developer.android.com/sdk/index.html] documentation.
+{info}
+
+{panel:borderStyle=solid|title=On This Page|bgColor=#FFD28C|borderWidth=1|borderColor=#000000}
+{toc:minlevel=3|maxlevel=3|exclude=Related.*}
+{panel}
+
+h3. Requirements
+
+{table}
+|| Software || Version ||
+| Android | 2.2.x+ |
+| Android SDK | 8+ |
+{table}
+
+{note}
+20130130: The SDK won't build unless the build target in Eclipse is set to Android SDK 14 or up.
+{note}
+
+h3. Installation
+
+Follow the steps below to install the SDK as a library in your application.
+
+h5. Step 1. Clone the repo
+
+First, clone our git repository:
+
+{code}
+git clone git@github.com:appnexus/mobile-sdk-android.git
+{code}
+
+*FIXME: Is it really just a matter of providing your SSH key to get write access? This step doesn't seem necessary to clone the repo.*
+
+{info}
+Note that you will need to provide your public SSH key if you want write access to the repo.
+{info}
+
+h5. Step 2. Set up the SDK library
+
+{tip}
+The instructions in this step show you how to add our SDK to your project. If you would like to [Mediate our Android SDK], you'll need to add the {{mediation/mediating}} folder to your project as well.
+{tip}
+
+Import the {{sdk}} directory into your workspace as a library using your preferred tools.
+
+Then follow the steps below to configure the SDK to work with your app. You can use XML, Java, or a mixture of the two.
+
+{info}
+In order to show ads, you'll need to obtain a "placement ID" from your ad network.
+{info}
+
+* [#Option 1. XML]
+* [#Option 2. Java]
+
+h6. Option 1. XML
+
+Edit the XML file describing your application layout. In a typical application, it's called {{activity_main.xml}}.
+
+This table describes the XML used to change SDK settings, alongside the equivalent Java methods.
+
+{table}
+|| Name || Java Equivalent || Description || Example ||
+| {{opensdk:placement_id}} | {{adview.setPlacementID()}} | The placement ID associated with your app's inventory.
+{warning}
+You must include a placement ID or an error will be thrown.
+{warning} | {{"656561"}} |
+| {{opensdk:test}} | {{Settings.getSettings().test_mode}} | If {{true}}, the application is in testing. | {{"true"}} |
+| {{opensdk:auto_refresh}} | {{adview.setAutoRefresh()}} | If {{true}}, the advertisement should refresh at a specified time interval. | {{"true"}} |
+| {{opensdk:auto_refresh_interval}} | {{adview.setAutoRefreshInterval()}} | The time interval at which the advertisement should refresh, measured in milliseconds. | {{"60000"}} |
+| {{opensdk:width}} | {{adview.setAdWidth()}} | The width of the advertisement to request from the server. If this is not set, the SDK requests an ad of at least {{android:layout_width}}.  | {{"320dp"}} |
+| {{opensdk:height}} | {{adview.setAdHeight()}} | The height of the view. | {{"50dp"}} |
+{table}
+
+There are two changes you need to make:
+
+* Add the {{xmlns:opensdk}} namespace attribute describing your application to your layout tag; this might be a {{RelativeLayout}}, {{LinearLayout}}, or {{FrameLayout}}.
+
+{code}xmlns:opensdk="http://schemas.android.com/apk/res/com.example.hello_world"{code}
+
+* Add a {{com.appnexus.opensdk.BannerAdView}} (or {{com.appnexus.opensdk.InterstitialAdView}}) block with your preferred configuration settings provided.
+
+{code}
+    <com.appnexus.opensdk.AdView
+        android:id="@+id/ad"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        opensdk:placement_id="656561"
+        opensdk:width="320"
+        opensdk:height="50"
+        opensdk:auto_refresh="false"
+        opensdk:auto_refresh_interval="15000"/>
+{code}
+
+h6. Option 2. Java
+
+The following methods are used when configure your application using Java. XML equivalents are shown for reference.
+
+{table}
+|| Name || XML Equivalent || Description || Example ||
+| {{adview.setPlacementID()}}          | {{opensdk:placement_id}}          | The placement ID associated with your app's inventory.
+{warning}
+You must include a placement ID or an error will be thrown.
+{warning} | {{"656561"}} |
+| {{Settings.getSettings().test_mode}} | {{opensdk:test}}                  | If {{true}}, the application is in testing.                                                                                                         | {{"true"}}   |
+| {{adview.setAutoRefresh()}}          | {{opensdk:auto_refresh}}          | If {{true}}, the advertisement should refresh at a specified time interval.                                                                         | {{"true"}}   |
+| {{adview.setAutoRefreshInterval()}}  | {{opensdk:auto_refresh_interval}} | The time interval at which the advertisement should refresh, measured in milliseconds.                                                         | {{"60000"}}  |
+| {{adview.setAdWidth()}}              | {{opensdk:width}}                 | The width of the advertisement to request from the server. If this is not set, the SDK requests an ad of at least {{android:layout_width}}.    | {{"320"}}  |
+| {{adview.setAdHeight()}}             | {{opensdk:height}}                | The height of the view.                                                                                                                        | {{"50"}}   |
+{table}
+
+The code below shows an example Java configuration:
+
+{code}
+package com.example.helloworld;
+
+import com.appnexus.opensdk.AdView;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.RelativeLayout;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		// SDK configuration below...
+		RelativeLayout rl = (RelativeLayout)(findViewById(R.id.mainview));
+		AdView av = new BannerAdView(this);
+		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, 100);
+		av.setAdHeight(50);
+		av.setAdWidth(320);
+		av.setLayoutParams(lp);
+		av.setPlacementID("656561");
+		rl.addView(av);
+		av.loadAd();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+}
+{code}
+
+h5. Step 5. Edit app permissions
+
+Edit your Android manifest to include the following permissions:
+
+{code}
+<uses-permission android:name='android.permission.ACCESS_NETWORK_STATE' />
+<uses-permission android:name='android.permission.INTERNET' />
+<uses-permission android:name='android.permission.ACCESS_COARSE_LOCATION' />
+<uses-permission android:name='android.permission.ACCESS_FINE_LOCATION' />
+{code}
+
+* {{ACCESS_NETWORK_STATE}} (required) - Grants the SDK permission to check for a live internet connection.
+* {{INTERNET}} (required) - Grants the SDK permission to access the internet.
+* {{ACCESS_COARSE_LOCATION}} (recommended) - Grants the SDK permission to access approximate location based on cell tower.
+* {{ACCESS_FINE_LOCATION}} (recommended) - Grants the SDK permission to access more accurate location based on gps.
+
+{info}
+Although not technically required, the *{{LOCATION}} permissions make it possible for the SDK to send location-based data to advertisers. Sending better location data generally leads to better monetization. Please note that the SDK will never wake up the phone to request the location to be updated; this would take time and battery. Instead, it will use these permissions to access the last known location of the device.
+{info}
+ 
+You'll also need to add the following activities:
+
+{code}
+<application
+  ...
+  <activity android:name="com.appnexus.opensdk.AdActivity" />
+  <activity android:name="com.appnexus.opensdk.BrowserActivity" />
+</application>
+{code}
+
+h3. Show Ads
+
+This section has the code you'll need to write in order to display ads.
+
+h4. Banners
+
+First, you'll need to set up a {{BannerAdView}}. This view is added to an existing layout in order to show ads.
+
+{code}
+BannerAdView bav = new BannerAdView(this);
+bav.setPlacementID("656561");
+{code}
+
+To load an ad, just call:
+
+{code}
+bav.loadAd();
+{code}
+
+h4. Interstitials
+
+Follow these directions to show interstitial ads.
+
+h5. Step 1. Implement the AdListener interface
+
+In order to show interstitials, at the top of {{MainActivity.java}}, you'll need to prepare to implement the {{AdListener}} interface by changing
+
+{code}
+public class MainActivity extends Activity {
+  ... codez
+}
+{code}
+
+to
+
+{code}
+public class MainActivity extends Activity implements AdListener {
+  ... codez
+}
+{code}
+
+h5. Step 2. Make an InterstitialAdView
+
+In {{MainActivity.java}}'s {{onCreate}} method, create an {{InterstitialAdView}}, configure its placement ID, and set up the {{AdListener}} interface:
+
+{code}
+InterstitialAdView iav = new InterstitialAdView(this);
+iav.setPlacementID("656561");
+iav.setAdListener(this);
+{code}
+
+h5. Step 3. Override methods in the AdListener interface
+
+You'll also need to define your own methods for the {{AdListener}} interface:
+
+* {{onAdLoaded}}: This method will be called when an ad loads.
+
+* {{onAdRequestFailed}}: This method will be called when an ad request fails.
+
+Here's a trivial example -- you can easily modify it to work on banners as well:
+
+{code}
+@Override
+public void onAdLoaded(InterstitialAdView iAdView) {
+	Log.e("HelloWorld", "Ad request loaded");	
+}
+
+@Override
+public void onAdRequestFailed(InterstitialAdView iAdView) {
+	Log.e("HelloWorld", "Ad request failed");	
+}
+{code}
+
+h5. Step 4. Load and show the ad
+
+Using the {{InterstitialAdView}} object, load an ad in the background with the {{loadAd}} method, and display it with {{show}}:
+
+{code}
+// Interstitials must be loaded before being shown.
+iav.loadAd();
+iav.show();
+{code}
+
+h4. MRAID
+
+Just, you know, make an MRAID creative. Follow the [spec|http://www.iab.net/mraid]. It's cool, we implement it. The whole thing.
+
+h3. Related Topics
+
+* [Show Ads on Android]
+* [Troubleshoot]
+* [Mediation]
+* [Mediate our Android SDK]
+
+Copyright 2013 APPNEXUS INC

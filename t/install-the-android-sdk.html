@@ -1,0 +1,473 @@
+<html><head><link href="bootstrap.css" rel="stylesheet"></head><body>
+
+<h2><a name="Install the Android SDK">Install the Android SDK</a></h2>
+
+
+
+<p>This SDK lets you show ads in your Android app. Below we describe the steps required to install it and start showing ads.
+</p>
+
+
+<p>If you have trouble installing or using the SDK, see <a href="troubleshoot.html">Troubleshoot</a>.
+</p>
+
+
+<p>For the full list of our SDK docs, see <a href="appnexus-mobile-sdks.html">AppNexus Mobile SDKs</a>.
+</p>
+
+
+<div class="tip">
+
+<p><strong>Discussion Forum</strong>
+</p>
+<p>For help and support, join our <a href="https://groups.google.com/forum/#!forum/appnexussdk">forum</a>.
+</p>
+</div>
+
+
+
+<div class="info">
+
+<p>These instructions assume that you have already installed and correctly configured the Android SDK on your machine. For more information, see the official <a href="http://developer.android.com/sdk/index.html">Android SDK</a> documentation.
+</p>
+</div>
+
+
+
+<div id="toc"><ul><li class="h3"><a href="#Requirements">Requirements</a></li>
+<li class="h3"><a href="#Installation">Installation</a></li>
+<li class="h3"><a href="#Show Ads">Show Ads</a></li>
+</ul></div>
+
+
+<h3><a name="Requirements">Requirements</a></h3>
+
+
+
+<table>
+
+<tr><th> Software </th><th> Version </th></tr>
+<tr><td> Android </td><td> 2.2.x+ </td></tr>
+<tr><td> Android SDK </td><td> 8+ </td></tr>
+</table>
+
+
+
+<div class="note">
+
+<p>20130130: The SDK won't build unless the build target in Eclipse is set to Android SDK 14 or up.
+</p>
+</div>
+
+
+
+<h3><a name="Installation">Installation</a></h3>
+
+
+
+<p>Follow the steps below to install the SDK as a library in your application.
+</p>
+
+
+<h5><a name="Step 1. Clone the repo">Step 1. Clone the repo</a></h5>
+
+
+
+<p>First, clone our git repository:
+</p>
+
+
+<pre>
+git clone git@github.com:appnexus/mobile-sdk-android.git
+</pre>
+
+
+
+<strong>FIXME: Is it really just a matter of providing your SSH key to get write access? This step doesn't seem necessary to clone the repo.</strong>
+
+
+
+<div class="info">
+
+<p>Note that you will need to provide your public SSH key if you want write access to the repo.
+</p>
+</div>
+
+
+
+<h5><a name="Step 2. Set up the SDK library">Step 2. Set up the SDK library</a></h5>
+
+
+
+<div class="tip">
+
+<p>The instructions in this step show you how to add our SDK to your project. If you would like to <a href="mediate-our-android-sdk.html">Mediate our Android SDK</a>, you'll need to add the <code>mediation/mediating</code> folder to your project as well.
+</p>
+</div>
+
+
+
+<p>Import the <code>sdk</code> directory into your workspace as a library using your preferred tools.
+</p>
+
+
+<p>Then follow the steps below to configure the SDK to work with your app. You can use XML, Java, or a mixture of the two.
+</p>
+
+
+<div class="info">
+
+<p>In order to show ads, you'll need to obtain a "placement ID" from your ad network.
+</p>
+</div>
+
+
+
+<li><a href="#Option 1. XML">Option 1. XML</a></li>
+
+<li><a href="#Option 2. Java">Option 2. Java</a></li>
+
+
+
+<h6><a name="Option 1. XML">Option 1. XML</a></h6>
+
+
+
+<p>Edit the XML file describing your application layout. In a typical application, it's called <code>activity_main.xml</code>.
+</p>
+
+
+<p>This table describes the XML used to change SDK settings, alongside the equivalent Java methods.
+</p>
+
+
+<table>
+
+<tr><th> Name </th><th> Java Equivalent </th><th> Description </th><th> Example </th></tr>
+<tr><td> <code>opensdk:placement_id</code> </td><td> <code>adview.setPlacementID()</code> </td><td> The placement ID associated with your app's inventory.
+
+<div class="warning">
+
+<p>You must include a placement ID or an error will be thrown.
+</p>
+</div> </td><td> <code>"656561"</code> </td></tr>
+<tr><td> <code>opensdk:test</code> </td><td> <code>Settings.getSettings().test_mode</code> </td><td> If <code>true</code>, the application is in testing. </td><td> <code>"true"</code> </td></tr>
+<tr><td> <code>opensdk:auto_refresh</code> </td><td> <code>adview.setAutoRefresh()</code> </td><td> If <code>true</code>, the advertisement should refresh at a specified time interval. </td><td> <code>"true"</code> </td></tr>
+<tr><td> <code>opensdk:auto_refresh_interval</code> </td><td> <code>adview.setAutoRefreshInterval()</code> </td><td> The time interval at which the advertisement should refresh, measured in milliseconds. </td><td> <code>"60000"</code> </td></tr>
+<tr><td> <code>opensdk:width</code> </td><td> <code>adview.setAdWidth()</code> </td><td> The width of the advertisement to request from the server. If this is not set, the SDK requests an ad of at least <code>android:layout_width</code>.  </td><td> <code>"320dp"</code> </td></tr>
+<tr><td> <code>opensdk:height</code> </td><td> <code>adview.setAdHeight()</code> </td><td> The height of the view. </td><td> <code>"50dp"</code> </td></tr>
+</table>
+
+
+
+<p>There are two changes you need to make:
+</p>
+
+
+<li>Add the <code>xmlns:opensdk</code> namespace attribute describing your application to your layout tag; this might be a <code>RelativeLayout</code>, <code>LinearLayout</code>, or <code>FrameLayout</code>.</li>
+
+
+
+<pre>xmlns:opensdk="http://schemas.android.com/apk/res/com.example.hello_world"</pre>
+
+
+
+<li>Add a <code>com.appnexus.opensdk.BannerAdView</code> (or <code>com.appnexus.opensdk.InterstitialAdView</code>) block with your preferred configuration settings provided.</li>
+
+
+
+<pre>
+    &lt;com.appnexus.opensdk.AdView
+        android:id="@+id/ad"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        opensdk:placement_id="656561"
+        opensdk:width="320"
+        opensdk:height="50"
+        opensdk:auto_refresh="false"
+        opensdk:auto_refresh_interval="15000"/&gt;
+</pre>
+
+
+
+<h6><a name="Option 2. Java">Option 2. Java</a></h6>
+
+
+
+<p>The following methods are used when configure your application using Java. XML equivalents are shown for reference.
+</p>
+
+
+<table>
+
+<tr><th> Name </th><th> XML Equivalent </th><th> Description </th><th> Example </th></tr>
+<tr><td> <code>adview.setPlacementID()</code>          </td><td> <code>opensdk:placement_id</code>          </td><td> The placement ID associated with your app's inventory.
+
+<div class="warning">
+
+<p>You must include a placement ID or an error will be thrown.
+</p>
+</div> </td><td> <code>"656561"</code> </td></tr>
+<tr><td> <code>Settings.getSettings().test_mode</code> </td><td> <code>opensdk:test</code>                  </td><td> If <code>true</code>, the application is in testing.                                                                                                         </td><td> <code>"true"</code>   </td></tr>
+<tr><td> <code>adview.setAutoRefresh()</code>          </td><td> <code>opensdk:auto_refresh</code>          </td><td> If <code>true</code>, the advertisement should refresh at a specified time interval.                                                                         </td><td> <code>"true"</code>   </td></tr>
+<tr><td> <code>adview.setAutoRefreshInterval()</code>  </td><td> <code>opensdk:auto_refresh_interval</code> </td><td> The time interval at which the advertisement should refresh, measured in milliseconds.                                                         </td><td> <code>"60000"</code>  </td></tr>
+<tr><td> <code>adview.setAdWidth()</code>              </td><td> <code>opensdk:width</code>                 </td><td> The width of the advertisement to request from the server. If this is not set, the SDK requests an ad of at least <code>android:layout_width</code>.    </td><td> <code>"320"</code>  </td></tr>
+<tr><td> <code>adview.setAdHeight()</code>             </td><td> <code>opensdk:height</code>                </td><td> The height of the view.                                                                                                                        </td><td> <code>"50"</code>   </td></tr>
+</table>
+
+
+
+<p>The code below shows an example Java configuration:
+</p>
+
+
+<pre>
+package com.example.helloworld;
+
+import com.appnexus.opensdk.AdView;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.RelativeLayout;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		// SDK configuration below...
+		RelativeLayout rl = (RelativeLayout)(findViewById(R.id.mainview));
+		AdView av = new BannerAdView(this);
+		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, 100);
+		av.setAdHeight(50);
+		av.setAdWidth(320);
+		av.setLayoutParams(lp);
+		av.setPlacementID("656561");
+		rl.addView(av);
+		av.loadAd();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+}
+</pre>
+
+
+
+<h5><a name="Step 5. Edit app permissions">Step 5. Edit app permissions</a></h5>
+
+
+
+<p>Edit your Android manifest to include the following permissions:
+</p>
+
+
+<pre>
+&lt;uses-permission android:name='android.permission.ACCESS_NETWORK_STATE' /&gt;
+&lt;uses-permission android:name='android.permission.INTERNET' /&gt;
+&lt;uses-permission android:name='android.permission.ACCESS_COARSE_LOCATION' /&gt;
+&lt;uses-permission android:name='android.permission.ACCESS_FINE_LOCATION' /&gt;
+</pre>
+
+
+
+<li><code>ACCESS_NETWORK_STATE</code> (required) - Grants the SDK permission to check for a live internet connection.</li>
+
+<li><code>INTERNET</code> (required) - Grants the SDK permission to access the internet.</li>
+
+<li><code>ACCESS_COARSE_LOCATION</code> (recommended) - Grants the SDK permission to access approximate location based on cell tower.</li>
+
+<li><code>ACCESS_FINE_LOCATION</code> (recommended) - Grants the SDK permission to access more accurate location based on gps.</li>
+
+
+
+<div class="info">
+
+Although not technically required, the *<code>LOCATION</code> permissions make it possible for the SDK to send location-based data to advertisers. Sending better location data generally leads to better monetization. Please note that the SDK will never wake up the phone to request the location to be updated; this would take time and battery. Instead, it will use these permissions to access the last known location of the device.
+
+</div>
+
+<p> 
+</p>
+<p>You'll also need to add the following activities:
+</p>
+
+
+<pre>
+&lt;application
+  ...
+  &lt;activity android:name="com.appnexus.opensdk.AdActivity" /&gt;
+  &lt;activity android:name="com.appnexus.opensdk.BrowserActivity" /&gt;
+&lt;/application&gt;
+</pre>
+
+
+
+<h3><a name="Show Ads">Show Ads</a></h3>
+
+
+
+<p>This section has the code you'll need to write in order to display ads.
+</p>
+
+
+<h4><a name="Banners">Banners</a></h4>
+
+
+
+<p>First, you'll need to set up a <code>BannerAdView</code>. This view is added to an existing layout in order to show ads.
+</p>
+
+
+<pre>
+BannerAdView bav = new BannerAdView(this);
+bav.setPlacementID("656561");
+</pre>
+
+
+
+<p>To load an ad, just call:
+</p>
+
+
+<pre>
+bav.loadAd();
+</pre>
+
+
+
+<h4><a name="Interstitials">Interstitials</a></h4>
+
+
+
+<p>Follow these directions to show interstitial ads.
+</p>
+
+
+<h5><a name="Step 1. Implement the AdListener interface">Step 1. Implement the AdListener interface</a></h5>
+
+
+
+<p>In order to show interstitials, at the top of <code>MainActivity.java</code>, you'll need to prepare to implement the <code>AdListener</code> interface by changing
+</p>
+
+
+<pre>
+public class MainActivity extends Activity {
+  ... codez
+}
+</pre>
+
+
+
+<p>to
+</p>
+
+
+<pre>
+public class MainActivity extends Activity implements AdListener {
+  ... codez
+}
+</pre>
+
+
+
+<h5><a name="Step 2. Make an InterstitialAdView">Step 2. Make an InterstitialAdView</a></h5>
+
+
+
+<p>In <code>MainActivity.java</code>'s <code>onCreate</code> method, create an <code>InterstitialAdView</code>, configure its placement ID, and set up the <code>AdListener</code> interface:
+</p>
+
+
+<pre>
+InterstitialAdView iav = new InterstitialAdView(this);
+iav.setPlacementID("656561");
+iav.setAdListener(this);
+</pre>
+
+
+
+<h5><a name="Step 3. Override methods in the AdListener interface">Step 3. Override methods in the AdListener interface</a></h5>
+
+
+
+<p>You'll also need to define your own methods for the <code>AdListener</code> interface:
+</p>
+
+
+<li><code>onAdLoaded</code>: This method will be called when an ad loads.</li>
+
+
+
+<li><code>onAdRequestFailed</code>: This method will be called when an ad request fails.</li>
+
+
+
+<p>Here's a trivial example -- you can easily modify it to work on banners as well:
+</p>
+
+
+<pre>
+@Override
+public void onAdLoaded(InterstitialAdView iAdView) {
+	Log.e("HelloWorld", "Ad request loaded");	
+}
+
+@Override
+public void onAdRequestFailed(InterstitialAdView iAdView) {
+	Log.e("HelloWorld", "Ad request failed");	
+}
+</pre>
+
+
+
+<h5><a name="Step 4. Load and show the ad">Step 4. Load and show the ad</a></h5>
+
+
+
+<p>Using the <code>InterstitialAdView</code> object, load an ad in the background with the <code>loadAd</code> method, and display it with <code>show</code>:
+</p>
+
+
+<pre>
+// Interstitials must be loaded before being shown.
+iav.loadAd();
+iav.show();
+</pre>
+
+
+
+<h4><a name="MRAID">MRAID</a></h4>
+
+
+
+<p>Just, you know, make an MRAID creative. Follow the <a href="http://www.iab.net/mraid">spec</a>. It's cool, we implement it. The whole thing.
+</p>
+
+
+<h3><a name="Related Topics">Related Topics</a></h3>
+
+
+
+<li><a href="show-ads-on-android.html">Show Ads on Android</a></li>
+
+<li><a href="troubleshoot.html">Troubleshoot</a></li>
+
+<li><a href="mediation.html">Mediation</a></li>
+
+<li><a href="mediate-our-android-sdk.html">Mediate our Android SDK</a></li>
+
+
+
+<p>Copyright 2013 APPNEXUS INC
+</p>
+</body></html>
