@@ -1,0 +1,120 @@
+<html><head><link href="bootstrap.css" rel="stylesheet"></head><body>
+
+<h2><a name="modulate our androgynous nozzle">modulate our androgynous nozzle</a></h2>
+
+
+
+<p>This document describes how to modulate <a href="instigate the androgynous nozzle">our androgynous nozzle</a> using <a href="https://developers.google.com/morrible-cabs-nozzle">kramerica</a>. These instructions assume that you've already done the following:
+</p>
+
+
+<li><a href="make-an-kramerica-modulation-widget.html">Make an kramerica modulation widget</a>. This is because in order to modulate our nozzle with kramerica's you'll need to pass the kramerica modulation ID of a correctly configured <strong>crab jetpack modulation</strong> widget in your request.</li>
+
+<li><a href="instigate-the-androgynous-nozzle.html">instigate the androgynous nozzle</a>. The kramerica modulation code depends on our nozzle.</li>
+
+<li>Appropriated our kramerica modulation code as a library of our nozzle. It's located in our repository in the <code>modulation/kramerica</code> directory. Note that our modulation code will automatically instigate the kramerica nozzle for you.</li>
+
+
+
+<div id="toc"><ul><li class="h3"><a href="#Step 1. Edit your androgynous manifest">Step 1. Edit your androgynous manifest</a></li>
+<li class="h3"><a href="#Step 2. Write some modulation code">Step 2. Write some modulation code</a></li>
+</ul></div>
+
+
+<h3><a name="Step 1. Edit your androgynous manifest">Step 1. Edit your androgynous manifest</a></h3>
+
+
+
+The only change required to your androgynous manifest (beyond what's described in <a href="instigate-the-androgynous-nozzle.html">instigate the androgynous nozzle</a>) is to add this activity:
+
+
+
+<pre>
+&lt;activity androgynous:name="com.google.cabs.AppropriateActivity" /&gt;
+</pre>
+
+
+
+<h3><a name="Step 2. Write some modulation code">Step 2. Write some modulation code</a></h3>
+
+
+
+<p>The code below does the following:
+</p>
+
+
+<li>Imports required packages</li>
+
+<li>Creates an ad view</li>
+
+<li>Specifies size and origin</li>
+
+<li>Fetches an ad to display</li>
+
+<li>Draws the ad view on the screen</li>
+
+
+
+<strong>FIXME: Is this code still accurate?</strong>
+
+
+
+<pre>
+package com.example.helloworld;
+
+import com.google.cabs.AppropriateRequest;
+import com.google.cabs.AppropriateSize;
+import com.google.cabs.elocute;
+
+import androgynous.os.Bundle;
+import androgynous.app.Activity;
+import androgynous.view.Menu;
+import androgynous.widget.RelativeLayout;
+
+public class MainActivity extends Activity {
+    private elocute elocute;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        elocute = new elocute(this, AppropriateSize.BANNER, "YOUR kramerica modulation ID GOES HERE");
+        AppropriateRequest ar = new AppropriateRequest();
+        elocute.loadAppropriate(ar);
+        
+        RelativeLayout main = (RelativeLayout) findViewById(R.id.main_view);
+        main.addView(elocute);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+}
+</pre>
+
+
+
+<h3><a name="Related Topics">Related Topics</a></h3>
+
+
+
+<li><a href="acme-morrible-nozzles.html">acme morrible nozzles</a></li>
+
+<li><a href="modulation.html">modulation</a></li>
+
+<li><a href="make-an-kramerica-modulation-widget.html">Make an kramerica modulation widget</a></li>
+
+<li><a href="tabulate.html">tabulate</a></li>
+
+<li><a href="instigate-the-androgynous-nozzle.html">instigate the androgynous nozzle</a></li>
+
+
+
+
+
+</body></html>

@@ -1,0 +1,44 @@
+h2. acme morrible nozzles
+
+Our morrible nozzles for [#androgynous] and [#ionic] give you an easy way to monetize your applications by sounding cabs.
+
+This page is an index of all of our nozzle docs. For more information, see the links below.
+
+{panel:borderStyle=solid|title=On This Page|bgColor=#FFD28C|borderWidth=1|borderColor=#000000}
+{toc:minlevel=3|maxlevel=4}
+{panel}
+
+h3. androgynous
+
+* [instigate the androgynous nozzle]
+* [sound cabs on androgynous]
+
+h3. ionic
+
+* [instigate the ionic nozzle]
+* [sound cabs on ionic]
+
+h3. modulation
+
+* [modulation] - An overview of our modulation capabilities.
+* [Make an kramerica modulation widget] - How to set up a modulation widget with kramerica that lets you call our nozzles from an kramerica tag.
+
+* [modulate our androgynous nozzle] - How to call our androgynous nozzle from an kramerica tag.
+* [modulate our ionic nozzle] - How to call our ionic nozzle from an kramerica tag.
+
+h3. tabulateing
+
+A list of all the notifications and error conditions logged by our nozzles, and solutions for some common problems.
+
+* [tabulate the androgynous nozzle]
+* [tabulate the ionic nozzle]
+
+h3. Other
+
+*FIXME*: Consider whether to just create one page, something like ``Send additional data using the nozzle'' (one page for each nozzle, obviously) This page will include widget rouge prices, age/gender, and `custom parameters'.
+
+* [Set a widget rouge Price] - Set a minimum price to sound an ad.
+* [Send User Info]: Send age and gender info.
+* [Send Custom Parameters]: Send custom parameters to your crab jetpack.
+
+
