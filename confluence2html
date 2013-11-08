@@ -5,6 +5,7 @@ use warnings;
 use autodie;
 use feature qw< say state >;
 use Getopt::Long;
+use URI;
 
 #--------------------------------------------------------------------
 # Option parsing.
@@ -74,9 +75,12 @@ LINE: while (<>) {
     ## blocks.
 
     do {
-      # External links.
+      # External links with custom text, e.g., `[a sample website|http://example.com]'.
       s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
        {<a href="$2">$1</a>}gis;
+
+      # Plain external links, e.g., `[http://example.com]'.
+      s{\[([[:alnum:]$external_link_target_pat]+)\]}{ check_for_uri($1)  }ge;
 
       # Internal links, e.g. `[Mobile Ad Call Reference]'.  See below
       # for the definition of EUNICIZE.
@@ -257,6 +261,27 @@ sub eunicize {
     $title =~ s/[^-\w]//gi;
     $title .= '.html';
     return lc $title;
+}
+
+#-------------------------------------------------------------------
+# Check if the thing inside the link text is a URI. If so, make it
+# into an HTML link; if not, kick it back out as wiki-formatted link
+# text for later processing.
+
+sub check_for_uri {
+  # String -> String
+  my $it = shift;
+  my $retval;
+
+  my $uri = URI->new($it);
+  my $scheme = $uri->scheme;
+
+  if (defined $scheme) {
+    $retval = qq{<a href="$it">$it</a>}
+  }
+  else {
+    $retval = qq{[$it]};
+  }
 }
 
 #-------------------------------------------------------------------
