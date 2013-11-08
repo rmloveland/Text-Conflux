@@ -64,10 +64,14 @@ LINE: while (<>) {
         next LINE;
     }
 
-    ## We wrap the link-making code below in a DO block so that text
-    ## is never modified in any way while we're inside a `{code}'
-    ## block.  This change was prompted by an attempt to format some
-    ## Objective-C code in one of our projects.
+    ## We wrap the code below in a DO block so that text is never
+    ## modified in any way while we're inside a `{code}' block.  This
+    ## change was prompted by two things (so far):
+    ##  1. An attempt to format some Objective-C code in one of our
+    ## projects.
+    ##  2. The need to be able to write a page in Confluence markup
+    ## with some examples of Confluence markup wrapped in `{code}'
+    ## blocks.
 
     do {
       # External links.
@@ -117,8 +121,6 @@ LINE: while (<>) {
       s{^\|}{<tr><td>}gis;
       s{\|}{</td><td>}gis;
 
-    } unless $code % 2 != 0;
-
     # Process headers, 1-6.  We add an appropriate ID to each header's
     # LI tag so that we can use CSS's TEXT-INDENT to create a nice
     # indentation in the table of contents.
@@ -136,6 +138,8 @@ LINE: while (<>) {
 
     # Same-line code blocks.
     s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s;
+
+    } unless $code % 2 != 0;
 
     # Multiline code blocks.
     $code++ if /\{code\}/;
