@@ -1,6 +1,6 @@
 #+title: confluence2html TODOs
 #+author: Rich Loveland
-#+email: loveland.richard@gmail.com
+#+email: r@rmloveland.com
   
 * TODO Note ALL of the differences with Confluence markup in POD
 
@@ -16,6 +16,11 @@
   - Links do not automatically have line breaks inserted
     afterward. This is to allow you to embed these links in regular
     text. If you want to use them as subheaders, make a bulleted list.
+
+* TODO Make this a module
+
+  At least for the time being. Speed is not a *major* concern (yet),
+  but at the same time slow software sucks.
 
 * TODO Generate a parse tree/AST that can be re-used
 
@@ -38,6 +43,19 @@
   There are lots of substeps needed here; here's a list:
 
   - [ ] Extract common regular expressions into variables
+
+* TODO Come up with a new name (derived from Confluence?)
+
+  Start by looking at some synonyms. This will serve two purposes:
+
+  - Avoid entanglements with Atlassian
+  - Provide freedom/flexibility to extend the syntax (or at least to
+    support only the minimal subset that we do)
+
+* TODO Implement blockquotes
+
+  Note that this will make this ``not a proper subset'' of Confluence
+  markup.
 
 * TODO Implement underlining
 
