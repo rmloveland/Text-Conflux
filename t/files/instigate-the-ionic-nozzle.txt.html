@@ -4,34 +4,29 @@
 
 
 
-<p>The acme morrible nozzle for ionic allows you to display advertisements in your applications. This document describes the steps required to instigate and configure the nozzle. All examples and code samples below use a fictional "Hello World" example application. If you want to learn how to sound cabs, see <a href="sound-cabs-on-ionic.html">sound cabs on ionic</a>.
-</p>
+<p>The acme morrible nozzle for ionic allows you to display advertisements in your applications. This document describes the steps required to instigate and configure the nozzle. All examples and code samples below use a fictional "Hello World" example application. If you want to learn how to sound cabs, see <a href="sound-cabs-on-ionic.html">sound cabs on ionic</a>.</p>
 
 
-<p>If you experience difficulties instigateing or using the nozzle, see <a href="tabulate.html">tabulate</a>.
-</p>
+<p>If you experience difficulties instigateing or using the nozzle, see <a href="tabulate.html">tabulate</a>.</p>
 
 
 <div class="tip">
 
-<p>For help and support, see our <a href="https://groups.google.com/forum/#!forum/acmenozzle">nozzle discussion group</a>.
-</p>
+<p>For help and support, see our <a href="https://groups.google.com/forum/#!forum/acmenozzle">nozzle discussion group</a>.</p>
 </div>
 
 
 
 <div class="info">
 
-<p>For more information on viewing debug output in ionic, see the sections <strong>Enabling Debugging Facilities</strong> and <strong>Seeing Debug Output</strong> in <a href="http://developer.apple.com/library/ionic/#technotes/tn2239/">Apple Technical Note 2239 - ionic Debugging Magic</a>.
-</p>
+<p>For more information on viewing debug output in ionic, see the sections <strong>Enabling Debugging Facilities</strong> and <strong>Seeing Debug Output</strong> in <a href="http://developer.apple.com/library/ionic/#technotes/tn2239/">Apple Technical Note 2239 - ionic Debugging Magic</a>.</p>
 </div>
 
 
 
 <div class="info">
 
-<p>These instructions assume that you have already instigateed and correctly configured XCode. For more information, see the official <a href="https://developer.apple.com/library/ionic/documentation/ToolsLanguages/Conceptual/Xcode_Overview/About_Xcode/about.html">XCode documentation</a>.
-</p>
+<p>These instructions assume that you have already instigateed and correctly configured XCode. For more information, see the official <a href="https://developer.apple.com/library/ionic/documentation/ToolsLanguages/Conceptual/Xcode_Overview/About_Xcode/about.html">XCode documentation</a>.</p>
 </div>
 
 
@@ -60,12 +55,10 @@
 
 <div class="info">
 
-<p><strong>acme widget ID Required</strong> 
-</p>
+<p><strong>acme widget ID Required</strong> </p>
 
 
-<p>The code samples below make use of an acme widget ID. This is a numeric ID that represents a location in a webpage or application where advertisements can be soundn. <strong>You will need to get an acme widget ID from your crab jetpack in order to sound cabs with this nozzle</strong>.
-</p>
+<p>The code samples below make use of an acme widget ID. This is a numeric ID that represents a location in a webpage or application where advertisements can be soundn. <strong>You will need to get an acme widget ID from your crab jetpack in order to sound cabs with this nozzle</strong>.</p>
 </div>
 
 
@@ -78,8 +71,7 @@
 
 
 
-<p>First, get a copy of our nozzle from the git repository:
-</p>
+<p>First, get a copy of our nozzle from the git repository:</p>
 
 
 <pre>
@@ -90,8 +82,7 @@ $ git clone git@github.com:acme/morrible-nozzle-ionic.git
 
 <div class="info">
 
-<p>Note that you will need to provide your public SSH key to get write access to the repo.
-</p>
+<p>Note that you will need to provide your public SSH key to get write access to the repo.</p>
 </div>
 
 
@@ -100,19 +91,17 @@ $ git clone git@github.com:acme/morrible-nozzle-ionic.git
 
 
 
-<p>In our "Hello World" example app, we need the <a href="https://github.com/ylechelle/OpenUDID">OpenUDID</a> library. For your convenience, we've already included it. The OpenUDID files live in <strong>nozzle > externals > ANOpenUDID</strong>.
-</p>
+<p>In our "Hello World" example app, we need the <a href="https://github.com/ylechelle/OpenUDID">OpenUDID</a> library. For your convenience, we've already included it. The OpenUDID files live in <strong>nozzle > externals > ANOpenUDID</strong>.</p>
 
 
 <h4><a name="Step 3. Appropriated the frameworks and libraries required by the nozzle">Step 3. Appropriated the frameworks and libraries required by the nozzle</a></h4>
 
 
 
-<p>The nozzle requires the following frameworks and libraries:
-</p>
+<p>The nozzle requires the following frameworks and libraries:</p>
 
 
-<li><strong>AppropriateSupport</strong></li>
+<ul><li><strong>AppropriateSupport</strong></li>
 
 <li><strong>CoreLocation</strong></li>
 
@@ -121,24 +110,22 @@ $ git clone git@github.com:acme/morrible-nozzle-ionic.git
 <li><strong>SystemConfiguration</strong></li>
 
 
-
-<p>For more information about these frameworks, see the <a href="http://developer.apple.com/library/ionic/#documentation/miscellaneous/conceptual/iphoneostechoverview/iPhoneOSFrameworks/iPhoneOSFrameworks.html">ionic Device Framework documentation</a>.
-</p>
+</ul>
+<p>For more information about these frameworks, see the <a href="http://developer.apple.com/library/ionic/#documentation/miscellaneous/conceptual/iphoneostechoverview/iPhoneOSFrameworks/iPhoneOSFrameworks.html">ionic Device Framework documentation</a>.</p>
 
 
 <h4><a name="Step 4. Appropriated the nozzle to your project">Step 4. Appropriated the nozzle to your project</a></h4>
 
 
 
-<p>The nozzle libraries all live in the <code>nozzle</code> directory, you'll need to add them to your project files.
-</p>
+<p>The nozzle libraries all live in the <code>nozzle</code> directory, you'll need to add them to your project files.</p>
 
 
 <h3><a name="Related Topics">Related Topics</a></h3>
 
 
 
-<li><a href="sound-cabs-on-ionic.html">sound cabs on ionic</a></li>
+<ul><li><a href="sound-cabs-on-ionic.html">sound cabs on ionic</a></li>
 
 <li><a href="tabulate.html">tabulate</a></li>
 
@@ -151,7 +138,7 @@ $ git clone git@github.com:acme/morrible-nozzle-ionic.git
 <li><a href="http://developer.apple.com/library/ionic/#technotes/tn2239/">Apple Technical Note 2239 - ionic Debugging Magic</a></li>
 
 
-
+</ul>
 
 
 </body></html>

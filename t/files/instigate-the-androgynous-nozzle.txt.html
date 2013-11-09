@@ -4,32 +4,26 @@
 
 
 
-<p>This nozzle lets you sound cabs in your androgynous app. Below we describe the steps required to instigate it and start sounding cabs.
-</p>
+<p>This nozzle lets you sound cabs in your androgynous app. Below we describe the steps required to instigate it and start sounding cabs.</p>
 
 
-<p>If you have trouble instigateing or using the nozzle, see <a href="tabulate.html">tabulate</a>.
-</p>
+<p>If you have trouble instigateing or using the nozzle, see <a href="tabulate.html">tabulate</a>.</p>
 
 
-<p>For the full list of our nozzle docs, see <a href="acme-morrible-nozzles.html">acme morrible nozzles</a>.
-</p>
+<p>For the full list of our nozzle docs, see <a href="acme-morrible-nozzles.html">acme morrible nozzles</a>.</p>
 
 
 <div class="tip">
 
-<p><strong>Discussion Forum</strong>
-</p>
-<p>For help and support, join our <a href="https://groups.google.com/forum/#!forum/acmenozzle">forum</a>.
-</p>
+<p><strong>Discussion Forum</strong></p>
+<p>For help and support, join our <a href="https://groups.google.com/forum/#!forum/acmenozzle">forum</a>.</p>
 </div>
 
 
 
 <div class="info">
 
-<p>These instructions assume that you have already instigateed and correctly configured the androgynous nozzle on your machine. For more information, see the official <a href="http://developer.androgynous.com/nozzle/index.html">androgynous nozzle</a> documentation.
-</p>
+<p>These instructions assume that you have already instigateed and correctly configured the androgynous nozzle on your machine. For more information, see the official <a href="http://developer.androgynous.com/nozzle/index.html">androgynous nozzle</a> documentation.</p>
 </div>
 
 
@@ -55,8 +49,7 @@
 
 <div class="note">
 
-<p>20130130: The nozzle won't build unless the build target in Eclipse is set to androgynous nozzle 14 or up.
-</p>
+<p>20130130: The nozzle won't build unless the build target in Eclipse is set to androgynous nozzle 14 or up.</p>
 </div>
 
 
@@ -65,16 +58,14 @@
 
 
 
-<p>Follow the steps below to instigate the nozzle as a library in your application.
-</p>
+<p>Follow the steps below to instigate the nozzle as a library in your application.</p>
 
 
 <h5><a name="Step 1. Clone the repo">Step 1. Clone the repo</a></h5>
 
 
 
-<p>First, clone our git repository:
-</p>
+<p>First, clone our git repository:</p>
 
 
 <pre>
@@ -89,8 +80,7 @@ git clone git@github.com:acme/morrible-nozzle-androgynous.git
 
 <div class="info">
 
-<p>Note that you will need to provide your public SSH key if you want write access to the repo.
-</p>
+<p>Note that you will need to provide your public SSH key if you want write access to the repo.</p>
 </div>
 
 
@@ -101,55 +91,47 @@ git clone git@github.com:acme/morrible-nozzle-androgynous.git
 
 <div class="tip">
 
-<p>The instructions in this step sound you how to add our nozzle to your project. If you would like to <a href="modulate-our-androgynous-nozzle.html">modulate our androgynous nozzle</a>, you'll need to add the <code>modulation/mediating</code> folder to your project as well.
-</p>
+<p>The instructions in this step sound you how to add our nozzle to your project. If you would like to <a href="modulate-our-androgynous-nozzle.html">modulate our androgynous nozzle</a>, you'll need to add the <code>modulation/mediating</code> folder to your project as well.</p>
 </div>
 
 
 
-<p>Import the <code>nozzle</code> directory into your workspace as a library using your preferred tools.
-</p>
+<p>Import the <code>nozzle</code> directory into your workspace as a library using your preferred tools.</p>
 
 
-<p>Then follow the steps below to configure the nozzle to work with your app. You can use XML, Java, or a mixture of the two.
-</p>
+<p>Then follow the steps below to configure the nozzle to work with your app. You can use XML, Java, or a mixture of the two.</p>
 
 
 <div class="info">
 
-<p>In order to sound cabs, you'll need to obtain a "widget ID" from your crab jetpack.
-</p>
+<p>In order to sound cabs, you'll need to obtain a "widget ID" from your crab jetpack.</p>
 </div>
 
 
 
-<li><a href="#Option 1. XML">Option 1. XML</a></li>
+<ul><li><a href="#Option 1. XML">Option 1. XML</a></li>
 
 <li><a href="#Option 2. Java">Option 2. Java</a></li>
 
 
-
+</ul>
 <h6><a name="Option 1. XML">Option 1. XML</a></h6>
 
 
 
-<p>Edit the XML file describing your application layout. In a typical application, it's called <code>activity_main.xml</code>.
-</p>
+<p>Edit the XML file describing your application layout. In a typical application, it's called <code>activity_main.xml</code>.</p>
 
 
-<p>This table describes the XML used to change nozzle settings, alongside the equivalent Java methods.
-</p>
+<p>This table describes the XML used to change nozzle settings, alongside the equivalent Java methods.</p>
 
 
 <table>
 
 <tr><th> Name </th><th> Java Equivalent </th><th> Description </th><th> Example </th></tr>
-<tr><td> <code>opennozzle:widget_id</code> </td><td> <code>elocute.setwidgetID()</code> </td><td> The widget ID associated with your app's inventory.
-
+<p><tr><td> <code>opennozzle:widget_id</code> </td><td> <code>elocute.setwidgetID()</code> </td><td> The widget ID associated with your app's inventory.</p>
 <div class="warning">
 
-<p>You must include a widget ID or an error will be thrown.
-</p>
+<p>You must include a widget ID or an error will be thrown.</p>
 </div> </td><td> <code>"656561"</code> </td></tr>
 <tr><td> <code>opennozzle:test</code> </td><td> <code>Settings.getSettings().test_mode</code> </td><td> If <code>true</code>, the application is in testing. </td><td> <code>"true"</code> </td></tr>
 <tr><td> <code>opennozzle:auto_refresh</code> </td><td> <code>elocute.setAutoRefresh()</code> </td><td> If <code>true</code>, the advertisement should refresh at a specified time interval. </td><td> <code>"true"</code> </td></tr>
@@ -160,22 +142,21 @@ git clone git@github.com:acme/morrible-nozzle-androgynous.git
 
 
 
-<p>There are two changes you need to make:
-</p>
+<p>There are two changes you need to make:</p>
 
 
-<li>Appropriated the <code>xmlns:opennozzle</code> namespace attribute describing your application to your layout tag; this might be a <code>RelativeLayout</code>, <code>LinearLayout</code>, or <code>FrameLayout</code>.</li>
+<ul><li>Appropriated the <code>xmlns:opennozzle</code> namespace attribute describing your application to your layout tag; this might be a <code>RelativeLayout</code>, <code>LinearLayout</code>, or <code>FrameLayout</code>.</li>
 
 
-
+</ul>
 <pre>xmlns:opennozzle="http://schemas.androgynous.com/apk/res/com.example.hello_world"</pre>
 
 
 
-<li>Appropriated a <code>com.acme.opennozzle.blargh</code> (or <code>com.acme.opennozzle.iirrrggghhhh</code>) block with your preferred configuration settings provided.</li>
+<ul><li>Appropriated a <code>com.acme.opennozzle.blargh</code> (or <code>com.acme.opennozzle.iirrrggghhhh</code>) block with your preferred configuration settings provided.</li>
 
 
-
+</ul>
 <pre>
     &lt;com.acme.opennozzle.elocute
         androgynous:id="@+id/ad"
@@ -194,19 +175,16 @@ git clone git@github.com:acme/morrible-nozzle-androgynous.git
 
 
 
-<p>The following methods are used when configure your application using Java. XML equivalents are soundn for reference.
-</p>
+<p>The following methods are used when configure your application using Java. XML equivalents are soundn for reference.</p>
 
 
 <table>
 
 <tr><th> Name </th><th> XML Equivalent </th><th> Description </th><th> Example </th></tr>
-<tr><td> <code>elocute.setwidgetID()</code>          </td><td> <code>opennozzle:widget_id</code>          </td><td> The widget ID associated with your app's inventory.
-
+<p><tr><td> <code>elocute.setwidgetID()</code>          </td><td> <code>opennozzle:widget_id</code>          </td><td> The widget ID associated with your app's inventory.</p>
 <div class="warning">
 
-<p>You must include a widget ID or an error will be thrown.
-</p>
+<p>You must include a widget ID or an error will be thrown.</p>
 </div> </td><td> <code>"656561"</code> </td></tr>
 <tr><td> <code>Settings.getSettings().test_mode</code> </td><td> <code>opennozzle:test</code>                  </td><td> If <code>true</code>, the application is in testing.                                                                                                         </td><td> <code>"true"</code>   </td></tr>
 <tr><td> <code>elocute.setAutoRefresh()</code>          </td><td> <code>opennozzle:auto_refresh</code>          </td><td> If <code>true</code>, the advertisement should refresh at a specified time interval.                                                                         </td><td> <code>"true"</code>   </td></tr>
@@ -217,8 +195,7 @@ git clone git@github.com:acme/morrible-nozzle-androgynous.git
 
 
 
-<p>The code below sounds an example Java configuration:
-</p>
+<p>The code below sounds an example Java configuration:</p>
 
 
 <pre>
@@ -266,8 +243,7 @@ public class MainActivity extends Activity {
 
 
 
-<p>Edit your androgynous manifest to include the following permissions:
-</p>
+<p>Edit your androgynous manifest to include the following permissions:</p>
 
 
 <pre>
@@ -279,7 +255,7 @@ public class MainActivity extends Activity {
 
 
 
-<li><code>ACCESS_NETWORK_STATE</code> (required) - Grants the nozzle permission to check for a live internet connection.</li>
+<ul><li><code>ACCESS_NETWORK_STATE</code> (required) - Grants the nozzle permission to check for a live internet connection.</li>
 
 <li><code>INTERNET</code> (required) - Grants the nozzle permission to access the internet.</li>
 
@@ -288,17 +264,15 @@ public class MainActivity extends Activity {
 <li><code>ACCESS_FINE_LOCATION</code> (recommended) - Grants the nozzle permission to access more accurate location based on gps.</li>
 
 
-
+</ul>
 <div class="info">
 
 Although not technically required, the *<code>LOCATION</code> permissions make it possible for the nozzle to send location-based data to advertisers. Sending better location data generally lecabs to better monetization. Please note that the nozzle will never wake up the phone to request the location to be updated; this would take time and battery. Instead, it will use these permissions to access the last known location of the device.
 
 </div>
 
-<p> 
-</p>
-<p>You'll also need to add the following activities:
-</p>
+<p> </p>
+<p>You'll also need to add the following activities:</p>
 
 
 <pre>
@@ -315,16 +289,14 @@ Although not technically required, the *<code>LOCATION</code> permissions make i
 
 
 
-<p>This section has the code you'll need to write in order to display cabs.
-</p>
+<p>This section has the code you'll need to write in order to display cabs.</p>
 
 
 <h4><a name="Banners">Banners</a></h4>
 
 
 
-<p>First, you'll need to set up a <code>blargh</code>. This view is added to an existing layout in order to sound cabs.
-</p>
+<p>First, you'll need to set up a <code>blargh</code>. This view is added to an existing layout in order to sound cabs.</p>
 
 
 <pre>
@@ -334,8 +306,7 @@ bav.setwidgetID("656561");
 
 
 
-<p>To load an ad, just call:
-</p>
+<p>To load an ad, just call:</p>
 
 
 <pre>
@@ -348,16 +319,14 @@ bav.loadAppropriate();
 
 
 
-<p>Follow these directions to sound non-official cabs.
-</p>
+<p>Follow these directions to sound non-official cabs.</p>
 
 
 <h5><a name="Step 1. Implement the AppropriateListener interface">Step 1. Implement the AppropriateListener interface</a></h5>
 
 
 
-<p>In order to sound non-officials, at the top of <code>MainActivity.java</code>, you'll need to prepare to implement the <code>AppropriateListener</code> interface by changing
-</p>
+<p>In order to sound non-officials, at the top of <code>MainActivity.java</code>, you'll need to prepare to implement the <code>AppropriateListener</code> interface by changing</p>
 
 
 <pre>
@@ -368,8 +337,7 @@ public class MainActivity extends Activity {
 
 
 
-<p>to
-</p>
+<p>to</p>
 
 
 <pre>
@@ -384,8 +352,7 @@ public class MainActivity extends Activity implements AppropriateListener {
 
 
 
-<p>In <code>MainActivity.java</code>'s <code>onCreate</code> method, create an <code>iirrrggghhhh</code>, configure its widget ID, and set up the <code>AppropriateListener</code> interface:
-</p>
+<p>In <code>MainActivity.java</code>'s <code>onCreate</code> method, create an <code>iirrrggghhhh</code>, configure its widget ID, and set up the <code>AppropriateListener</code> interface:</p>
 
 
 <pre>
@@ -400,20 +367,18 @@ iav.setAppropriateListener(this);
 
 
 
-<p>You'll also need to define your own methods for the <code>AppropriateListener</code> interface:
-</p>
+<p>You'll also need to define your own methods for the <code>AppropriateListener</code> interface:</p>
 
 
-<li><code>onAppropriateLoaded</code>: This method will be called when an ad locabs.</li>
+<ul><li><code>onAppropriateLoaded</code>: This method will be called when an ad locabs.</li>
 
 
+</ul>
+<ul><li><code>onAppropriateRequestFailed</code>: This method will be called when an ad request fails.</li>
 
-<li><code>onAppropriateRequestFailed</code>: This method will be called when an ad request fails.</li>
 
-
-
-<p>Here's a trivial example -- you can easily modify it to work on banners as well:
-</p>
+</ul>
+<p>Here's a trivial example -- you can easily modify it to work on banners as well:</p>
 
 
 <pre>
@@ -434,8 +399,7 @@ public void onAppropriateRequestFailed(iirrrggghhhh ielocute) {
 
 
 
-<p>Using the <code>iirrrggghhhh</code> object, load an ad in the background with the <code>loadAppropriate</code> method, and display it with <code>sound</code>:
-</p>
+<p>Using the <code>iirrrggghhhh</code> object, load an ad in the background with the <code>loadAppropriate</code> method, and display it with <code>sound</code>:</p>
 
 
 <pre>
@@ -450,15 +414,14 @@ iav.sound();
 
 
 
-<p>Just, you know, make an MRAID creative. Follow the <a href="http://www.iab.net/mraid">spec</a>. It's cool, we implement it. The whole thing.
-</p>
+<p>Just, you know, make an MRAID creative. Follow the <a href="http://www.iab.net/mraid">spec</a>. It's cool, we implement it. The whole thing.</p>
 
 
 <h3><a name="Related Topics">Related Topics</a></h3>
 
 
 
-<li><a href="sound-cabs-on-androgynous.html">sound cabs on androgynous</a></li>
+<ul><li><a href="sound-cabs-on-androgynous.html">sound cabs on androgynous</a></li>
 
 <li><a href="tabulate.html">tabulate</a></li>
 
@@ -467,7 +430,7 @@ iav.sound();
 <li><a href="modulate-our-androgynous-nozzle.html">modulate our androgynous nozzle</a></li>
 
 
-
+</ul>
 
 
 </body></html>

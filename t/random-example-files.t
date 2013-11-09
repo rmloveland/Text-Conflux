@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use File::Slurp qw< slurp >;
 use Test::Simple tests => 12;
-use URI::File;
 
 my $perl = $^X;
 
