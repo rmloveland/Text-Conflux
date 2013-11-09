@@ -1,6 +1,24 @@
 #+title: confluence2html TODOs
 #+author: Rich Loveland
 #+email: r@rmloveland.com
+
+* TODO Come up with a new name (derived from Confluence?)
+
+  Start by looking at some synonyms. This will serve two purposes:
+
+  - Avoid entanglements with Atlassian
+  - Provide freedom/flexibility to extend the syntax (or at least to
+    support only the minimal subset that we do)
+
+   
+  A few possibilities:
+
+  - Conflux
+  - Concursion
+  - Concurrence
+  - Assemblage
+
+* TODO Decide on a license for this code
   
 * TODO Note ALL of the differences with Confluence markup in POD
 
@@ -22,13 +40,13 @@
   At least for the time being. Speed is not a *major* concern (yet),
   but at the same time slow software sucks.
 
-* TODO Generate a parse tree/AST that can be re-used
+* TODO Generate a parse tree/AST that can be re-used?
 
   Idea, Tue Nov 5 09:11:42 2013: What if, instead of generating HTML
   straightaway, we dynamically write the text of a Perl data
   structure, which we then read in using EVAL?
 
-* TODO Add unit tests
+* TODO Add more unit tests
 
   Some of the edge cases we need to test for:
 
@@ -44,14 +62,6 @@
 
   - [ ] Extract common regular expressions into variables
 
-* TODO Come up with a new name (derived from Confluence?)
-
-  Start by looking at some synonyms. This will serve two purposes:
-
-  - Avoid entanglements with Atlassian
-  - Provide freedom/flexibility to extend the syntax (or at least to
-    support only the minimal subset that we do)
-
 * TODO Implement blockquotes
 
   Note that this will make this ``not a proper subset'' of Confluence
@@ -62,11 +72,6 @@
 * TODO Implement ordered lists
 
   Right now we just turn them into unordered lists. This should be fixed.
-
-* TODO Wrap list items in UL or OL tags
-
-  This may require an output processing step.  (Geez, maybe you should
-  write a real parser, ya bum?)
 
 * TODO Can't link to headers in another page
 
@@ -83,6 +88,11 @@
   - Maybe even rewrite using Moo*?
     - Probably too slow -- this is called a lot!
     - Then again, if we're generating ASTs...
+
+* DONE Wrap list items in UL tags
+
+  This may require an output processing step.  (Geez, maybe you should
+  write a real parser, ya bum?)
 
 * DONE Implement `toc' macro
 
