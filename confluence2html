@@ -239,16 +239,31 @@ if ($wrap) {
 #-------------------------------------------------------------------
 # Ye Olde Main Output Processing Loop.
 
-for my $line (@output) {
-    if ( $line =~ /$toc_pat/ ) {
-        my @result  = parse_toc($line);
-        my $toc_min = $result[0];
-        my $toc_max = $result[1];
-        my $toc_exclude_pat = $result[2];
-        $line = replace_toc_line( $line, $toc_min, $toc_max, $toc_exclude_pat );
-    }
-    say $line;
+LINE: for my $line (@output) {
+  state $inside_ul = 0;
+  if ( $line =~ /$toc_pat/ ) {
+    my @result  = parse_toc($line);
+    my $toc_min = $result[0];
+    my $toc_max = $result[1];
+    my $toc_exclude_pat = $result[2];
+    $line = replace_toc_line( $line, $toc_min, $toc_max, $toc_exclude_pat );
+  }
+  elsif ( $line =~ /<li>/ && $inside_ul ) {
+    next LINE;
+  }
+  elsif ( $line =~ /<li>/ ) {
+    $inside_ul = 1;
+    $line = "<ul>" . $line;
+    next LINE;
+  }
+  elsif ( $line !~ /<li>/ && $inside_ul ) {
+    $inside_ul = 0;
+    $line .= "</ul>";
+    next LINE;
+  }
 }
+
+say for @output;
 
 #-------------------------------------------------------------------
 # Turn a [Wiki Link] into a <a href="wiki-link.html">Wiki Link</a>.
