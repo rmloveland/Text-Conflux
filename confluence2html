@@ -25,15 +25,15 @@ my $toc_min = 0;
 my $toc_max = 10;
 my $toc_exclude_pat;
 
-my $wiki_link_pat   = "&|/\-:. ";
-my $header_link_pat = $wiki_link_pat . "#";
+my $wiki_link_pat   = qq{[:alnum:]&|/\-:. };
+my $header_link_pat = qq{$wiki_link_pat#};
 
-my $external_link_text_pat   = "\\.\\?#!\\- ";
-my $external_link_target_pat = $external_link_text_pat . "#_/:=&";
+my $external_link_text_pat   = qq{[:alnum:]\\.\\?#!\\- };
+my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
 
-my $image_pat = "\\-|\\. ";
+my $image_pat = qq{[:alnum:]\\-|\\. };
 
-my $bold_pat   = qq{_!@#$%^\(\)+\\- &,:=`'?>\\.\\"};
+my $bold_pat   = qq{[:alnum:]_!@#$%^\(\)+\\-&,:=`'?>\\.\\" };
 my $italic_pat = $bold_pat;
 
 my $panel_pat = "{panel.*";
@@ -76,31 +76,31 @@ LINE: while (<>) {
 
     do {
       # External links with custom text, e.g., `[a sample website|http://example.com]'.
-      s{\[([[:alnum:]$external_link_text_pat]+)\|([[:alnum:]$external_link_target_pat]+)\]}
+      s{\[([$external_link_text_pat]+)\|([$external_link_target_pat]+)\]}
        {<a href="$2">$1</a>}gis;
 
       # Plain external links, e.g., `[http://example.com]'.
-      s{\[([[:alnum:]$external_link_target_pat]+)\]}{ check_for_uri($1)  }ge;
+      s{\[([$external_link_target_pat]+)\]}{ check_for_uri($1)  }ge;
 
       # Internal links, e.g. `[Mobile Ad Call Reference]'.  See below
       # for the definition of EUNICIZE.
-      s{\[([[:alnum:]$wiki_link_pat]+)\]}
+      s{\[([$wiki_link_pat]+)\]}
        {qq[<a href="] . eunicize($1) . qq[">$1</a>]}gise;
 
       # Links to headers on the same page.  We don't support anchors
       # (yet).
-      s{\[#([[:alnum:]$header_link_pat]+)\]}
+      s{\[#([$header_link_pat]+)\]}
        {<a href="#$1">$1</a>}gis;
 
       # Images.
-      s{^\!([[:alnum:]$image_pat]+.(png|jpg)).*\!}
+      s{^\!([$image_pat]+.(png|jpg)).*\!}
        {<br /><br /><img src="../img/$1"/><br /><br />}gis;
 
       # Bold elements (Sometimes they occur at the beginning of a
       # line, so we process them before we get to the list section
       # below.
-      s/\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
-      s/^\*([[:alnum:]$bold_pat]+)\*/<strong>$1<\/strong>/g;
+      s/\*([$bold_pat]+)\*/<strong>$1<\/strong>/g;
+      s/^\*([$bold_pat]+)\*/<strong>$1<\/strong>/g;
 
       # Lists of links, optionally followed by a colon or slash, then
       # descriptive text.
@@ -114,7 +114,7 @@ LINE: while (<>) {
                                     # syntax?
 
       # Italic elements.
-      s/ \_([[:alnum:]$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
+      s/ \_([$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
 
       # Tables.  These still have to be wrapped in a `{table}' macro.
       # Hopefully not for long.
