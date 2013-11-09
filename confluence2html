@@ -305,6 +305,8 @@ sub check_for_uri {
 sub replace_toc_line {
     # String, Int, Int, Regex -> String
     my ( $line, $min, $max, $pat ) = @_;
+
+    $pat //= "";
     my $result = qq{<div id="toc"><ul>};
 
     for my $toc_line (@toc_lines) {
