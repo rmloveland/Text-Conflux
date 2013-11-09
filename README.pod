@@ -8,7 +8,7 @@ confluence2html - Generate HTML from a proper subset of Confluence wiki markup
 
 =head1 DESCRIPTION
 
-Confluence2html is a command line filter that takes as its input a
+C<confluence2html> is a command line filter that takes as its input a
 stream of text marked up with a subset of Confluence markup and
 produces as its output a stream of HTML text.
 
@@ -18,47 +18,54 @@ The supported subset of Confluence markup is defined as follows:
 
 =item headers
 
-The h1-h6 header format is supported, as in `h2. Introduction'. No
+The h1-h6 header format is supported, as in `h2. Introduction'.  No
 other formatting inside the header text is supported. For example,
 `h2. Introduction to {{confluence2html}}' will not work.
 
 =item links
 
-Standard links are supported, e.g., `[Link to other page]'. This will
-be rewritten to link to a local file named
-`link-to-other-page.html'. If no such file exists, this will be a
-broken link until the file is created. The easiest way to do this is
-to have a file of Confluence markup named `link-to-other-page.txt',
-which is generated in the same directory using a tool such as C<make>
-(or a shell script, or even another Perl script!).
+Standard links are supported, e.g., `[Link to other page]'.  This will
+be rewritten to link to a local file named `link-to-other-page.html'.
+If no such file exists, this will be a broken link until the file is
+created.  The easiest way to do this is to have a file of Confluence
+markup named `link-to-other-page.txt', which is generated in the same
+directory using a tool such as C<make> (or a shell script, or even
+another Perl script!).
 
-External links are supported as expected, e.g.,
+External links are supported:
 
-    [Perl home page|http://www.perl.org].
+    [Perl home page|http://www.perl.org]
 
-However, Confluence space keys are not allowed. This is in part
-because the concept of ``spaces'' has no meaning in terms of processing a
-stream of text. Such a feature could be added by a more sophisticated
-application built by using/modifying this script.
+    [http://www.example.org].
+
+However, Confluence space keys are not allowed, since the concept of
+``spaces'' has no meaning in terms of processing a stream of text.  A
+space feature could be added by a more sophisticated application built
+by using/modifying this script.
 
 Finally, links do not automatically have line breaks inserted
-afterward. This is to allow you to embed these links in regular
-text. If you want to use them as functional subheaders or miniature
-tables of contents (without using the `toc' macro), put them in a
-bulleted list.
+afterward.  This is to allow you to embed these links in regular
+text. If you want to use them as miniature tables of contents in a
+list (without using the `toc' macro), put them in a bulleted list.
 
 =item macros
 
-A few macros are supported, but only as single tags on their
-own line. For example,
+A few macros are supported. Most can only be written as single tags on
+their own line.  For example,
 
     {info}
     Have some informative text!
     {info}.
 
-No arguments of the form `{info:title=FOO}' are supported.
+No arguments of the form `{info:title=FOO}' are supported. If you want
+to title your `info' block, try something like this:
 
-Supported macros include:
+    {info}
+    *Important Information!*
+    Your coffee is ready.
+    {info}
+
+Here are all of the supported macros:
 
 =over
 
@@ -80,23 +87,21 @@ Supported macros include:
 
 =back
 
-Note that these macros generate C<div> tags with class names that
-correspond to the macro name for easy CSS styling. For example:
+Note that the `info', `tip', `note', `warning', and `toc' macros
+generate C<div> tags with class names that correspond to the macro
+name for easy CSS styling.  For example:
 
-    <div id="info"><p>
+    <div class="info">
     These instructions assume that you have already installed and
     correctly configured... For more information, see ...
-    </p></div>
-
-See below for more information about the `toc' macro.
+    </div>
 
 =item table of contents macro
 
-Prints a table of contents comprised of selected headers on the page,
-inside a `div' with a `toc' id, e.g. `<div id =``toc''>'. A subset of
-the arguments to the `toc' macro are supported: `minlevel',
-`maxlevel', and `exclude' -- in that order. In other words, you must
-use the `toc' macro in one of the following ways:
+Prints a table of contents comprised of selected headers on the page.
+The following arguments are supported: `minlevel', `maxlevel', and
+`exclude' -- and they must be supplied in that order.  In other words,
+you must use the `toc' macro in one of the following ways:
 
 =over
 
@@ -104,48 +109,57 @@ use the `toc' macro in one of the following ways:
 
 Prints a table of contents using all headers on the page.
 
-=item `{toc:minlevel=$N|maxlevel=$M|exclude=$REGEX}'
+=item `{toc:minlevel=$N}'
 
-Where C<$N> and C<$M> are integers between 1 and 6, and C<$REGEX> is a
-perl regular expression -- note that the regular expression is not
-surrounded by quotes. This prints a table of contents with a minimum
-header size of C<$N> and a maximum header size of C<$M>, with any
-headers matching C<$REGEX> being excluded.
+C<$N> must be an integer between 1 and 6.  This prints a table of
+contents with a minimum header size of C<$N>.
 
 =item `{toc:minlevel=$N|maxlevel=$M}'
 
-Where C<$N> and C<$M> are integers between 1 and 6. This prints a
-table of contents with a minimum header size of C<$N> and a maximum
-header size of C<$M>.
+C<$N> and C<$M> must be integers between 1 and 6.  This prints a table
+of contents with a minimum header size of C<$N> and a maximum header
+size of C<$M>.
 
-=item `{toc:minlevel=$N}'
+=item `{toc:minlevel=$N|maxlevel=$M|exclude=$REGEX}'
 
-Where C<$N> is an integer between 1 and 6. This prints a
-table of contents with a minimum header size of C<$N>.
+C<$N> and C<$M> must be integers between 1 and 6, and C<$REGEX> is a
+perl regular expression -- note that the regular expression is not
+surrounded by quotes.  This prints a table of contents with a minimum
+header size of C<$N> and a maximum header size of C<$M>, with any
+headers matching C<$REGEX> being excluded.
 
 =back
 
 =item lists
 
 Only unordered lists are supported at this time. This should be fixed
-in the future.
+in the future. Each of the following are supported:
 
-Furthermore, no bold items can be used as list elements; the following
-will not work:
+    * Apple
+    - Banana
 
-    `* *First item*...'
+However, if you want to use bold words as list elements, you have to
+write it like this:
+
+    - *First item*
+    - *Second item*
 
 =item line breaks
 
 The line breaks that appear in the HTML output are those that appear
-in the text file. There is no support for `\\' (Confluence syntax for
-a forced line break).
+in the text file.  There is no support for the Confluence forced line
+break, `\\'.
 
 =item tables
 
-Tables are supported. The only requirement is that you must wrap the
-table itself in the `{table}' macro. (This decision is a compromise
-based on the fact that it makes tables simpler to parse.)
+Tables are supported.  The only requirement is that you must wrap the
+table itself in the `{table}' macro, e.g.:
+
+    {table}
+    || Name || Rank || Serial Number ||
+    | Steven Fluffernutter | Sergeant | 314159 |
+    | ... | ... | ... |
+    {table}
 
 =back
 
@@ -153,30 +167,27 @@ based on the fact that it makes tables simpler to parse.)
 
 =over
 
+=item --wrap
+
+Whether to wrap the body of the resulting HTML in `html', `head', and
+`body' tags.  This includes a link to the stylesheet specified by the
+`--stylesheet' option, so if you use this argument you probably want
+to specify a stylesheet.
+
 =item --stylesheet, -s
 
 The location of the CSS stylesheet, e.g.,
 
     ./confluence2html --stylesheet=bootstrap.css
 
-If you pass this argument, --wrap is automatically passed as well.
-
-=item --wrap
-
-Whether to wrap the body of the resulting HTML in `html', `head', and
-`body' tags. This includes a link to the stylesheet specified by the
-`--stylesheet' option, so if you use this argument you probably want
-to specify a stylesheet.
+If you pass this argument, --wrap is automatically toggled as well.
 
 =back
 
 =head1 BUGS
 
 Many bugs are lurking in this code; it's a total hack. On the roadmap:
-tests, refactoring, and perhaps even real parsing. Please open a
-Github issue to report a bug or request a feature:
-
-L<http://github.com/rmloveland/confluence2html>
+more tests, refactoring, and perhaps even real parsing.
 
 =head1 AUTHOR
 
