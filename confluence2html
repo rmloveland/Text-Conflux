@@ -4,17 +4,7 @@ use strict;
 use warnings;
 use autodie;
 use feature qw< say state >;
-use Getopt::Long;
 use URI;
-
-#--------------------------------------------------------------------
-# Option parsing.
-
-my ( $stylesheet, $wrap );
-GetOptions(
-    "stylesheet:s" => \$stylesheet,
-    "wrap"         => \$wrap,
-);
 
 #--------------------------------------------------------------------
 # Global Variables.
@@ -38,13 +28,6 @@ my $italic_pat = $bold_pat;
 
 my $panel_pat = "{panel.*";
 my $toc_pat = "{toc.*";
-
-$wrap++ if $stylesheet;
-
-if ($wrap) {
-    push @output,
-      qq{<html><head><link href="$stylesheet" rel="stylesheet"></head><body>\n};
-}
 
 #-------------------------------------------------------------------
 # Ye Olde Main Input Processing Loop.
@@ -230,10 +213,6 @@ LINE: while (<>) {
      {<p>$1</p>}g;
 
     push @output, $_;
-}
-
-if ($wrap) {
-    push @output, "</body></html>";
 }
 
 #-------------------------------------------------------------------

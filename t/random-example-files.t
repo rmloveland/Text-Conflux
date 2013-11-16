@@ -11,7 +11,7 @@ sub test_it {
   my $markup_file = shift;
 
   my $expected_html = slurp $markup_file.'.html';
-  my $actual_html = `$perl confluence2html --stylesheet=bootstrap.css < $markup_file`;
+  my $actual_html = `$perl confluence2html < $markup_file`;
 
   ok( $expected_html eq $actual_html, "Output matches contents of $expected_html" );
 }
