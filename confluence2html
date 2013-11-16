@@ -212,23 +212,23 @@ LINE: while (<>) {
         s/{table}/<\/table>/;
     }
 
-    s{\n+}{\n}gis;    # Necessary?
-
-    # Since all the other transformations are complete, we now know
-    # that we can wrap lines of text that are surrounded by newlines
-    # in paragraph tags (with a few simple exceptions).
+    # We know that lines containing headers, tables, and some other
+    # types of HTML are not appropriate candidates to be wrapped in
+    # paragraph tags, so we push those lines into the output buffer
+    # without any further processing.
 
     if (/(<\/?h[0-9]>|<\/?pre>|<\/?table>|<\/?li>|<\/?div)/) {
       push @output, $_;
       next LINE;
     }
 
-    unless($_ =~ /^(<h[0-9]|<\/?pre>|<\/?table><\/?div)/) {
-      s{^([\w \(\)<\/>\.,`'\-!=;:"&#]+)\n+}
-       {<p>$1</p>}g;
-    }
+    # Since all the other transformations are complete, we now know
+    # that we can wrap lines of text that are surrounded by newlines
+    # in paragraph tags (with a few simple exceptions).
 
-    s/{indent}//g;
+    s{^([\w \(\)<\/>\.,`'\-!=;:"&#]+)\n+}
+     {<p>$1</p>}g;
+
     push @output, $_;
 }
 
