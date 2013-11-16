@@ -1,145 +1,191 @@
 =head1 NAME
 
-confluence2html - Generate HTML from a proper subset of Confluence wiki markup
+confluence2html - Generate HTML from a subset of Confluence wiki markup
 
 =head1 SYNOPSIS
 
-  confluence2html < wiki-file.txt > wiki-file.html
+  $ confluence2html < input.txt > output.html
 
 =head1 DESCRIPTION
 
-C<confluence2html> is a command line filter that takes as its input a
-stream of text marked up with a subset of Confluence markup and
-produces as its output a stream of HTML text.
+C<confluence2html> is a command line filter that takes in a stream of
+text formatted with a subset of Confluence wiki markup and prints it
+out as HTML.  The goal of this project is to provide a reasonable
+"publish your writing to HTML" experience for users of Confluence wiki
+syntax.
 
-The supported subset of Confluence markup is defined as follows:
+Unlike some other markup languages, this syntax provides features that
+are important for technical documents.  For example:
 
 =over
 
-=item headers
+=item Plaintext Table Syntax
 
-The h1-h6 header format is supported, as in `h2. Introduction'.  No
-other formatting inside the header text is supported. For example,
-`h2. Introduction to {{confluence2html}}' will not work.
+You can use Confluence's table syntax instead of having to write HTML
+tables by hand.  This matters B<a lot> if you create and maintain
+technical documents. (See L</"tables"> below.)
 
-=item links
+=item Automatic Tables of Contents
 
-Standard links are supported, e.g., `[Link to other page]'.  This will
-be rewritten to link to a local file named `link-to-other-page.html'.
-If no such file exists, this will be a broken link until the file is
-created.  The easiest way to do this is to have a file of Confluence
-markup named `link-to-other-page.txt', which is generated in the same
-directory using a tool such as C<make> (or a shell script, or even
-another Perl script!).
+You can use the C<toc> macro to have a nice table of contents
+generated for your document.  (See L</"tables of contents"> below).
+
+=back
+
+Note that syntax highlighting plugins are available for Vim, Emacs,
+and other text editors.
+
+=head1 SUPPORTED MARKUP
+
+The subset of Confluence markup that we support is defined as follows:
+
+=over
+
+=item Headers
+
+The C<h[1-6]> header format is supported, as in C<h2. Introduction>.
+No other formatting inside the header text is supported. For example,
+C<h2. Introduction to {{confluence2html}}> will not work.
+
+=item Links
+
+Standard links are supported, e.g., C<[Link to some other page on this
+wiki]>.  This will be rewritten to link to a local file named
+C<link-to-some-other-page-on-this-wiki.html>.  If no such file exists,
+this will be a broken link until the file is created.  The easiest
+(but not only) way to do this is to have another file of Confluence
+markup in the same directory named
+C<link-to-some-other-page-on-this-wiki.txt>, which is generated at the
+same time.
+
+=over
+
+Note: the HTML output from the "standard link" syntax is still subject
+to change.  A more flexible design is needed.  One possibility is to
+design several different output formats the user can choose from;
+another is to allow the user to pass in a custom formatting tag as an
+argument which would allow them to do their own additional processing
+on the output, e.g.,
+
+    $ confluence2html --link-tag=LINK < page.txt | MOAR_FILTERING
+
+=back
 
 External links are supported:
 
     [Perl home page|http://www.perl.org]
 
-    [http://www.example.org].
+    [http://www.example.org]
 
-However, Confluence space keys are not allowed, since the concept of
-``spaces'' has no meaning in terms of processing a stream of text.  A
-space feature could be added by a more sophisticated application built
-by using/modifying this script.
+Confluence space keys are not supported, since the concept of "spaces"
+has no meaning in terms of processing a stream of text.  A space
+feature could be added by a more sophisticated application built using
+this script.
 
-Finally, links do not automatically have line breaks inserted
-afterward.  This is to allow you to embed these links in regular
-text. If you want to use them as miniature tables of contents in a
-list (without using the `toc' macro), put them in a bulleted list.
+=item Macros
 
-=item macros
+We support only a few of Confluence's many macros -- mainly those that
+are required for a reasonable "publish your writing to HTML"
+experience.  Here's the list:
 
-A few macros are supported. Most can only be written as single tags on
-their own line.  For example,
+=over
+
+=item C<code>
+
+=item C<info>
+
+=item C<tip>
+
+=item C<note>
+
+=item C<warning>
+
+=item C<htmlcomment>
+
+=item C<table>
+
+=item C<toc>
+
+=back
+
+Other than C<toc>, these macros can only be written as single tags on
+their own line that delimit blocks of text.  For example:
 
     {info}
     Have some informative text!
-    {info}.
+    {info}
 
-No arguments of the form `{info:title=FOO}' are supported. If you want
-to title your `info' block, try something like this:
+No arguments of the form C<{info:title=I am the Title}> are
+supported. If you want to add a title your C<info> block for readers,
+try something like:
 
     {info}
     *Important Information!*
     Your coffee is ready.
     {info}
 
-Here are all of the supported macros:
-
-=over
-
-=item code
-
-=item info
-
-=item tip
-
-=item note
-
-=item warning
-
-=item htmlcomment
-
-=item table
-
-=item toc
-
-=back
-
-Note that the `info', `tip', `note', `warning', and `toc' macros
-generate C<div> tags with class names that correspond to the macro
-name for easy CSS styling.  For example:
+Note that the C<info>, C<tip>, C<note>, C<warning>, and C<toc> macros
+output as C<div> tags with class names that correspond to the macro
+name for easy CSS styling.  Example output:
 
     <div class="info">
-    These instructions assume that you have already installed and
-    correctly configured... For more information, see ...
+    <p>These instructions assume that you have already installed and
+    correctly configured... For more information, see ... </p>
     </div>
 
-=item table of contents macro
+This makes it trivial to add background colors for added emphasis.
 
-Prints a table of contents comprised of selected headers on the page.
-The following arguments are supported: `minlevel', `maxlevel', and
-`exclude' -- and they must be supplied in that order.  In other words,
-you must use the `toc' macro in one of the following ways:
+=item Tables of Contents
+
+Prints a table of contents with links to some or all headers on the
+page.  The following arguments are supported (in addition to none at
+all): C<minlevel>, C<maxlevel>, C<exclude> -- and they must be
+supplied in that order.  In other words, you must use the C<toc> macro
+in one of the following ways:
 
 =over
 
-=item `{toc}'
+=item C<{toc}>
 
 Prints a table of contents using all headers on the page.
 
-=item `{toc:minlevel=$N}'
+=item C<{toc:minlevel=$N}>
 
 C<$N> must be an integer between 1 and 6.  This prints a table of
 contents with a minimum header size of C<$N>.
 
-=item `{toc:minlevel=$N|maxlevel=$M}'
+=item C<{toc:minlevel=$N|maxlevel=$M}>
 
 C<$N> and C<$M> must be integers between 1 and 6.  This prints a table
 of contents with a minimum header size of C<$N> and a maximum header
 size of C<$M>.
 
-=item `{toc:minlevel=$N|maxlevel=$M|exclude=$REGEX}'
+=item C<{toc:minlevel=$N|maxlevel=$M|exclude=$REGEX}>
 
 C<$N> and C<$M> must be integers between 1 and 6, and C<$REGEX> is a
-perl regular expression -- note that the regular expression is not
+Perl regular expression -- note that the regular expression is not
 surrounded by quotes.  This prints a table of contents with a minimum
 header size of C<$N> and a maximum header size of C<$M>, with any
 headers matching C<$REGEX> being excluded.
 
 =back
 
-=item lists
+=item Lists
 
-Only unordered lists are supported at this time. This should be fixed
-in the future. Each of the following are supported:
+Only unordered (bulleted) lists are supported at this time.  (This
+should be fixed in the future.)  Each of the following syntaxes are
+supported:
 
     * Apple
+    * Banana
+    * Cherry
+
+    - Apple
     - Banana
+    - Cherry
 
 However, if you want to use bold words as list elements, you have to
-write it like this:
+write it like this, using hyphens:
 
     - *First item*
     - *Second item*
@@ -148,39 +194,29 @@ write it like this:
 
 The line breaks that appear in the HTML output are those that appear
 in the text file.  There is no support for the Confluence forced line
-break, `\\'.
+break C<\\>.
 
-=item tables
+=item Tables
 
 Tables are supported.  The only requirement is that you must wrap the
-table itself in the `{table}' macro, e.g.:
+table itself in the C<{table}> macro, e.g.:
 
     {table}
     || Name || Rank || Serial Number ||
     | Steven Fluffernutter | Sergeant | 314159 |
+    | Christopher Crunch | Captain | 271828 |
+    | ... | ... | ... |
     | ... | ... | ... |
     {table}
 
-=back
-
-=head1 COMMAND LINE ARGUMENTS
-
 =over
 
-=item --wrap
+Note: Having to wrap tables in the C<table> macro is probably the most
+error-prone (and thus annoying) requirement from the perspective of an
+experienced Confluence user.  This limitation should be removed in the
+future.
 
-Whether to wrap the body of the resulting HTML in `html', `head', and
-`body' tags.  This includes a link to the stylesheet specified by the
-`--stylesheet' option, so if you use this argument you probably want
-to specify a stylesheet.
-
-=item --stylesheet, -s
-
-The location of the CSS stylesheet, e.g.,
-
-    ./confluence2html --stylesheet=bootstrap.css
-
-If you pass this argument, --wrap is automatically toggled as well.
+=back
 
 =back
 
@@ -191,4 +227,4 @@ more tests, refactoring, and perhaps even real parsing.
 
 =head1 AUTHOR
 
-Rich Loveland, L<r@rmloveland.com>
+Rich Loveland, L<mailto:r@rmloveland.com>
