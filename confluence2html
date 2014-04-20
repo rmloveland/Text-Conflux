@@ -501,7 +501,7 @@ headers matching C<$REGEX> being excluded.
 
 =item Lists
 
-Only unordered (bulleted) lists are supported at this time.  (This
+Only unordered lists are supported at this time.  (This
 should be fixed in the future.)  Each of the following syntaxes are
 supported:
 
