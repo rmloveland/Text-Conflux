@@ -209,7 +209,7 @@ LINE: while (<>) {
     # that we can wrap lines of text that are surrounded by newlines
     # in paragraph tags (with a few simple exceptions).
 
-    s{^([\w \(\)<\/>\.,`'\-!=;:"&#]+)\n+}
+    s{^([\w \(\)<\/>\.,`'\-!=;:"&#\?]+)\n+}
      {<p>$1</p>}g;
 
     push @output, $_;
