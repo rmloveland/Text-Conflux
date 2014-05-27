@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use autodie;
-use feature qw< say state >;
+use feature qw< state >;
 use URI;
 
 #--------------------------------------------------------------------
@@ -242,7 +242,7 @@ LINE: for my $line (@output) {
   }
 }
 
-say for @output;
+print for @output;
 
 #-------------------------------------------------------------------
 # Turn a [Wiki Link] into a <a href="wiki-link.html">Wiki Link</a>.
