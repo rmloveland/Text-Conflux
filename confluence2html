@@ -23,7 +23,7 @@ my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
 
 my $image_pat = qq{[:alnum:]\\-|\\. };
 
-my $bold_pat   = qq{[:alnum:]_!@#$%^\(\)+\\-&,:=`'?>\\.\\" };
+my $bold_pat   = qq{[:alnum:]_!@#$%^\(\)+\\-&,:;=`'?>\\.\\" };
 my $italic_pat = $bold_pat;
 
 my $panel_pat = "{panel.*";
