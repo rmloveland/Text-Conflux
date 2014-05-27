@@ -18,7 +18,7 @@ my $toc_exclude_pat;
 my $wiki_link_pat   = qq{[:alnum:]&|/\-:. };
 my $header_link_pat = qq{$wiki_link_pat#};
 
-my $external_link_text_pat   = qq{[:alnum:]\\.\\?#!\\-\~ };
+my $external_link_text_pat   = qq{[:alnum:]\\.\\?#!\\-\~\%\+ };
 my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
 
 my $image_pat = qq{[:alnum:]\\-|\\. };
