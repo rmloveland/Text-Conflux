@@ -23,8 +23,8 @@ my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
 
 my $image_pat = qq{[:alnum:]\\-|\\. };
 
-my $bold_pat   = qq{[:alnum:]_!@#$%^\(\)+\\-&,:;=`'?>\\.\\" };
-my $italic_pat = $bold_pat;
+my $bold_pat   = qq{[:alnum:]+_!@#$%^\(\)+\\-&,:;=`'?>\\.\\" };
+my $italic_pat = qq{[:alnum:]+!@#$%^\(\)+\\-&,:;=`'?>\\.\\" };
 
 my $panel_pat = "{panel.*";
 my $toc_pat = "{toc.*";
@@ -97,7 +97,7 @@ LINE: while (<>) {
                                     # syntax?
 
       # Italic elements.
-      s/ \_([$italic_pat]+)\_([ \.])/ <em>$1<\/em>$2/g;
+      s/ \_([$italic_pat]+)\_([ \?])/ <em>$1<\/em>$2/g;
 
       # Tables.  These still have to be wrapped in a `{table}' macro.
       # Hopefully not for long.
