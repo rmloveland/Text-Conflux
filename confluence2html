@@ -136,7 +136,6 @@ LINE: while (<>) {
       # necessitated by some XML build cruft for an Android project.
         s/</&lt;/g;
         s/>/&gt;/g;
-        s{\n}{}g;
         s/\{code\}/<pre>/;
     }
     elsif ( $code % 2 == 0 ) {
