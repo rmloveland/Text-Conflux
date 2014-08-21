@@ -104,7 +104,7 @@ LINE: while (<>) {
       s{^\|\|}{<tr><th>}gis;    # Beginning of table
       s{\|\| ?\n}{</th></tr>}gis;
       s{\|\|}{</th><th>}gis;         # Middle of columns
-      s{\| ?\n}{</td></tr>}gis;
+      s{\| ?\n$}{</td></tr>}gis;     # End of table row
       s{^\|}{<tr><td>}gis;
       s{\|}{</td><td>}gis;
 
