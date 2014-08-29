@@ -191,7 +191,7 @@ LINE: while (<>) {
         s/{table}/<table>/;
     }
     elsif ( $table % 2 == 0 ) {
-        s/{table}/<\/table>/;
+        s/{table}/\n<\/table>/;
     }
 
     # We know that lines containing headers, tables, and some other
