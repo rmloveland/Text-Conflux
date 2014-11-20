@@ -193,6 +193,9 @@ LINE: while (<>) {
         s/{table}/\n<\/table>/;
     }
 
+    # Encode ampersands.
+    s/ & / &amp; /g;
+
     # We know that lines containing headers, tables, and some other
     # types of HTML are not appropriate candidates to be wrapped in
     # paragraph tags, so we push those lines into the output buffer
