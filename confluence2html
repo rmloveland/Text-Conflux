@@ -18,7 +18,7 @@ my $toc_exclude_pat;
 my $wiki_link_pat   = qq{[:alnum:]&|/\-:. };
 my $header_link_pat = qq{$wiki_link_pat#};
 
-my $external_link_text_pat   = qq{[:alnum:]\\.,\\?#!\\-\~\%\+ };
+my $external_link_text_pat   = qq{[:alnum:]\\.,\\?#!\\-\~\%&\+ };
 my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
 
 my $image_pat = qq{[:alnum:]\\-|\\. };
@@ -90,13 +90,13 @@ LINE: while (<>) {
       s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
 
       # Lists of non-link items.
-      s/^\* ?(.*)$/\<li>$1<\/li>/g;
-      s/^\- ?(.*)$/\<li>$1<\/li>/g; # Use the `-' char for bulleted
+      s/^\*( ?.*)$/\<li>$1<\/li>/g;
+      s/^\-( ?.*)$/\<li>$1<\/li>/g; # Use the `-' char for bulleted
                                     # bother supporting the other
                                     # syntax?
 
       # Italic elements.
-      s/( +)\_([$italic_pat]+)\_/$1<em>$2<\/em>/g;
+      s/( +|^)\_([$italic_pat]+)\_/$1<em>$2<\/em>/g;
 
       # Tables.  These still have to be wrapped in a `{table}' macro.
       # Hopefully not for long.
