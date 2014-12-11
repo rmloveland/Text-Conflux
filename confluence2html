@@ -96,7 +96,7 @@ LINE: while (<>) {
                                     # syntax?
 
       # Italic elements.
-      s/( ?)\_([$italic_pat]+)\_/$1<em>$2<\/em>/g;
+      s/( +)\_([$italic_pat]+)\_/$1<em>$2<\/em>/g;
 
       # Tables.  These still have to be wrapped in a `{table}' macro.
       # Hopefully not for long.
