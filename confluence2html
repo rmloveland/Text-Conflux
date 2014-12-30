@@ -79,21 +79,22 @@ LINE: while (<>) {
       s{^\!([$image_pat]+.(png|jpg)).*\!}
        {<br /><br /><img src="../img/$1"/><br /><br />}gis;
 
+      # Lists of links, optionally followed by a colon or slash, then
+      # descriptive text.
+      s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
+
+      # Lists of non-link items.
+      s/^\*( +.*)$/\<li>$1<\/li>/g;
+      s/^\-( ?.*)$/\<li>$1<\/li>/g; # Use the `-' char for bulleted
+                                    # bother supporting the other
+                                    # syntax?
+
       # Bold elements (Sometimes they occur at the beginning of a
       # line, so we process them before we get to the list section
       # below.
       s/\*([$bold_pat]+)\*/<strong>$1<\/strong>/g;
       s/^\*([$bold_pat]+)\*/<strong>$1<\/strong>/g;
 
-      # Lists of links, optionally followed by a colon or slash, then
-      # descriptive text.
-      s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
-
-      # Lists of non-link items.
-      s/^\*( ?.*)$/\<li>$1<\/li>/g;
-      s/^\-( ?.*)$/\<li>$1<\/li>/g; # Use the `-' char for bulleted
-                                    # bother supporting the other
-                                    # syntax?
 
       # Italic elements.
       s/( +|^)\_([$italic_pat]+)\_/$1<em>$2<\/em>/g;
@@ -515,12 +516,6 @@ supported:
     - Apple
     - Banana
     - Cherry
-
-However, if you want to use bold words as list elements, you have to
-write it like this, using hyphens:
-
-    - *First item*
-    - *Second item*
 
 =item line breaks
 
