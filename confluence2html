@@ -85,9 +85,6 @@ LINE: while (<>) {
 
       # Lists of non-link items.
       s/^\*( +.*)$/\<li>$1<\/li>/g;
-      s/^\-( ?.*)$/\<li>$1<\/li>/g; # Use the `-' char for bulleted
-                                    # bother supporting the other
-                                    # syntax?
 
       # Bold elements (Sometimes they occur at the beginning of a
       # line, so we process them before we get to the list section
@@ -506,16 +503,11 @@ headers matching C<$REGEX> being excluded.
 =item Lists
 
 Only unordered lists are supported at this time.  (This
-should be fixed in the future.)  Each of the following syntaxes are
-supported:
+should be fixed in the future.)  Example:
 
     * Apple
     * Banana
     * Cherry
-
-    - Apple
-    - Banana
-    - Cherry
 
 =item line breaks
 
