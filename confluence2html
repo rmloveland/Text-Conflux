@@ -118,7 +118,7 @@ LINE: while (<>) {
     }
 
     # Monospace.
-    s/{{([\\!\@\$0-9\+\*A-Z\.,\-\/>a-z_=:"\(\) \<\>\n]+)}}/<code>$1<\/code>/g;
+    s/{{([\\!\@\^\$0-9\+\*A-Z\.,\-\/>a-z_=:"\(\) \<\>\n]+)}}/<code>$1<\/code>/g;
 
     # Same-line code blocks.
     s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s;
@@ -210,7 +210,7 @@ LINE: while (<>) {
     # code blocks are not modified.
 
     do {
-      s{^([\w \(\)<\/>\.,`'\-!=;:"\+~&\$%#\*@\?{}0-9]+)\n+}{<p>$1</p>}g;
+      s{^([\w \(\)<\/>\.,`'\-!=;:"\^\+~&\$%#\*@\?{}0-9]+)\n+}{<p>$1</p>}g;
     } unless $code % 2 != 0;
 
     push @output, $_;
