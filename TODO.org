@@ -4,6 +4,14 @@
 
 * TODO Get 'mailto' links to work
 
+* TODO Make image directory a flag
+
+  e.g., '--image-dir ~/public_html/img'
+
+* TODO Make base URI for wiki links a flag
+
+  e.g., '--base-uri "http://example.com"'
+
 * TODO Cherry-pick random bugfixes from alternate branches
 
 * TODO Come up with a new name (derived from Confluence?)
