@@ -2,6 +2,20 @@
 #+author: Rich Loveland
 #+email: r@rmloveland.com
 
+* TODO Output Pandoc JSON format
+
+  It would be cool to have a boolean flag,
+
+  =--output-as-pandoc-json=
+  
+  that generates the JSON AST understood by =pandoc=.  Then we could
+  use this script as a pandoc filter as described in the man page.  To
+  see what the output looks like, try it on a Markdown file like so:
+
+  =pandoc -t json tw4p.md > /tmp/tw4p.json=
+
+  Use =Pandoc::Elements=.
+
 * TODO Get 'mailto' links to work
 
 * TODO Make image directory a flag
