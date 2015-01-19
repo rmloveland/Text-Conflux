@@ -173,22 +173,11 @@ headers matching C<$REGEX> being excluded.
 =item Lists
 
 Only unordered lists are supported at this time.  (This
-should be fixed in the future.)  Each of the following syntaxes are
-supported:
+should be fixed in the future.)  Example:
 
     * Apple
     * Banana
     * Cherry
-
-    - Apple
-    - Banana
-    - Cherry
-
-However, if you want to use bold words as list elements, you have to
-write it like this, using hyphens:
-
-    - *First item*
-    - *Second item*
 
 =item line breaks
 
@@ -198,16 +187,13 @@ break C<\\>.
 
 =item Tables
 
-Tables are supported.  The only requirement is that you must wrap the
-table itself in the C<{table}> macro, e.g.:
+Tables are supported, e.g.:
 
-    {table}
     || Name || Rank || Serial Number ||
     | Steven Fluffernutter | Sergeant | 314159 |
     | Christopher Crunch | Captain | 271828 |
     | ... | ... | ... |
     | ... | ... | ... |
-    {table}
 
 =over
 
