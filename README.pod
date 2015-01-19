@@ -172,12 +172,15 @@ headers matching C<$REGEX> being excluded.
 
 =item Lists
 
-Only unordered lists are supported at this time.  (This
-should be fixed in the future.)  Example:
+Ordered and unordered lists are supported.  Example:
 
     * Apple
     * Banana
     * Cherry
+
+    1. Rhubarb
+    2. Tomato
+    3. Pomegranate
 
 =item line breaks
 

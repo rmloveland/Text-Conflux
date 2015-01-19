@@ -82,9 +82,11 @@ LINE: while (<>) {
       # Lists of links, optionally followed by a colon or slash, then
       # descriptive text.
       s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
+      s/^[0-9]\. ?(<a href.*<\/a>)([ :\-]?.*)/\<li class="ordered">$1$2<\/li>/g;
 
       # Lists of non-link items.
       s/^\*( +.*)$/\<li>$1<\/li>/g;
+      s/^[0-9]\.( +.*)$/\<li class="ordered">$1<\/li>/g;
 
       # Bold elements (Sometimes they occur at the beginning of a
       # line, so we process them before we get to the list section
@@ -208,11 +210,15 @@ LINE: while (<>) {
     push @output, $_;
 }
 
+# This lets the regex matchers do their thing and close 'ol' tags, etc.
+push @output, "\n";
+
 #-------------------------------------------------------------------
 # Ye Olde Main Output Processing Loop.
 
 LINE: for my $line (@output) {
   state $inside_ul = 0;
+  state $inside_ol = 0;
   if ( $line =~ /$toc_pat/ ) {
     my @result  = parse_toc($line);
     my $toc_min = $result[0];
@@ -220,17 +226,29 @@ LINE: for my $line (@output) {
     my $toc_exclude_pat = $result[2];
     $line = replace_toc_line( $line, $toc_min, $toc_max, $toc_exclude_pat );
   }
-  elsif ( $line =~ /<li>/ && $inside_ul ) {
+  elsif ( $line =~ /<li>/ && ($inside_ul || $inside_ol) ) {
     next LINE;
   }
   elsif ( $line =~ /<li>/ ) {
     $inside_ul = 1;
-    $line = "<ul>" . $line;
+    $line = "<ul>\n" . $line;
+    next LINE;
+  }
+  elsif ( $line =~ /<li class="ordered">/ && !$inside_ol ) {
+    $inside_ol = 1;
+    $line = "<ol>\n" . $line;
     next LINE;
   }
   elsif ( $line !~ /<li>/ && $inside_ul ) {
     $inside_ul = 0;
-    $line .= "</ul>";
+    chomp $line;
+    $line .= "</ul>\n";
+    next LINE;
+  }
+  elsif ( $line !~ /<li class="ordered">/ && $inside_ol ) {
+    $inside_ol = 0;
+    chomp $line;
+    $line .= "</ol>\n";
     next LINE;
   }
 }
@@ -494,12 +512,15 @@ headers matching C<$REGEX> being excluded.
 
 =item Lists
 
-Only unordered lists are supported at this time.  (This
-should be fixed in the future.)  Example:
+Ordered and unordered lists are supported.  Example:
 
     * Apple
     * Banana
     * Cherry
+
+    1. Rhubarb
+    2. Tomato
+    3. Pomegranate
 
 =item line breaks
 
