@@ -2,6 +2,12 @@
 #+author: Rich Loveland
 #+email: r@rmloveland.com
 
+* TODO Implement header lines (----)
+
+* TODO Implement line breaks (\\)
+
+* TODO Implement strikethrough (-FOO-)
+
 * TODO Output Pandoc JSON format
 
   It would be cool to have a boolean flag,
