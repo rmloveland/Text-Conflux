@@ -103,10 +103,9 @@ LINE: while (<>) {
 
       # Tables.  These still have to be wrapped in a `{table}' macro.
       # Hopefully not for long.
-      s{^\|\|}{<table><tr><th>}gis;    # Beginning of table
+      s{^\|\|}{<tr><th>}gis;    # Beginning of table
       s{\|\| ?\n}{</th></tr>}gis;
       s{\|\|}{</th><th>}gis;         # Middle of columns
-      s{\| ?\h\n}{</td></tr></table>};     # More than one newline denotes end of table
       s{\| ?\n$}{</td></tr>}gis;     # End of table row
       s{^\|}{<tr><td>}gis;
       s{\|}{</td><td>}gis;
@@ -186,6 +185,15 @@ LINE: while (<>) {
     }
     elsif ( $htmlcomment % 2 == 0 ) {
         s/{htmlcomment}/-->/;
+    }
+
+    # HTML tables need to be wrapped in `{table}' tags.
+    $table++ if /{table}/;
+    if ( $table % 2 != 0 ) {
+        s/{table}/<table>/;
+    }
+    elsif ( $table % 2 == 0 ) {
+        s/{table}/\n<\/table>/;
     }
 
     # Encode ampersands.
@@ -533,13 +541,16 @@ break C<\\>.
 
 =item Tables
 
-Tables are supported, e.g.:
+Tables are supported.  The only requirement is that you must wrap the
+table itself in the C<{table}> macro, e.g.:
 
+    {table}
     || Name || Rank || Serial Number ||
     | Steven Fluffernutter | Sergeant | 314159 |
     | Christopher Crunch | Captain | 271828 |
     | ... | ... | ... |
     | ... | ... | ... |
+    {table}
 
 =over
 

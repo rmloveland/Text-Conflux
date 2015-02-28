@@ -190,13 +190,16 @@ break C<\\>.
 
 =item Tables
 
-Tables are supported, e.g.:
+Tables are supported.  The only requirement is that you must wrap the
+table itself in the C<{table}> macro, e.g.:
 
+    {table}
     || Name || Rank || Serial Number ||
     | Steven Fluffernutter | Sergeant | 314159 |
     | Christopher Crunch | Captain | 271828 |
     | ... | ... | ... |
     | ... | ... | ... |
+    {table}
 
 =over
 
