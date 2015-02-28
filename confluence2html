@@ -58,6 +58,9 @@ LINE: while (<>) {
     ## blocks.
 
     do {
+      # Add a horizontal rule.
+      s{^----$}{<hr></hr>};
+
       # External links with custom text, e.g., `[a sample website|http://example.com]'.
       s{\[([$external_link_text_pat]+)\|([$external_link_target_pat]+)\]}
        {<a href="$2">$1</a>}gis;
