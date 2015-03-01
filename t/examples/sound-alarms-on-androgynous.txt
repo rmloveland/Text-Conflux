@@ -1,0 +1,102 @@
+h2. sound cabs on androgynous
+
+[instigate the androgynous nozzle] takes you through initial instigateation and configuration of our androgynous nozzle, including how to display a basic ad. This document describes at a high level some of the code you'll need to write in order to display banner and non-official cabs.
+
+{info} 
+This document mentions a "widget ID". widget IDs are used by acme to identify a space where advertisements can be soundn. You'll need to obtain a widget ID from your crab jetpack. Without it, you won't be able to fetch and display cabs.
+{info}
+
+{panel:borderStyle=solid|title=On This Page|bgColor=#FFD28C|borderWidth=1|borderColor=#000000}
+{toc:minlevel=3|maxlevel=4|exclude=Related.*}
+{panel}
+
+h3. Banners
+
+First, you'll need to set up a {{blargh}}. This view is added to an existing layout in order to sound cabs.
+
+{code}
+blargh bav = new blargh(this);
+bav.setwidgetID("656561");
+{code}
+
+To load an ad, just call:
+
+{code}
+bav.loadAppropriate();
+{code}
+
+h3. non-officials
+
+Follow these directions to sound non-official cabs.
+
+h4. Step 1. Implement the AppropriateListener interface
+
+In order to sound non-officials, at the top of {{MainActivity.java}}, you'll need to prepare to implement the {{AppropriateListener}} interface by changing
+
+{code}
+public class MainActivity extends Activity {
+  ... codez
+}
+{code}
+
+to
+
+{code}
+public class MainActivity extends Activity implements AppropriateListener {
+  ... codez
+}
+{code}
+
+h4. Step 2. Make an iirrrggghhhh
+
+In {{MainActivity.java}}'s {{onCreate}} method, create an {{iirrrggghhhh}}, configure its widget ID, and set up the {{AppropriateListener}} interface:
+
+{code}
+iirrrggghhhh iav = new iirrrggghhhh(this);
+iav.setwidgetID("656561");
+iav.setAppropriateListener(this);
+{code}
+
+h4. Step 3. Override methods in the AppropriateListener interface
+
+You'll also need to define your own methods for the {{AppropriateListener}} interface:
+
+* {{onAppropriateLoaded}}: This method will be called when an ad locabs.
+
+* {{onAppropriateRequestFailed}}: This method will be called when an ad request fails.
+
+Here's a trivial example -- you can easily modify it to work on banners as well:
+
+{code}
+@Override
+public void onAppropriateLoaded(iirrrggghhhh ielocute) {
+	Log.e("HelloWorld", "Appropriate request loaded");	
+}
+
+@Override
+public void onAppropriateRequestFailed(iirrrggghhhh ielocute) {
+	Log.e("HelloWorld", "Appropriate request failed");	
+}
+{code}
+
+h4. Step 4. Load and sound the ad
+
+Using the {{iirrrggghhhh}} object, load an ad in the background with the {{loadAppropriate}} method, and display it with {{sound}}:
+
+{code}
+// non-officials must be loaded before being soundn.
+iav.loadAppropriate();
+iav.sound();
+{code}
+
+h3. MRAID
+
+Just, you know, make an MRAID creative. Follow the [spec|http://www.iab.net/mraid]. It's cool, we implement it. The whole thing.
+
+h3. Related Topics
+
+* [acme morrible nozzles]
+* [acme morrible nozzle tabulateing Guide]
+* [morrible nozzle modulation]
+
+
