@@ -40,6 +40,7 @@ LINE: while (<>) {
     state $warning     = 0;
     state $htmlcomment = 0;
     state $table       = 0;
+    state $quote  = 0;
 
     next LINE if /$panel_pat/;
 
@@ -178,6 +179,13 @@ LINE: while (<>) {
         s/{warning}/<\/div>/;
     }
 
+    $quote++ if /{quote}/;
+    if ( $quote % 2 != 0 ) {
+        s/{quote}/<blockquote>/;
+    }
+    elsif ( $quote % 2 == 0 ) {
+        s/{quote}/<\/blockquote>/;
+    }
     # Support HTML comments. This is one of my favorite macros.
     $htmlcomment++ if /{htmlcomment}/;
     if ( $htmlcomment % 2 != 0 ) {
