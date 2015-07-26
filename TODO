@@ -1,0 +1,29 @@
+TODO Refactor this ugly bastard
+TODO Output Pandoc JSON format
+TODO Note ALL of the differences with Confluence markup in POD
+TODO Make this a proper package
+TODO Make this a module
+TODO Make image directory a flag
+TODO Make base URI for wiki links a flag
+TODO Implement underlining
+TODO Implement toggle-able pretty-printing
+TODO Implement strikethrough (-FOO-)
+TODO Implement ordered lists
+TODO Implement line breaks (\\)
+TODO Get 'mailto' links to work
+TODO Generate a parse tree/AST that can be re-used?
+TODO Decide on a license for this code
+TODO Come up with a new name (derived from Confluence?)
+TODO Cherry-pick random bugfixes from alternate branches
+TODO Can't link to headers in another page
+IN PROGRESS Add more unit tests
+DONE Wrap list items in UL tags
+DONE Update build script to massage the Markdown
+DONE Implement `toc' macro
+DONE Implement 'htmlcomment' macro
+DONE Implement header lines (----)
+DONE Implement blockquotes
+DONE Fix bug where ' in a list element causes a line break
+DONE Evaluate options other than Markdown
+DONE Can't do relative links in same page
+DONE Add command line options
