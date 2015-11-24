@@ -21,7 +21,7 @@ my $header_link_pat = qq{$wiki_link_pat#-};
 my $external_link_text_pat   = qq{[:alnum:]:"'\\.,\\?#!\\-\~\%&@\+\(\) };
 my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
 
-my $image_pat = qq{[:alnum:]\\-|\\. };
+my $image_pat = qq{[:alnum:]%\\-|\\.:/ };
 
 my $bold_pat   = qq{[:alnum:]+_!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
 my $italic_pat = qq{[:alnum:]+!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
@@ -80,8 +80,7 @@ LINE: while (<>) {
        {<a href="#$1">$1</a>}gis;
 
       # Images.
-      s{^\!([$image_pat]+.(png|jpg)).*\!}
-       {<br /><br /><img src="$ENV{PWD}/../img/$1"/><br /><br />}gis;
+      s{^\!([$image_pat]+.(png|jpg)).*\!}{<br /><br /><img src="$1"/><br /><br />}gis;
 
       # Lists of links, optionally followed by a colon or slash, then
       # descriptive text.
@@ -382,12 +381,12 @@ are important for technical documents.  For example:
 
 You can use Confluence's table syntax instead of having to write HTML
 tables by hand.  This matters B<a lot> if you create and maintain
-technical documents. (See L</"tables"> below.)
+technical documents. (See L</"Tables"> below.)
 
 =item Automatic Tables of Contents
 
 You can use the C<toc> macro to have a nice table of contents
-generated for your document.  (See L</"tables of contents"> below).
+generated for your document.  (See L</"Tables of Contents"> below).
 
 =back
 
@@ -417,8 +416,6 @@ markup in the same directory named
 C<link-to-some-other-page-on-this-wiki.txt>, which is generated at the
 same time.
 
-=over
-
 Note: the HTML output from the "standard link" syntax is still subject
 to change.  A more flexible design is needed.  One possibility is to
 design several different output formats the user can choose from;
@@ -427,8 +424,6 @@ argument which would allow them to do their own additional processing
 on the output, e.g.,
 
     $ confluence2html --link-tag=LINK < page.txt | MOAR_FILTERING
-
-=back
 
 External links are supported:
 
@@ -560,14 +555,10 @@ table itself in the C<{table}> macro, e.g.:
     | ... | ... | ... |
     {table}
 
-=over
-
 Note: Having to wrap tables in the C<table> macro is probably the most
 error-prone (and thus annoying) requirement from the perspective of an
 experienced Confluence user.  This limitation should be removed in the
 future.
-
-=back
 
 =back
 
