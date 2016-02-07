@@ -1,3 +1,6 @@
+IN PROGRESS Add more unit tests
+
+TODO should contents of 'htmlcomment' just be dropped from the output?
 TODO Refactor this ugly bastard
 TODO Output Pandoc JSON format
 TODO Note ALL of the differences with Confluence markup in POD
@@ -16,7 +19,7 @@ TODO Decide on a license for this code
 TODO Come up with a new name (derived from Confluence?)
 TODO Cherry-pick random bugfixes from alternate branches
 TODO Can't link to headers in another page
-IN PROGRESS Add more unit tests
+
 DONE Wrap list items in UL tags
 DONE Update build script to massage the Markdown
 DONE Implement `toc' macro
