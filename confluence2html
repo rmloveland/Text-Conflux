@@ -4,7 +4,30 @@ use strict;
 use warnings;
 use autodie;
 use feature qw< state >;
+use Getopt::Long;
 use URI;
+
+## Argument processing.
+
+my $add_header_toggles;
+
+GetOptions(
+		   "--add-header-toggles" => \$add_header_toggles,
+		  );
+
+my $toggle_js = <<"EOF";
+<script type="text/javascript">
+<!--
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'none')
+          e.style.display = 'block';
+       else
+          e.style.display = 'none';
+    }
+//-->
+</script>
+EOF
 
 ## Global Variables.
 
@@ -25,6 +48,8 @@ my $panel_pat                = "{panel.*";
 my $toc_pat                  = "{toc.*";
 
 ## Ye Olde Main Input Processing Loop.
+
+push @output, $toggle_js if $add_header_toggles;
 
 LINE: while (<>) {
     state $code        = 0;
@@ -109,11 +134,21 @@ LINE: while (<>) {
     # indentation in the table of contents.
 
     if (/h([0-9]). (.*)$/) {
-        my $new =
-          qq[<h$1><a name="$2">$2</a></h$1>];
-        my $toc_line = qq[<li class="h$1"><a href="#$2">$2</a></li>];
-        push @toc_lines, [ $1, $toc_line ];
-        s/h$1. (.*)$/$new/;
+	  my $new;
+	  if ($add_header_toggles and $1 eq "2") {
+		my $rand = int rand 99999;
+		$new = <<"EOF";
+</div>
+<h$1><a name="$2-TOC"><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</a></h$1>
+<div id="$2" style="display: none">
+EOF
+	  }
+	  else {
+		$new = qq[<h$1><a name="$2-TOC">$2</a></h$1>];
+	  }
+	  my $toc_line = qq[<li class="h$1"><a href="#$2-TOC">$2</a></li>];
+	  push @toc_lines, [ $1, $toc_line ];
+	  s/h$1. (.*)$/$new/;
     }
 
     # Monospace.
