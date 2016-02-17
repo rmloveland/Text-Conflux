@@ -6,31 +6,25 @@ use autodie;
 use feature qw< state >;
 use URI;
 
-#--------------------------------------------------------------------
-# Global Variables.
+## Global Variables.
 
 my @output;
 my @toc_lines;
+my $toc_exclude_pat;
 my $toc_min = 0;
 my $toc_max = 10;
-my $toc_exclude_pat;
 
-my $wiki_link_pat   = qq{[:alnum:]&|\,/\-:. };
-my $header_link_pat = qq{$wiki_link_pat#-};
-
+my $wiki_link_pat            = qq{[:alnum:]&|\,/\-:. };
+my $header_link_pat          = qq{$wiki_link_pat#-};
 my $external_link_text_pat   = qq{[:alnum:]:"'\\.,\\?#!\\-\~\%&@\+\(\) };
 my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
+my $image_pat                = qq{[:alnum:]%\\-|\\.:/ };
+my $bold_pat                 = qq{[:alnum:]+_!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
+my $italic_pat               = qq{[:alnum:]+!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
+my $panel_pat                = "{panel.*";
+my $toc_pat                  = "{toc.*";
 
-my $image_pat = qq{[:alnum:]%\\-|\\.:/ };
-
-my $bold_pat   = qq{[:alnum:]+_!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
-my $italic_pat = qq{[:alnum:]+!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
-
-my $panel_pat = "{panel.*";
-my $toc_pat = "{toc.*";
-
-#-------------------------------------------------------------------
-# Ye Olde Main Input Processing Loop.
+## Ye Olde Main Input Processing Loop.
 
 LINE: while (<>) {
     state $code        = 0;
@@ -40,7 +34,7 @@ LINE: while (<>) {
     state $warning     = 0;
     state $htmlcomment = 0;
     state $table       = 0;
-    state $quote  = 0;
+    state $quote       = 0;
 
     next LINE if /$panel_pat/;
 
@@ -231,8 +225,7 @@ LINE: while (<>) {
 # This lets the regex matchers do their thing and close 'ol' tags, etc.
 push @output, "\n";
 
-#-------------------------------------------------------------------
-# Ye Olde Main Output Processing Loop.
+## Ye Olde Main Output Processing Loop.
 
 LINE: for my $line (@output) {
   state $inside_ul = 0;
@@ -273,7 +266,6 @@ LINE: for my $line (@output) {
 
 print for @output;
 
-#-------------------------------------------------------------------
 # Turn a [Wiki Link] into a <a href="wiki-link.html">Wiki Link</a>.
 
 sub eunicize {
@@ -286,7 +278,6 @@ sub eunicize {
     return lc $title;
 }
 
-#-------------------------------------------------------------------
 # Check if the thing inside the link text is a URI. If so, make it
 # into an HTML link; if not, kick it back out as wiki-formatted link
 # text for later processing.
@@ -296,7 +287,7 @@ sub check_for_uri {
   my $it = shift;
   my $retval;
 
-  my $uri = URI->new($it);
+  my $uri    = URI->new($it);
   my $scheme = $uri->scheme;
 
   if (defined $scheme) {
@@ -307,7 +298,6 @@ sub check_for_uri {
   }
 }
 
-#-------------------------------------------------------------------
 # Table of contents processing goes here.
 
 sub replace_toc_line {
@@ -320,13 +310,11 @@ sub replace_toc_line {
     for my $toc_line (@toc_lines) {
         my $line_level = $toc_line->[0];
         my $line_text  = $toc_line->[1];
-        if (( $min <= $line_level
-	      &&
-	      $line_level <= $max )
+        if ( ( $min <= $line_level && $line_level <= $max )
             && $line_text !~ $pat )
-	  {
+        {
             $result .= "$line_text\n";
-	  }
+        }
     }
     $result .= qq{</ul></div>};
     $line = $result;
