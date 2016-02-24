@@ -79,6 +79,10 @@ LINE: while (<>) {
     ## blocks.
 
     do {
+      # Check marks!  Things are done or not done!
+      s{\(x\) (.*)}{<input type="checkbox" /> $1}g;
+      s{\(/\) (.*)}{<input type="checkbox" checked="yes" /> $1}g;
+
       # Add a horizontal rule.
       s{^----$}{<hr></hr>};
 
