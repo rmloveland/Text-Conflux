@@ -1,32 +1,33 @@
-IN PROGRESS Add more unit tests
+h1. TODO
 
-TODO should contents of 'htmlcomment' just be dropped from the output?
-TODO Refactor this ugly bastard
-TODO Output Pandoc JSON format
-TODO Note ALL of the differences with Confluence markup in POD
-TODO Make this a proper package
-TODO Make this a module
-TODO Make image directory a flag
-TODO Make base URI for wiki links a flag
-TODO Implement underlining
-TODO Implement toggle-able pretty-printing
-TODO Implement strikethrough (-FOO-)
-TODO Implement ordered lists
-TODO Implement line breaks (\\)
-TODO Get 'mailto' links to work
-TODO Generate a parse tree/AST that can be re-used?
-TODO Decide on a license for this code
-TODO Come up with a new name (derived from Confluence?)
-TODO Cherry-pick random bugfixes from alternate branches
-TODO Can't link to headers in another page
+h2. IN PROGRESS Add more unit tests
 
-DONE Wrap list items in UL tags
-DONE Update build script to massage the Markdown
-DONE Implement `toc' macro
-DONE Implement 'htmlcomment' macro
-DONE Implement header lines (----)
-DONE Implement blockquotes
-DONE Fix bug where ' in a list element causes a line break
-DONE Evaluate options other than Markdown
-DONE Can't do relative links in same page
-DONE Add command line options
+h2. TODO should contents of 'htmlcomment' just be dropped from the output?
+h2. TODO Refactor this ugly bastard
+h2. TODO Output Pandoc JSON format
+h2. TODO Note ALL of the differences with Confluence markup in POD
+h2. TODO Make this a module
+h2. TODO Make image directory a flag
+h2. TODO Make base URI for wiki links a flag
+h2. TODO Implement underlining
+h2. TODO Implement toggle-able pretty-printing
+h2. TODO Implement strikethrough (-FOO-)
+h2. TODO Implement ordered lists
+h2. TODO Implement line breaks (\\)
+h2. TODO Get 'mailto' links to work
+h2. TODO Generate a parse tree/AST that can be re-used?
+h2. TODO Decide on a license for this code
+h2. TODO Come up with a new name (derived from Confluence?)
+h2. TODO Cherry-pick random bugfixes from alternate branches
+h2. TODO Can't link to headers in another page
+
+h2. DONE Wrap list items in UL tags
+h2. DONE Update build script to massage the Markdown
+h2. DONE Implement `toc' macro
+h2. DONE Implement 'htmlcomment' macro
+h2. DONE Implement header lines (----)
+h2. DONE Implement blockquotes
+h2. DONE Fix bug where ' in a list element causes a line break
+h2. DONE Evaluate options other than Markdown
+h2. DONE Can't do relative links in same page
+h2. DONE Add command line options
