@@ -10,6 +10,14 @@ h2. Staging
 
 h2. Someday/Maybe
 
+h3. TODO Add '--config' flag
+
+This should output the location of the config files (if any).
+
+h3. TODO Read settings from config file
+
+There should be a user-level config file, as well as per-directory settings.
+
 h3. TODO should contents of 'htmlcomment' just be dropped from the output?
 
 h3. TODO Refactor this ugly bastard
@@ -68,3 +76,6 @@ h3. DONE Add command line options
 
 h2. Archive
 
+{htmlcomment}
+vim:set ft=confluencewiki:
+{htmlcomment}
