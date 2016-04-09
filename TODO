@@ -1,57 +1,58 @@
 h1. TODO
 
+*On This Page*
 {toc:minlevel=2|maxlevel=2}
 
 h2. Current
 
 h3. IN PROGRESS Add more unit tests
 
-h3. TODO Add conditional text support
+h3. DONE Add conditional text support
 
 Here's an attempt at a high-level design that (mostly) follows Asciidoc, but tries to keep it "Confluence-ish".
 
 If you have some conditional text, include it in a macro block like the one shown below (or not shown, perhaps).
 
 {code}
-{attr:FOO}
+{audience:FOO}
 Here is some conditional text.
-{attr}
+{audience}
 {code}
 
 To call {{confluence2html}} and get the first conditional block to appear, run it like this:
 
 {code}
-$ confluence2html --attr FOO
+$ confluence2html --audience FOO
 {code}
 
 You may also want to provide multiple values to an option.  For example, you may have additional blocks of conditional text.
 
 {code}
-{attr:BAR=BAZ}
+{audience:BAR}
 Even moar conditional text.
-{attr}
+{audience}
 
-{attr:BAZ=QUUX}
+{audience:QUUX}
 If you are reading this, welcome to the Quux Hierarchy (long may it reign).
-{attr}
+{audience}
 {code}
 
 To get the first of the above blocks to appear in the output, issue
 
 {code}
-$ confluence2html --attr BAR=BAZ
+$ confluence2html --audience BAR
 {code}
 
 To get the second,
 
 {code}
-$ confluence2html --attr BAZ=QUUX
+$ confluence2html --audience QUUX
 {code}
 
 And to get them both to appear, try
 
 {code}
-$ confluence2html --attr BAR=BAZ --attr BAZ=QUUX
+$ confluence2html --audience BAR --audience QUUX
 {code}
 
 {info}

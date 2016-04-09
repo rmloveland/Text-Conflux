@@ -6,16 +6,19 @@ use autodie;
 use feature qw< state >;
 use File::Slurp qw< slurp >;
 use Getopt::Long;
+use List::Util qw< none >;
 use URI;
 
 ## Argument processing.
 
 my $add_header_toggles;
 my $style_sheet;
+my @audiences;
 
 GetOptions(
   "--add-header-toggles" => \$add_header_toggles,
   "--stylesheet=s" => \$style_sheet,
+  "--audience=s" => \@audiences,
 );
 
 my $toggle_js = <<"EOF";
@@ -58,6 +61,7 @@ my $bold_pat                 = qq{[:alnum:]+_!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
 my $italic_pat               = qq{[:alnum:]+!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
 my $panel_pat                = "{panel.*";
 my $toc_pat                  = "{toc.*";
+my $audience_pat             = "{audience.*";
 
 ## Ye Olde Main Input Processing Loop.
 
@@ -74,6 +78,8 @@ LINE: while (<>) {
     state $htmlcomment = 0;
     state $table       = 0;
     state $quote       = 0;
+    state $audience    = 0;
+    state $current_audience = '';
 
     next LINE if /$panel_pat/;
 
@@ -180,7 +186,24 @@ EOF
     s{> ?(TODO)}{><font color="red">TODO</font>}g;
     s{> ?(DONE)}{><font color="green">DONE</font>}g;
 
-    } unless $code % 2 != 0;
+    if ( /{audience:.*/ ) {
+      $audience++;
+      my $audience_type =  parse_audience($_);
+      $_ = '';
+      $current_audience = $audience_type;
+    }
+    elsif ( /{audience}/ ) {
+      $audience++;
+      $_ = '';
+    }
+
+    if ( $audience % 2 != 0) {
+      if ( none { $_ eq $current_audience } @audiences ) {
+        next LINE;
+      }
+    }
+
+  } unless $code % 2 != 0;
 
     # Multiline code blocks.
     $code++ if /\{code\}/;
@@ -379,6 +402,20 @@ sub replace_toc_line {
     $result .= qq{</ul></div>};
     $line = $result;
     return $line;
+}
+
+sub parse_audience {
+  # String -> String || Undef
+  # {audience:FOO}
+  my $input = shift;
+  my $audience;
+  my $retval;
+  if ($input =~ /{audience:([A-Za-z0-9\-]+)/) {
+    $retval = $1;
+    chomp $retval;
+  }
+  else { $retval = undef; }
+  return $retval;
 }
 
 sub parse_toc {
