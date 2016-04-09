@@ -176,6 +176,10 @@ EOF
     # Same-line code blocks.
     s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s;
 
+    # Color TODO statuses in output.
+    s{> ?(TODO)}{><font color="red">TODO</font>}g;
+    s{> ?(DONE)}{><font color="green">DONE</font>}g;
+
     } unless $code % 2 != 0;
 
     # Multiline code blocks.
