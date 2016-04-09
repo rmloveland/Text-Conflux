@@ -4,16 +4,19 @@ use strict;
 use warnings;
 use autodie;
 use feature qw< state >;
+use File::Slurp qw< slurp >;
 use Getopt::Long;
 use URI;
 
 ## Argument processing.
 
 my $add_header_toggles;
+my $style_sheet;
 
 GetOptions(
-		   "--add-header-toggles" => \$add_header_toggles,
-		  );
+  "--add-header-toggles" => \$add_header_toggles,
+  "--stylesheet=s" => \$style_sheet,
+);
 
 my $toggle_js = <<"EOF";
 <script type="text/javascript">
@@ -27,6 +30,15 @@ my $toggle_js = <<"EOF";
     }
 //-->
 </script>
+EOF
+
+my $css = "";
+$css = slurp $style_sheet if $style_sheet;
+
+my $css_block = <<"EOF";
+<style type="text/css">
+$css
+</style>
 EOF
 
 ## Global Variables.
@@ -50,6 +62,7 @@ my $toc_pat                  = "{toc.*";
 ## Ye Olde Main Input Processing Loop.
 
 push @output, $toggle_js if $add_header_toggles;
+push @output, $css_block if $style_sheet;
 my $toggled_header_seen = 0;
 
 LINE: while (<>) {
