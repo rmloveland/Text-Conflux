@@ -14,11 +14,13 @@ use URI;
 my $add_header_toggles;
 my $style_sheet;
 my @audiences;
+my $title ='';
 
 GetOptions(
   "--add-header-toggles" => \$add_header_toggles,
   "--stylesheet=s" => \$style_sheet,
   "--audience=s" => \@audiences,
+  "--title=s" => \$title,
 );
 
 my $toggle_js = <<"EOF";
@@ -44,6 +46,55 @@ $css
 </style>
 EOF
 
+my $xml_header;
+if ( $style_sheet && $toggle_js ) {
+  $xml_header = <<"EOF_HEADER";
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>$title</title>
+    $css_block
+    $toggle_js
+  </head>
+  <body>
+EOF_HEADER
+}
+elsif ( $style_sheet ) {
+  $xml_header = <<"EOF_HEADER";
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>$title</title>
+    $css_block
+  </head>
+  <body>
+EOF_HEADER
+}
+else {
+  $xml_header = <<"EOF_HEADER";
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>$title</title>
+  </head>
+  <body>
+EOF_HEADER
+}
+
+my $xml_footer = <<"EOF_FOOTER";
+  </body>
+</html>
+EOF_FOOTER
+
 ## Global Variables.
 
 my @output;
@@ -51,6 +102,7 @@ my @toc_lines;
 my $toc_exclude_pat;
 my $toc_min = 0;
 my $toc_max = 10;
+my $has_toc;
 
 my $wiki_link_pat            = qq{[:alnum:]&|\,/\-:. };
 my $header_link_pat          = qq{$wiki_link_pat#-};
@@ -65,8 +117,16 @@ my $audience_pat             = "{audience.*";
 
 ## Ye Olde Main Input Processing Loop.
 
-push @output, $toggle_js if $add_header_toggles;
-push @output, $css_block if $style_sheet;
+push @output, $xml_header if $title;
+
+unless ( $toggle_js && $title ) {
+  push @output, $toggle_js if $add_header_toggles;
+}
+
+unless ( $style_sheet && $title ) {
+  push @output, $css_block if $style_sheet;
+}
+
 my $toggled_header_seen = 0;
 
 LINE: while (<>) {
@@ -162,14 +222,24 @@ LINE: while (<>) {
 	  if ($add_header_toggles and $1 eq "2") {
         $toggled_header_seen++;
 		my $rand = int rand 99999;
-		$new = <<"EOF";
+        if ( $has_toc ) {
+          $new = <<"EOF";
 <h$1><a name="$2-TOC"><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</a></h$1>
 <div id="$2" style="display: none">
 EOF
+        }
+        else {
+          $new = <<"EOF2";
+<h$1><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</h$1>
+<div id="$2" style="display: none">
+EOF2
+      }
         $new = '</div> ' . $new if $toggled_header_seen > 1;
 	  }
 	  else {
-		$new = qq[<h$1><a name="$2-TOC">$2</a></h$1>];
+		$new = $has_toc
+        ? qq[<h$1><a name="$2-TOC">$2</a></h$1>]
+        : qq[<h$1>$2</h$1>]
 	  }
 	  my $toc_line = qq[<li class="h$1"><a href="#$2-TOC">$2</a></li>];
 	  push @toc_lines, [ $1, $toc_line ];
@@ -183,8 +253,8 @@ EOF
     s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s;
 
     # Color TODO statuses in output.
-    s{> ?(TODO)}{><font color="red">TODO</font>}g;
-    s{> ?(DONE)}{><font color="green">DONE</font>}g;
+    s{> ?(TODO)}{><span class="red">TODO</span>}g;
+    s{> ?(DONE)}{><span class="green">DONE</span>}g;
 
     if ( /{audience:.*/ ) {
       $audience++;
@@ -307,6 +377,8 @@ push @output, "</div>" if $toggled_header_seen;
 
 # This lets the regex matchers do their thing and close 'ol' tags, etc.
 push @output, "\n";
+
+push @output, $xml_footer;
 
 ## Ye Olde Main Output Processing Loop.
 

@@ -5,7 +5,9 @@ h1. TODO
 
 h2. Current
 
-h3. IN PROGRESS Add more unit tests
+h3. TODO Add more unit tests
+
+h3. TODO Add headers and footers to make output valid
 
 h3. DONE Add conditional text support
 
@@ -59,11 +61,29 @@ $ confluence2html --audience BAR --audience QUUX
 For information on how to actually implement multiple values for a given option, see the section *Options with multiple values* in the {{Getopt::Long}} docs.
 {info}
 
-h3. TODO Don't add anchor tags to headers unless the TOC macro is used
+----
+
+h4. Testing Conditional Text Support
+
+{audience:FOO}
+This block of text will only appear to FOO customers.
+{audience}
+
+{audience:BAR}
+This block of text will only appear to BAR customers.
+{audience}
+
+h3. TODO Do not add anchor tags to headers unless the TOC macro is used
+
+h3. TODO Add support for abbrevs?
+
+E.g., type {NPZ} everywhere and have it expand to New Paltz.   This will only really be useful for repetitive terms (of which there are a few in technical writing).
+
+I'm not sure how/where to store the abbrevs in the source document.  Need to design that.
 
 h2. Staging
 
-h2. Someday/Maybe
+h2. Someday Maybe
 
 h3. TODO Add '--config' flag
 
@@ -121,11 +141,11 @@ h3. DONE Implement header lines (----)
 
 h3. DONE Implement blockquotes
 
-h3. DONE Fix bug where ' in a list element causes a line break
+h3. DONE Fix bug where single quote in a list element causes a line break
 
 h3. DONE Evaluate options other than Markdown
 
-h3. DONE Can't do relative links in same page
+h3. DONE Support relative links in same page
 
 h3. DONE Add command line options
 
