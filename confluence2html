@@ -256,8 +256,10 @@ EOF2
     s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s;
 
     # Color TODO statuses in output.
-    s{> ?(TODO)}{><span class="red">TODO</span>}g;
-    s{> ?(DONE)}{><span class="green">DONE</span>}g;
+    s{> ?(TODO)}{><span class="red">$1</span>}g;
+    s{> ?(DONE)}{><span class="green">$1</span>}g;
+    s{> ?(IN PROGRESS)}{><span class="orange">$1</span>}g;
+    s{> ?(CANCELLED)}{><span class="gray">$1</span>}g;
 
     if ( /{audience:.*/ ) {
       $audience++;
