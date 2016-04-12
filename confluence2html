@@ -378,7 +378,7 @@ push @output, "</div>" if $toggled_header_seen;
 # This lets the regex matchers do their thing and close 'ol' tags, etc.
 push @output, "\n";
 
-push @output, $xml_footer;
+push @output, $xml_footer if $title;
 
 ## Ye Olde Main Output Processing Loop.
 
