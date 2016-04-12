@@ -187,11 +187,11 @@ LINE: while (<>) {
 
       # Lists of links, optionally followed by a colon or slash, then
       # descriptive text.
-      s/^\* ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
+      s/^\+ ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
       s/^[0-9]\. ?(<a href.*<\/a>)([ :\-]?.*)/\<li class="ordered">$1$2<\/li>/g;
 
       # Lists of non-link items.
-      s/^\*( +.*)$/\<li>$1<\/li>/g;
+      s/^\+( +.*)$/\<li>$1<\/li>/g;
       s/^[0-9]\.( +.*)$/\<li class="ordered">$1<\/li>/g;
 
       # Bold elements (Sometimes they occur at the beginning of a
@@ -217,20 +217,23 @@ LINE: while (<>) {
     # LI tag so that we can use CSS's TEXT-INDENT to create a nice
     # indentation in the table of contents.
 
-    if (/h([0-9]). (.*)$/) {
+	my $header_pat = "^([*]+) ?(.*)\$";
+	if (/$header_pat/) {
 	  my $new;
-	  if ($add_header_toggles and $1 eq "2") {
+	  my $level;
+	  $level = length($1);
+	  if ($add_header_toggles and $level == 2) {
         $toggled_header_seen++;
 		my $rand = int rand 99999;
         if ( $has_toc ) {
           $new = <<"EOF";
-<h$1><a name="$2-TOC"><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</a></h$1>
+<h$level><a name="$2-TOC"><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</a></h$level>
 <div id="$2" style="display: none">
 EOF
         }
         else {
           $new = <<"EOF2";
-<h$1><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</h$1>
+<h$level><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</h$level>
 <div id="$2" style="display: none">
 EOF2
       }
@@ -238,12 +241,12 @@ EOF2
 	  }
 	  else {
 		$new = $has_toc
-        ? qq[<h$1><a name="$2-TOC">$2</a></h$1>]
-        : qq[<h$1>$2</h$1>]
+        ? qq[<h$level><a name="$2-TOC">$2</a></h$level>]
+        : qq[<h$level>$2</h$level>]
 	  }
-	  my $toc_line = qq[<li class="h$1"><a href="#$2-TOC">$2</a></li>];
-	  push @toc_lines, [ $1, $toc_line ];
-	  s/h$1. (.*)$/$new/;
+	  my $toc_line = qq[<li class="h$level"><a href="#$2-TOC">$2</a></li>];
+	  push @toc_lines, [ $level, $toc_line ];
+	  s/$header_pat/$new/;
     }
 
     # Monospace.
