@@ -1,15 +1,73 @@
-h1. TODO
+* Things to Do
 
-*On This Page*
-{toc:minlevel=2|maxlevel=2}
+ *On This Page*
+ {toc:minlevel=2|maxlevel=2}
 
-h2. Current
+** Current
 
-h3. TODO Add more unit tests
+**** TODO Add more unit tests
 
-h3. TODO Add headers and footers to make output valid
+**** TODO Add headers and footers to make output valid
 
-h3. DONE Add conditional text support
+**** TODO Do not add anchor tags to headers unless the TOC macro is used
+
+**** TODO Add support for abbrevs?
+
+E.g., type {NPZ} everywhere and have it expand to New Paltz.   This will only really be useful for repetitive terms (of which there are a few in technical writing).
+
+I'm not sure how/where to store the abbrevs in the source document.  Need to design that.
+
+** Staging
+
+** Someday Maybe
+
+**** TODO Add '--config' flag
+
+This should output the location of the config files (if any).
+
+**** TODO Read settings from config file
+
+There should be a user-level config file, as well as per-directory settings.
+
+**** TODO should contents of 'htmlcomment' just be dropped from the output?
+
+**** TODO Refactor this ugly bastard
+
+**** TODO Output Pandoc JSON format
+
+**** TODO Note ALL of the differences with Confluence markup in POD
+
+**** TODO Make this a module
+
+**** TODO Make image directory a flag
+
+**** TODO Make base URI for wiki links a flag
+
+**** TODO Implement underlining
+
+**** TODO Implement toggle-able pretty-printing
+
+**** TODO Implement strikethrough (-FOO-)
+
+**** TODO Implement ordered lists
+
+**** TODO Implement line breaks (\\)
+
+**** TODO Get 'mailto' links to work
+
+**** TODO Generate a parse tree/AST that can be re-used?
+
+**** TODO Decide on a license for this code
+
+**** TODO Come up with a new name (derived from Confluence?)
+
+**** TODO Cherry-pick random bugfixes from alternate branches
+
+**** TODO Can't link to headers in another page
+
+** Archive
+
+**** DONE Add conditional text support (aka "audiences")
 
 Here's an attempt at a high-level design that (mostly) follows Asciidoc, but tries to keep it "Confluence-ish".
 
@@ -63,7 +121,7 @@ For information on how to actually implement multiple values for a given option,
 
 ----
 
-h4. Testing Conditional Text Support
+***** Testing Conditional Text Support
 
 {audience:FOO}
 This block of text will only appear to FOO customers.
@@ -73,83 +131,63 @@ This block of text will only appear to FOO customers.
 This block of text will only appear to BAR customers.
 {audience}
 
-h3. TODO Do not add anchor tags to headers unless the TOC macro is used
+**** DONE Implement an 'include-like' version of 'code' macro
 
-h3. TODO Add support for abbrevs?
+The macro will look like this:
 
-E.g., type {NPZ} everywhere and have it expand to New Paltz.   This will only really be useful for repetitive terms (of which there are a few in technical writing).
+{code}
+{code:file=header-lines.t}
+{code}
 
-I'm not sure how/where to store the abbrevs in the source document.  Need to design that.
+And its output will look like this:
 
-h2. Staging
+{code:file=header-lines.t}
 
-h2. Someday Maybe
+Using this macro will require passing the {{--include-directory}} flag on program invocation, so the program knows what directory to look inside for the files.
 
-h3. TODO Add '--config' flag
+The reasons why you might want something like this are explained [in this blog post|https://logicgrimoire.wordpress.com/2015/06/16/include-code-samples-in-markdown-files/].
 
-This should output the location of the config files (if any).
+**** DONE Implement 'include' macro
 
-h3. TODO Read settings from config file
+The macro will look like this:
 
-There should be a user-level config file, as well as per-directory settings.
+{code}
+{include:file=foo.txt}
+{code}
 
-h3. TODO should contents of 'htmlcomment' just be dropped from the output?
+And its output will look like this:
 
-h3. TODO Refactor this ugly bastard
+{quote}
+{include:file=README}
+{quote}
 
-h3. TODO Output Pandoc JSON format
+Using this macro will require passing the {{--include-directory}} flag.
 
-h3. TODO Note ALL of the differences with Confluence markup in POD
+**** DONE Wrap list items in UL tags
 
-h3. TODO Make this a module
+**** DONE Update build script to massage the Markdown
 
-h3. TODO Make image directory a flag
+**** DONE Implement `toc' macro
 
-h3. TODO Make base URI for wiki links a flag
+**** DONE Implement 'htmlcomment' macro
 
-h3. TODO Implement underlining
+**** DONE Implement header lines (----)
 
-h3. TODO Implement toggle-able pretty-printing
+**** DONE Implement blockquotes
 
-h3. TODO Implement strikethrough (-FOO-)
+**** DONE Fix bug where single quote in a list element causes a line break
 
-h3. TODO Implement ordered lists
+**** DONE Evaluate options other than Markdown
 
-h3. TODO Implement line breaks (\\)
+**** DONE Support relative links in same page
 
-h3. TODO Get 'mailto' links to work
+**** DONE Add command line options
 
-h3. TODO Generate a parse tree/AST that can be re-used?
-
-h3. TODO Decide on a license for this code
-
-h3. TODO Come up with a new name (derived from Confluence?)
-
-h3. TODO Cherry-pick random bugfixes from alternate branches
-
-h3. TODO Can't link to headers in another page
-
-h3. DONE Wrap list items in UL tags
-
-h3. DONE Update build script to massage the Markdown
-
-h3. DONE Implement `toc' macro
-
-h3. DONE Implement 'htmlcomment' macro
-
-h3. DONE Implement header lines (----)
-
-h3. DONE Implement blockquotes
-
-h3. DONE Fix bug where single quote in a list element causes a line break
-
-h3. DONE Evaluate options other than Markdown
-
-h3. DONE Support relative links in same page
-
-h3. DONE Add command line options
-
-h2. Archive
+{htmlcomment}
+Local Variables:
+mode: confluence-markup
+End:
+{htmlcomment}
 
 {htmlcomment}
 vim: set ft=confluencewiki:
