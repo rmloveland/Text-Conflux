@@ -274,6 +274,10 @@ EOF2
     s{> ?(IN PROGRESS)}{><span class="orange">$1</span>}g;
     s{> ?(CANCELLED)}{><span class="gray">$1</span>}g;
 
+
+	# Support for the 'audience' macro: toggle output based on the
+	# intended reader.  This is important for professional-grade
+	# technical writing.
     if ( /{audience:.*/ ) {
       $audience++;
       my $audience_type =  parse_audience($_);
