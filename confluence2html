@@ -16,6 +16,8 @@ my $style_sheet;
 my @audiences;
 my $title ='';
 my $image_directory;
+my $include_directory;
+my $code_samples_directory;
 my $base_url;
 
 GetOptions(
@@ -24,6 +26,8 @@ GetOptions(
   "--audience=s" => \@audiences,
   "--title=s" => \$title,
   "--image-directory=s"	=> \$image_directory,
+  "--include-directory=s"	=> \$include_directory,
+  "--code-samples-directory=s"	=> \$code_samples_directory,
   "--base-url=s"		=> \$base_url,
 );
 
@@ -121,6 +125,8 @@ my $italic_pat               = qq{[:alnum:]+!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
 my $panel_pat                = "{panel.*";
 my $toc_pat                  = "{toc.*";
 my $audience_pat             = "{audience.*";
+my $code_sample_pat         = "{code:file=([-._a-z]+)}";
+my $include_pat              = "{include:file=([-._A-Za-z]+)}";
 
 ## Ye Olde Main Input Processing Loop.
 
@@ -283,6 +289,49 @@ EOF2
       if ( none { $_ eq $current_audience } @audiences ) {
         next LINE;
       }
+    }
+
+  	# Support for the 'include' macro.  This is useful for slurping in
+	# snippets of wiki markup from external files for content reuse.
+
+    if ( /$include_pat/ ) {
+      die "Can't use 'include' macro without passing '--include-directory'\n" 
+        unless defined $include_directory;
+      my $include_pathname = $1;
+
+      s!$include_pat!!g;
+
+      my $file = $include_directory . '/' . $include_pathname;
+      my @text = slurp( $file );
+      for my $elem ( @text ) {
+        $elem =~ s/</&lt;/g;
+        $elem =~ s/>/&gt;/g;
+        push @output, $elem;
+      }
+    }
+
+	  
+	# Support for an 'include-like' version of the 'code' macro.  This
+	# is useful for slurping in code samples from external files
+	# (where they can be more easily edited with proper syntax
+	# highlighting, indentation, etc.
+
+    if ( /$code_sample_pat/ ) {
+      die "Can't use '{code:file=FOO}' without passing '--code-samples-directory'\n" 
+        unless defined $code_samples_directory;
+      my $code_sample_pathname = $1;
+
+      s!$code_sample_pat!!g;
+
+      my $program_file = $code_samples_directory . '/' . $code_sample_pathname;
+      my @program_text = slurp( $program_file );
+      push @output, "<pre>";
+      for my $program_line ( @program_text ) {
+        $program_line =~ s/</&lt;/g;
+        $program_line =~ s/>/&gt;/g;
+        push @output, $program_line;
+      }
+      push @output, "</pre>";
     }
 
   } unless $code % 2 != 0;
