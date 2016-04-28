@@ -253,9 +253,7 @@ EOF2
         $new = '</div> ' . $new if $toggled_header_seen > 1;
 	  }
 	  else {
-		$new = $has_toc
-        ? qq[<h$level><a name="$2-TOC">$2</a></h$level>]
-        : qq[<h$level>$2</h$level>]
+        $new = qq[<h$level><a name="$2-TOC">$2</a></h$level>];
 	  }
 	  my $toc_line = qq[<li class="h$level"><a href="#$2-TOC">$2</a></li>];
 	  push @toc_lines, [ $level, $toc_line ];
