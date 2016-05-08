@@ -31,8 +31,14 @@ GetOptions(
   "--base-url=s"		=> \$base_url,
 );
 
-$image_directory //= "images";
-$base_url //= ".";
+# Sane default values for some arguments
+
+$image_directory        //= "images";
+$base_url               //= ".";
+$include_directory      //= 'includes';
+$code_samples_directory //= 'code';
+
+# Toggling header visibility (this may be removed)
 
 my $toggle_js = <<"EOF";
 <script type="text/javascript">
