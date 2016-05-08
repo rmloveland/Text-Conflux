@@ -54,6 +54,8 @@ my $toggle_js = <<"EOF";
 </script>
 EOF
 
+# Specifying a CSS stylesheet.
+
 my $css = "";
 $css = slurp $style_sheet if $style_sheet;
 
@@ -62,6 +64,8 @@ my $css_block = <<"EOF";
 $css
 </style>
 EOF
+
+# Header and footer templates for valid XHTML output.
 
 my $xml_header;
 if ( $style_sheet && $toggle_js ) {
@@ -318,11 +322,10 @@ EOF2
       }
     }
 
-	  
 	# Support for an 'include-like' version of the 'code' macro.  This
 	# is useful for slurping in code samples from external files
 	# (where they can be more easily edited with proper syntax
-	# highlighting, indentation, etc.
+	# highlighting, indentation, etc.)
 
     if ( /$code_sample_pat/ ) {
       die "Can't use '{code:file=FOO}' without passing '--code-samples-directory'\n" 
