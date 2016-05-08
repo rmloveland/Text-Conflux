@@ -548,20 +548,6 @@ sub replace_toc_line {
     return $line;
 }
 
-sub parse_audience {
-  # String -> String || Undef
-  # {audience:FOO}
-  my $input = shift;
-  my $audience;
-  my $retval;
-  if ($input =~ /{audience:([A-Za-z0-9\-]+)/) {
-    $retval = $1;
-    chomp $retval;
-  }
-  else { $retval = undef; }
-  return $retval;
-}
-
 sub parse_toc {
     # String -> Array
     # {toc:minlevel=3|maxlevel=4|Exclude=.*} -> ($min, $max, $pat)
@@ -581,6 +567,22 @@ sub parse_toc {
     }
 
     return @result;
+}
+
+# Parsing the 'audience' macro
+
+sub parse_audience {
+  # String -> String || Undef
+  # {audience:FOO}
+  my $input = shift;
+  my $audience;
+  my $retval;
+  if ($input =~ /{audience:([A-Za-z0-9\-]+)/) {
+    $retval = $1;
+    chomp $retval;
+  }
+  else { $retval = undef; }
+  return $retval;
 }
 
 __END__
