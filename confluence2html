@@ -428,7 +428,7 @@ EOF2
     # paragraph tags, so we push those lines into the output buffer
     # without any further processing.
 
-    if (/(<\/?h[0-9]>|<\/?pre>|<\/?table>|<\/?li>|<\/?div)/) {
+    if (/(<\/?h[0-9]>|<\/?pre>|<\/?table>|<\/?li>|<\/?div|<\/?hr)/) {
       push @output, $_;
       next LINE;
     }
