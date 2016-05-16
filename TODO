@@ -5,7 +5,7 @@
 
 ** Current
 
-**** TODO Add more unit tests
+**** IN PROGRESS Add more unit tests
 
 **** TODO Add headers and footers to make output valid
 
@@ -13,13 +13,42 @@
 
 **** TODO Add support for abbrevs?
 
-E.g., type {NPZ} everywhere and have it expand to New Paltz.   This will only really be useful for repetitive terms (of which there are a few in technical writing).
+E.g., type '{NPZ}' everywhere and have it expand to 'New Paltz'.   This will only really be useful for repetitive terms (of which there are a few in technical writing).
 
 I'm not sure how/where to store the abbrevs in the source document.  Need to design that.
 
 ** Staging
 
 ** Someday Maybe
+
+**** TODO Improve the 'include' macro's support for arbitrary wikitext
+
+As of right now (Sun May 15 20:28:46 2016), the 'include' macro can only support paragraphs with inline links/formatting.  It can't do more complex constructs like tables or lists.
+
+Start by investigating and documenting what works and what doesn't, and then fix stuff.
+
+**** TODO Support wrapped text
+
+An idea: maybe this would be easier to do with a first pass that goes through and joins single newlines followed by text up with the previous line (IFF such lines exist).
+
+For example, it would turn this:
+
+{code}
+I've just come across a post on Hackernews titled List Comprehensions
+in Eight Lines of Clojure. It's definitely a nice little example. But
+it also feels kind of unreal, even cheating ;) Because who would
+really use such kinds of list comprehensions? It seems to me, that the
+whole purpose of this construct is to make the code be concise and
+resemble a set-theoretic notation for sets. But here we need to use
+them inside a list-comp macro. This actually looks more like just
+another iteration construct.
+{code}
+
+into this:
+
+{code}
+I've just come across a post on Hackernews titled List Comprehensions in Eight Lines of Clojure. It's definitely a nice little example. But it also feels kind of unreal, even cheating ;) Because who would really use such kinds of list comprehensions? It seems to me, that the whole purpose of this construct is to make the code be concise and resemble a set-theoretic notation for sets. But here we need to use them inside a list-comp macro. This actually looks more like just another iteration construct.
+{code}
 
 **** TODO Add '--config' flag
 
@@ -29,7 +58,7 @@ This should output the location of the config files (if any).
 
 There should be a user-level config file, as well as per-directory settings.
 
-**** TODO should contents of 'htmlcomment' just be dropped from the output?
+**** TODO Should contents of 'htmlcomment' just be dropped from the output?
 
 **** TODO Refactor this ugly bastard
 
@@ -39,17 +68,11 @@ There should be a user-level config file, as well as per-directory settings.
 
 **** TODO Make this a module
 
-**** TODO Make image directory a flag
-
-**** TODO Make base URI for wiki links a flag
-
 **** TODO Implement underlining
 
 **** TODO Implement toggle-able pretty-printing
 
 **** TODO Implement strikethrough (-FOO-)
-
-**** TODO Implement ordered lists
 
 **** TODO Implement line breaks (\\)
 
@@ -60,6 +83,10 @@ There should be a user-level config file, as well as per-directory settings.
 **** TODO Decide on a license for this code
 
 **** TODO Come up with a new name (derived from Confluence?)
+
+Sun May 15 20:17:35 2016:
+
+Right now I'm partial to "Conflux", a synonym.
 
 **** TODO Cherry-pick random bugfixes from alternate branches
 
@@ -143,7 +170,7 @@ And its output will look like this:
 
 {code:file=header-lines.t}
 
-Using this macro will require passing the {{--include-directory}} flag on program invocation, so the program knows what directory to look inside for the files.
+Using this macro will require passing the {{--code-samples-directory}} flag on program invocation, so the program knows what directory to look inside for the code file.
 
 The reasons why you might want something like this are explained [in this blog post|https://logicgrimoire.wordpress.com/2015/06/16/include-code-samples-in-markdown-files/].
 
@@ -192,3 +219,8 @@ End:
 {htmlcomment}
 vim: set ft=confluencewiki:
 {htmlcomment}
+**** DONE Implement ordered lists
+
+**** DONE Make image directory a flag
+
+**** DONE Make base URI for wiki links a flag
