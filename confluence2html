@@ -181,6 +181,25 @@ LINE: while (<>) {
     ## blocks.
 
     do {
+	  # Support for the 'include' macro.  This is useful for slurping in
+	  # snippets of wiki markup from external files for content reuse.
+
+	  # NOTE: Currently only separates paragraphs of text, not the
+	  # full syntax (such as unordered lists, etc.)
+
+	  if ( /$include_pat/ ) {
+		die "Can't use 'include' macro without passing '--include-directory'\n" 
+		  unless defined $include_directory;
+		my $include_pathname = $1;
+
+		s!$include_pat!!g;
+
+		my $file = $include_directory . '/' . $include_pathname;
+		my @text = slurp( $file );
+		my $text = join '<p>', @text;
+		s!$_!$text!;
+	  }
+
       # Check marks!  Things are done or not done!
       s{\(x\) (.*)}{<input type="checkbox" /> $1}g;
       s{\(/\) (.*)}{<input type="checkbox" checked="yes" /> $1}g;
@@ -300,25 +319,6 @@ EOF2
     if ( $audience % 2 != 0) {
       if ( none { $_ eq $current_audience } @audiences ) {
         next LINE;
-      }
-    }
-
-  	# Support for the 'include' macro.  This is useful for slurping in
-	# snippets of wiki markup from external files for content reuse.
-
-    if ( /$include_pat/ ) {
-      die "Can't use 'include' macro without passing '--include-directory'\n" 
-        unless defined $include_directory;
-      my $include_pathname = $1;
-
-      s!$include_pat!!g;
-
-      my $file = $include_directory . '/' . $include_pathname;
-      my @text = slurp( $file );
-      for my $elem ( @text ) {
-        $elem =~ s/</&lt;/g;
-        $elem =~ s/>/&gt;/g;
-        push @output, $elem;
       }
     }
 
