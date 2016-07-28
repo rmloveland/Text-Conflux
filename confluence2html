@@ -632,9 +632,9 @@ The subset of Confluence markup that we support is defined as follows:
 
 =item Headers
 
-The C<h[1-6]> header format is supported, as in C<h2. Introduction>.
+The C<*> header format is supported, as in C<** Introduction>.
 No other formatting inside the header text is supported. For example,
-C<h2. Introduction to {{confluence2html}}> will not work.
+C<** Introduction to {{confluence2html}}> will not work.
 
 =item Links
 
