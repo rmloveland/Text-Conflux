@@ -225,7 +225,7 @@ LINE: while (<>) {
        {<a href="#$1">$1</a>}gis;
 
       # Images.
-      s{^\!([$image_pat]+.(png|jpg)).*\!}{<br /><br /><img src="$image_directory/$1"/><br /><br />}gis;
+      s{^\!([$image_pat]+.(png|jpg)).*:([0-9]+)\!}{<p><img width="$3" src="$image_directory/$1"/></p>}gis;
 
       # Lists of links, optionally followed by a colon or slash, then
       # descriptive text.
@@ -790,6 +790,17 @@ Note: Having to wrap tables in the C<table> macro is probably the most
 error-prone (and thus annoying) requirement from the perspective of an
 experienced Confluence user.  This limitation should be removed in the
 future.
+
+=item Images
+
+Images are supported, with the following syntax:
+
+    !foo.png:450!
+
+This will insert C<foo.png> into the output, at 450 pixels in width.
+In order for confluence2html to know where to find C<foo.png>, you
+must pass the C<--image-directory> flag, e.g., C<confluence2html
+--image-directory /path/to/images < in > out.html>.
 
 =back
 
