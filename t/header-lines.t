@@ -10,7 +10,8 @@ my $perl = $^X;
 my $got = `echo "----" | ./confluence2html`;
 
 my $expected = <<EOF;
-<p><hr></hr></p>
+<hr></hr>
+
 EOF
 
 ok ( $expected eq $got, "header line" );
