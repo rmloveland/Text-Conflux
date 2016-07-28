@@ -23,12 +23,12 @@ are important for technical documents.  For example:
 
 You can use Confluence's table syntax instead of having to write HTML
 tables by hand.  This matters B<a lot> if you create and maintain
-technical documents. (See L</"tables"> below.)
+technical documents. (See L</"Tables"> below.)
 
 =item Automatic Tables of Contents
 
 You can use the C<toc> macro to have a nice table of contents
-generated for your document.  (See L</"tables of contents"> below).
+generated for your document.  (See L</"Tables of Contents"> below).
 
 =back
 
@@ -43,9 +43,9 @@ The subset of Confluence markup that we support is defined as follows:
 
 =item Headers
 
-The C<h[1-6]> header format is supported, as in C<h2. Introduction>.
+The C<*> header format is supported, as in C<** Introduction>.
 No other formatting inside the header text is supported. For example,
-C<h2. Introduction to {{confluence2html}}> will not work.
+C<** Introduction to {{confluence2html}}> will not work.
 
 =item Links
 
@@ -58,8 +58,6 @@ markup in the same directory named
 C<link-to-some-other-page-on-this-wiki.txt>, which is generated at the
 same time.
 
-=over
-
 Note: the HTML output from the "standard link" syntax is still subject
 to change.  A more flexible design is needed.  One possibility is to
 design several different output formats the user can choose from;
@@ -68,8 +66,6 @@ argument which would allow them to do their own additional processing
 on the output, e.g.,
 
     $ confluence2html --link-tag=LINK < page.txt | MOAR_FILTERING
-
-=back
 
 External links are supported:
 
@@ -201,14 +197,21 @@ table itself in the C<{table}> macro, e.g.:
     | ... | ... | ... |
     {table}
 
-=over
-
 Note: Having to wrap tables in the C<table> macro is probably the most
 error-prone (and thus annoying) requirement from the perspective of an
 experienced Confluence user.  This limitation should be removed in the
 future.
 
-=back
+=item Images
+
+Images are supported, with the following syntax:
+
+    !foo.png:450!
+
+This will insert C<foo.png> into the output, at 450 pixels in width.
+In order for confluence2html to know where to find C<foo.png>, you
+must pass the C<--image-directory> flag, e.g., C<confluence2html
+--image-directory /path/to/images < in > out.html>.
 
 =back
 
