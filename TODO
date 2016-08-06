@@ -5,11 +5,27 @@
 
 ** Current
 
-**** IN PROGRESS Add more unit tests
+*** TODO Devise a better unit testing strategy
+
+Right now the tests are very brittle, and there is no visibility into how they are breaking.
+
+They use {{Test::Simple}} but should start using {{Test::More}}.
+
+The tests are too dependent on the exact string output.  They should probably parse the output into an {{HTML::Tree}} or whatever and check that instead.
+
+** Staging
+
+**** TODO Add more unit tests
+
+**** TODO Make this a module
 
 **** TODO Add headers and footers to make output valid
 
 **** TODO Do not add anchor tags to headers unless the TOC macro is used
+
+** Someday Maybe
+
+**** TODO BUG: Quotes in header text lead to broken TOC links
 
 **** TODO Add support for abbrevs?
 
@@ -17,9 +33,11 @@ E.g., type '{NPZ}' everywhere and have it expand to 'New Paltz'.   This will onl
 
 I'm not sure how/where to store the abbrevs in the source document.  Need to design that.
 
-** Staging
+**** TODO Implement HTML page breaks
 
-** Someday Maybe
+{code}
+<p><!-- pagebreak --></p>
+{code}
 
 **** TODO Improve the 'include' macro's support for arbitrary wikitext
 
@@ -66,7 +84,6 @@ There should be a user-level config file, as well as per-directory settings.
 
 **** TODO Note ALL of the differences with Confluence markup in POD
 
-**** TODO Make this a module
 
 **** TODO Implement underlining
 
@@ -210,6 +227,12 @@ Using this macro will require passing the {{--include-directory}} flag.
 
 **** DONE Add command line options
 
+**** DONE Implement ordered lists
+
+**** DONE Make image directory a flag
+
+**** DONE Make base URI for wiki links a flag
+
 {htmlcomment}
 Local Variables:
 mode: confluence-markup
@@ -219,8 +242,3 @@ End:
 {htmlcomment}
 vim: set ft=confluencewiki:
 {htmlcomment}
-**** DONE Implement ordered lists
-
-**** DONE Make image directory a flag
-
-**** DONE Make base URI for wiki links a flag
