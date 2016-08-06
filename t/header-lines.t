@@ -2,16 +2,19 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 1;
-use feature qw< say >;
+use Test::More tests => 1;
+use HTML::TreeBuilder;
 
 my $perl = $^X;
 
 my $got = `echo "----" | ./confluence2html`;
 
-my $expected = <<EOF;
-<hr></hr>
+my $expected = qq[<hr></hr>];
 
-EOF
+my $tree1 = HTML::TreeBuilder->new;
+my $tree2 = HTML::TreeBuilder->new;
 
-ok ( $expected eq $got, "header line" );
+my $parsed1 = $tree1->parse($got)->as_HTML;
+my $parsed2 = $tree2->parse($expected)->as_HTML;
+
+is_deeply( $parsed1, $parsed2, "header line" );

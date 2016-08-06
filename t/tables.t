@@ -2,7 +2,8 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 1;
+use Test::More tests => 1;
+use HTML::TreeBuilder;
 
 my $perl = $^X;
 
@@ -23,4 +24,10 @@ EOF
 
 my $got = `echo "$table" | ./confluence2html`;
 
-ok ( $expected eq $got, "simple table" );
+my $tree1 = HTML::TreeBuilder->new;
+my $tree2 = HTML::TreeBuilder->new;
+
+my $parsed1 = $tree1->parse($got)->as_HTML;
+my $parsed2 = $tree2->parse($expected)->as_HTML;
+
+is_deeply( $parsed1, $parsed2, "simple table" );
