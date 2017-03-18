@@ -129,13 +129,13 @@ my $wiki_link_pat            = qq{[:alnum:]&|\,/\-:. };
 my $header_link_pat          = qq{$wiki_link_pat#-};
 my $external_link_text_pat   = qq{[:alnum:]:"'\\.,\\?#!\\-\~\%&@\+\(\) };
 my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
-my $image_pat                = qq{[:alnum:]%\\-|\\.:/ };
+my $image_pat                = qq{[:alnum:]%\\-|_\\.:/ };
 my $bold_pat                 = qq{[:alnum:]+_!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
-my $italic_pat               = qq{[:alnum:]+!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
+my $italic_pat               = qq{[:alnum:]+~!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
 my $panel_pat                = "{panel.*";
 my $toc_pat                  = "{toc.*";
 my $audience_pat             = "{audience.*";
-my $code_sample_pat         = "{code:file=([-._a-z]+)}";
+my $code_sample_pat          = "{code:file=([-._a-z]+)}";
 my $include_pat              = "{include:file=([-._A-Za-z]+)}";
 
 ## Ye Olde Main Input Processing Loop.
