@@ -5,19 +5,19 @@
 
 ** Current
 
-*** TODO Devise a better unit testing strategy
-
-Right now the tests are very brittle, and there is no visibility into how they are breaking.
-
-They use {{Test::Simple}} but should start using {{Test::More}}.
-
-The tests are too dependent on the exact string output.  They should probably parse the output into an {{HTML::Tree}} or whatever and check that instead.
-
-** Staging
-
 **** TODO Add more unit tests
 
 **** TODO Make this a module
+
+*** TODO Get tests working on Windows
+
+Right now the tests shell out to {{echo}} and use a pipe.  This isn't gonna fly cross-platform.
+
+** Staging
+
+*** TODO Implement 'html2confluence' (aka 'html2conflux')
+
+Based on what you've learned about using Mojo::DOM, this should be possible.  Once this is done, we can hook into tools like Pandoc and others to (e.g.) reliably convert Markdown documents to Conflux.
 
 **** TODO Add headers and footers to make output valid
 
@@ -110,6 +110,20 @@ Right now I'm partial to "Conflux", a synonym.
 **** TODO Can't link to headers in another page
 
 ** Archive
+
+**** DONE Devise a better unit testing strategy
+
+Right now the tests are very brittle, and there is no visibility into how they are breaking.
+
+They use {{Test::Simple}} but should start using {{Test::More}}.
+
+The tests are too dependent on the exact string output.  They should probably parse the output into an {{HTML::Tree}} or whatever and check that instead.
+
+----
+
+Sat Aug  6 02:19:41 EDT 2016:
+
++ Just updated the tests to check HTML::Builder objects against each other rather than strings.  Calling this one done for now, other work will happen on different tickets.
 
 **** DONE Add conditional text support (aka "audiences")
 
