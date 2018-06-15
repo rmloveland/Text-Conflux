@@ -61,7 +61,7 @@ EOF
 # Specifying a CSS stylesheet.
 
 my $css = "";
-$css = slurp $style_sheet if $style_sheet;
+$css = slurp $style_sheet if -e $style_sheet;
 
 my $css_block = <<"EOF";
 <style type="text/css">
