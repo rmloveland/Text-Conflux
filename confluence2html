@@ -129,7 +129,7 @@ my $toc_min = 0;
 my $toc_max = 10;
 my $has_toc;
 
-my $wiki_link_pat            = qq{[:alnum:]&|\,/\-:. };
+my $wiki_link_pat            = qq{[:alnum:]&|\,/\-:\. };
 my $header_link_pat          = qq{$wiki_link_pat#-};
 my $external_link_text_pat   = qq{[:alnum:]:"'\\.,\\?#!\\-\~\%&@\+\(\) };
 my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
