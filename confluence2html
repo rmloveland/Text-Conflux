@@ -8,6 +8,7 @@ use File::Slurp qw< slurp >;
 use Getopt::Long;
 use List::Util qw< none >;
 use URI;
+use Cwd;
 
 ## Argument processing.
 
@@ -33,10 +34,13 @@ GetOptions(
 
 # Sane default values for some arguments
 
-$image_directory        //= "images";
-$base_url               //= ".";
-$include_directory      //= 'includes';
-$code_samples_directory //= 'code';
+my $cwd = getcwd;
+
+$image_directory        //= qq[$cwd/assets/images];
+$base_url               //= qq[.];
+$include_directory      //= qq[$cwd/assets/includes];
+$code_samples_directory //= qq[$cwd/assets/code];
+$style_sheet            //= qq[$cwd/assets/css/style.css];
 
 # Toggling header visibility (this may be removed)
 
