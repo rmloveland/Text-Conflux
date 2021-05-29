@@ -6,7 +6,6 @@ use feature qw/ say /;
 use Test::More tests => 1;
 use HTML::TreeBuilder;
 use Cwd;
-
 use constant DEBUG => undef;
 
 my $cwd = getcwd;
@@ -34,13 +33,13 @@ my $expected = <<EOF;
 </html>
 EOF
 
-my $tree1 = HTML::TreeBuilder->new;
+my $tree1 = HTML::TreeBuilder->new(ignore_text => 1);
 my $parser1 = $tree1->parse($got);
 my $roundtripped_got = $parser1->as_HTML;
 
-my $tree2 = HTML::TreeBuilder->new;
+my $tree2 = HTML::TreeBuilder->new(ignore_text => 1);
 my $parser2 = $tree2->parse($expected);
-my $roundtripped_expected = $parser1->as_HTML;
+my $roundtripped_expected = $parser2->as_HTML;
 
 do {
     say qq[GOT:      $roundtripped_got];
