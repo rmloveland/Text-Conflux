@@ -11,7 +11,7 @@ use constant DEBUG => undef;
 
 my $cwd = getcwd;
 my $perl = $^X;
-my $script = qq[../confluence2html];
+my $script = qq[$cwd/../confluence2html];
 
 =head1 HTTP link with name
 
