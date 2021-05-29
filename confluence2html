@@ -139,8 +139,8 @@ my $italic_pat               = qq{[:alnum:]+~!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
 my $panel_pat                = "{panel.*";
 my $toc_pat                  = "{toc.*";
 my $audience_pat             = "{audience.*";
-my $code_sample_pat          = "{code:file=([-._a-z]+)}";
-my $include_pat              = "{include:file=([-._A-Za-z]+)}";
+my $code_sample_pat          = "{code:file=([-._A-Za-z0-9]+)}";
+my $include_pat              = "{include:file=([-._A-Za-z0-9]+)}";
 
 ## Ye Olde Main Input Processing Loop.
 
