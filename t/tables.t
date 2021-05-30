@@ -10,7 +10,7 @@ use constant DEBUG => undef;
 
 my $cwd = getcwd;
 my $perl = $^X;
-my $script = qq[$cwd/../confluence2html];
+my $script = qq[$cwd/confluence2html];
 
 my $table_text = <<EOF;
 {table}

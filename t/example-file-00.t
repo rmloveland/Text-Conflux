@@ -10,8 +10,8 @@ use constant DEBUG => undef;
 
 my $cwd = getcwd;
 my $perl = $^X;
-my $script = qq[$cwd/../confluence2html];
-my $test_file = qq[$cwd/examples/acme-mobile-nozzles.txt];
+my $script = qq[$cwd/confluence2html];
+my $test_file = qq[$cwd/t/examples/acme-mobile-nozzles.txt];
 
 my $got = qx{$perl $script < $test_file};
 
