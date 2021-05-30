@@ -134,13 +134,13 @@ my $header_link_pat          = qq{$wiki_link_pat#-};
 my $external_link_text_pat   = qq{[:alnum:]:"'\\.,\\?#!\\-\~\%&@\+\(\) };
 my $external_link_target_pat = qq{$external_link_text_pat\_/:=&};
 my $image_pat                = qq{[:alnum:]%\\-|_\\.:/ };
-my $bold_pat                 = qq{[:alnum:]+_!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
-my $italic_pat               = qq{[:alnum:]+~!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
-my $panel_pat                = "{panel.*";
-my $toc_pat                  = "{toc.*";
-my $audience_pat             = "{audience.*";
-my $code_sample_pat          = "{code:file=([-._A-Za-z0-9]+)}";
-my $include_pat              = "{include:file=([-._A-Za-z0-9]+)}";
+my $bold_pat        = qq{[:alnum:]+_!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
+my $italic_pat      = qq{[:alnum:]+~!@#$%^\(\)+\\-&,:;=`'?>\\.\\\/" };
+my $panel_pat       = "{panel.*";
+my $toc_pat         = "{toc.*";
+my $audience_pat    = "{audience.*";
+my $code_sample_pat = "{code:file=([-._A-Za-z0-9]+)}";
+my $include_pat     = "{include:file=([-._A-Za-z0-9]+)}";
 
 ## Ye Olde Main Input Processing Loop.
 
@@ -194,8 +194,8 @@ LINE: while (<>) {
 
         if (/$include_pat/) {
             die
-"Can't use 'include' macro without passing '--include-directory'\n"
-              unless defined $include_directory;
+                "Can't use 'include' macro without passing '--include-directory'\n"
+                unless defined $include_directory;
             my $include_pathname = $1;
 
             s!$include_pat!!g;
@@ -231,12 +231,12 @@ LINE: while (<>) {
        {<a href="#$1">$1</a>}gis;
 
         # Images.
-s{^\!([$image_pat]+.(png|jpg)).*:([0-9]+)\!}{<p><img width="$3" src="$image_directory/$1"/></p>}gis;
+        s{^\!([$image_pat]+.(png|jpg)).*:([0-9]+)\!}{<p><img width="$3" src="$image_directory/$1"/></p>}gis;
 
         # Lists of links, optionally followed by a colon or slash, then
         # descriptive text.
         s/^\+ ?(<a href.*<\/a>)([ :\-]?.*)/\<li>$1$2<\/li>/g;
-s/^[0-9]\. ?(<a href.*<\/a>)([ :\-]?.*)/\<li class="ordered">$1$2<\/li>/g;
+        s/^[0-9]\. ?(<a href.*<\/a>)([ :\-]?.*)/\<li class="ordered">$1$2<\/li>/g;
 
         # Lists of non-link items.
         s/^\+( +.*)$/\<li>$1<\/li>/g;
@@ -270,13 +270,13 @@ s/^[0-9]\. ?(<a href.*<\/a>)([ :\-]?.*)/\<li class="ordered">$1$2<\/li>/g;
             my $header_text_match  = $2;
             my $new;
             my $level;
-            if ($header_level_match =~ /\*/) {
+            if ( $header_level_match =~ /\*/ ) {
                 $level = length($header_level_match);
             }
             else {
                 $level = $header_level_match;
             }
-            if ($add_header_toggles and $level == 2) {
+            if ( $add_header_toggles and $level == 2 ) {
                 $toggled_header_seen++;
                 my $rand = int rand 99999;
                 if ($has_toc) {
@@ -295,16 +295,16 @@ EOF2
             }
             else {
                 $new
-                  = qq[<h$level><a name="$header_text_match-TOC">$header_text_match</a></h$level>];
+                    = qq[<h$level><a name="$header_text_match-TOC">$header_text_match</a></h$level>];
             }
             my $toc_line
-              = qq[<li class="h$level"><a href="#$header_text_match-TOC">$header_text_match</a></li>];
-            push @toc_lines, [$level, $toc_line];
+                = qq[<li class="h$level"><a href="#$header_text_match-TOC">$header_text_match</a></li>];
+            push @toc_lines, [ $level, $toc_line ];
             s/$header_pat/$new/;
         }
 
         # Monospace.
-s/\{\{\{?([\[\]\/\\!\?&\@\^\=\#\$0-9\+\*A-Z\.,\-\/>a-z_=:%`'"~\(\) \<\>\n]+}?)}}/<code>$1<\/code>/g;
+        s/\{\{\{?([\[\]\/\\!\?&\@\^\=\#\$0-9\+\*A-Z\.,\-\/>a-z_=:%`'"~\(\) \<\>\n]+}?)}}/<code>$1<\/code>/g;
 
         # Same-line code blocks.
         s/\{code\}\n?(.*[\n]?)\n?\{code\}/<pre>$1<\/pre>/s;
@@ -342,14 +342,14 @@ s/\{\{\{?([\[\]\/\\!\?&\@\^\=\#\$0-9\+\*A-Z\.,\-\/>a-z_=:%`'"~\(\) \<\>\n]+}?)}}
 
         if (/$code_sample_pat/) {
             die
-"Can't use '{code:file=FOO}' without passing '--code-samples-directory'\n"
-              unless defined $code_samples_directory;
+                "Can't use '{code:file=FOO}' without passing '--code-samples-directory'\n"
+                unless defined $code_samples_directory;
             my $code_sample_pathname = $1;
 
             s!$code_sample_pat!!g;
 
-            my $program_file =
-              $code_samples_directory . '/' . $code_sample_pathname;
+            my $program_file
+                = $code_samples_directory . '/' . $code_sample_pathname;
             my @program_text = slurp($program_file);
             push @output, "<pre>";
             for my $program_line (@program_text) {
@@ -450,10 +450,10 @@ s/\{\{\{?([\[\]\/\\!\?&\@\^\=\#\$0-9\+\*A-Z\.,\-\/>a-z_=:%`'"~\(\) \<\>\n]+}?)}}
         next LINE;
     }
 
-    # Since all the other transformations are complete, we now know that we can
-    # wrap lines of text that are surrounded by newlines in paragraph tags
-    # (with a few simple exceptions).  As above, we wrap this in a DO so that
-    # code blocks are not modified.
+   # Since all the other transformations are complete, we now know that we can
+   # wrap lines of text that are surrounded by newlines in paragraph tags
+   # (with a few simple exceptions).  As above, we wrap this in a DO so that
+   # code blocks are not modified.
 
     do {
         s{^([\w \(\)<\/>\.,`'\-!=;:"\^\+~&\$%#\*@\?{}0-9]+)\n+}{<p>$1</p>}g;
@@ -479,7 +479,8 @@ LINE: for my $line (@output) {
         my $toc_min         = $result[0];
         my $toc_max         = $result[1];
         my $toc_exclude_pat = $result[2];
-        $line = replace_toc_line( $line, $toc_min, $toc_max, $toc_exclude_pat );
+        $line
+            = replace_toc_line( $line, $toc_min, $toc_max, $toc_exclude_pat );
     }
     elsif ( $line =~ /<li>/ && ( $inside_ul || $inside_ol ) ) {
         next LINE;
@@ -513,8 +514,7 @@ print for @output;
 # Turn a [Wiki Link] into a <a href="wiki-link.html">Wiki Link</a>.
 
 sub eunicize {
-
-    # String -> String
+    ## String -> String
     my $title = shift;
     $title =~ s/ /-/g;
     $title =~ s/-{2,}/-/g;
@@ -528,8 +528,7 @@ sub eunicize {
 # text for later processing.
 
 sub check_for_uri {
-
-    # String -> String
+    ## String -> String
     my $it = shift;
     my $retval;
 
@@ -547,8 +546,7 @@ sub check_for_uri {
 # Table of contents processing goes here.
 
 sub replace_toc_line {
-
-    # String, Int, Int, Regex -> String
+    ## String, Int, Int, Regex -> String
     my ( $line, $min, $max, $pat ) = @_;
 
     $pat //= "";
@@ -569,10 +567,9 @@ sub replace_toc_line {
 }
 
 sub parse_toc {
-
-    # String -> Array
+    ## String -> Array
     # {toc:minlevel=3|maxlevel=4|Exclude=.*} -> ($min, $max, $pat)
-    my $s = shift;
+    my $s      = shift;
     my @result = ( $toc_min, $toc_max, $toc_exclude_pat );
     if ( $s =~ /\{toc:minlevel=(\d+)\|maxlevel=(\d+)\|exclude=(.*)\}/ ) {
         @result = ( $1, $2, $3 );
@@ -593,8 +590,7 @@ sub parse_toc {
 # Parsing the 'audience' macro
 
 sub parse_audience {
-
-    # String -> String || Undef
+    ## String -> String || Undef
     # {audience:FOO}
     my $input = shift;
     my $audience;
