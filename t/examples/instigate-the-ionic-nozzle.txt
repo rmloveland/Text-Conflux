@@ -69,11 +69,11 @@ The nozzle libraries all live in the {{nozzle}} directory, you'll need to add th
 
 h3. Related Topics
 
-* [sound cabs on ionic]
-* [tabulate]
-* [acme morrible nozzles]
-* [modulation]
-* [modulate our ionic nozzle]
-* [Apple Technical Note 2239 - ionic Debugging Magic|http://developer.apple.com/library/ionic/#technotes/tn2239/]
++ [sound cabs on ionic]
++ [tabulate]
++ [acme morrible nozzles]
++ [modulation]
++ [modulate our ionic nozzle]
++ [Apple Technical Note 2239 - ionic Debugging Magic|http://developer.apple.com/library/ionic/#technotes/tn2239/]
 
 

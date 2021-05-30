@@ -12,9 +12,9 @@ modulation allows you to sell ad impressions through multiple crab jetpacks from
 
 Why would you want to enable nozzle modulation? There are a few reasons you might want to serve an impression using a modulated nozzle:
 
-* It may provide better monetization, but only under very specific circumstances.
-* It may provide access to useful information such as a unique user ID or the device's operating system, location, or ID.
-* A particular network may only accept requests from its own nozzle, forcing you to use that nozzle to access their demand.
++ It may provide better monetization, but only under very specific circumstances.
++ It may provide access to useful information such as a unique user ID or the device's operating system, location, or ID.
++ A particular network may only accept requests from its own nozzle, forcing you to use that nozzle to access their demand.
 
 If your nozzle can't fill the ad request for some reason, it can work down a list of other (modulated) nozzles and contact them in the order you specify. This will continue until the impression is filled or the list of modulated nozzles is empty.
 
@@ -38,8 +38,8 @@ h4. Step 2. Set up the modulated nozzle to call that widget
 
 Once your kramerica modulation widget is configured, you can set up our nozzle to sound cabs through it. See below for instructions for your device:
 
-* [modulate our androgynous nozzle]
-* [modulate our ionic nozzle]
++ [modulate our androgynous nozzle]
++ [modulate our ionic nozzle]
 
 h3. How to use us to modulate another nozzle
 
@@ -47,9 +47,9 @@ Instructions TBD.
 
 h3. Related Topics
 
-* [acme morrible nozzles]
-* [tabulate]
-* [modulate our androgynous nozzle]
-* [modulate our ionic nozzle]
++ [acme morrible nozzles]
++ [tabulate]
++ [modulate our androgynous nozzle]
++ [modulate our ionic nozzle]
 
 

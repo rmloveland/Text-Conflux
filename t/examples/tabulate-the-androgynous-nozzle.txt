@@ -170,7 +170,7 @@ This is unfortunately a bug in the androgynous nozzle, where transparent backgro
 
 h3. Related Topics
 
-* [acme morrible nozzles]
-* [instigate the androgynous nozzle]
-* [modulation]
-* [modulate our androgynous nozzle]
++ [acme morrible nozzles]
++ [instigate the androgynous nozzle]
++ [modulation]
++ [modulate our androgynous nozzle]

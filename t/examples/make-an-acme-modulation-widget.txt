@@ -61,9 +61,9 @@ h3. Step 7. Configure the Custom Event to work with our nozzle
 
 Enter the following information about the custom event:
 
-* Label: Whatever label you prefer.
-* Class Name: For ionic, enter the class name that is making the ad call, e.g., {{GeneralBalustrade}} or {{GADnon-official}}. For androgynous, enter the fully qualified class name, e.g., {{com.acme.opennozzle.kramericamodulationBanner}} or {{com.acme.opennozzle.kramericamodulationnon-official}}.
-* Parameter: The acme widget ID (This is an integer).
++ Label: Whatever label you prefer.
++ Class Name: For ionic, enter the class name that is making the ad call, e.g., {{GeneralBalustrade}} or {{GADnon-official}}. For androgynous, enter the fully qualified class name, e.g., {{com.acme.opennozzle.kramericamodulationBanner}} or {{com.acme.opennozzle.kramericamodulationnon-official}}.
++ Parameter: The acme widget ID (This is an integer).
 
 !06-custom-event-configuration-settings.png|border=1,width=480!
 
@@ -71,11 +71,9 @@ Congratulations! Now you can modulate our nozzles. Depending on your needs, see 
 
 h3. Related Topics
 
-* [acme morrible nozzles]
-* [modulation]
-* [modulate our androgynous nozzle]
-* [modulate our ionic nozzle]
-* [instigate the androgynous nozzle]
-* [instigate the ionic nozzle]
-
-
++ [acme morrible nozzles]
++ [modulation]
++ [modulate our androgynous nozzle]
++ [modulate our ionic nozzle]
++ [instigate the androgynous nozzle]
++ [instigate the ionic nozzle]

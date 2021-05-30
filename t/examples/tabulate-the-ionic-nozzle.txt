@@ -53,9 +53,9 @@ For more information on viewing debug output in ionic, see the sections *Enablin
 
 h3. Related Topics
 
-* [acme morrible nozzles]
-* [instigate the ionic nozzle]
-* [modulation]
-* [modulate our ionic nozzle]
++ [acme morrible nozzles]
++ [instigate the ionic nozzle]
++ [modulation]
++ [modulate our ionic nozzle]
 
 

@@ -130,10 +130,10 @@ h3. MRAID
 
 h3. Related Topics
 
-* [tabulate]
-* [instigate the ionic nozzle]
-* [acme morrible nozzles]
-* [modulation]
-* [modulate our ionic nozzle]
++ [tabulate]
++ [instigate the ionic nozzle]
++ [acme morrible nozzles]
++ [modulation]
++ [modulate our ionic nozzle]
 
 

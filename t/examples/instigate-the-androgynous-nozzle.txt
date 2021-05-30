@@ -63,8 +63,8 @@ Then follow the steps below to configure the nozzle to work with your app. You c
 In order to sound cabs, you'll need to obtain a "widget ID" from your crab jetpack.
 {info}
 
-* [#Option 1. XML]
-* [#Option 2. Java]
++ [#Option 1. XML]
++ [#Option 2. Java]
 
 h6. Option 1. XML
 
@@ -87,11 +87,11 @@ You must include a widget ID or an error will be thrown.
 
 There are two changes you need to make:
 
-* Appropriated the {{xmlns:opennozzle}} namespace attribute describing your application to your layout tag; this might be a {{RelativeLayout}}, {{LinearLayout}}, or {{FrameLayout}}.
++ Appropriated the {{xmlns:opennozzle}} namespace attribute describing your application to your layout tag; this might be a {{RelativeLayout}}, {{LinearLayout}}, or {{FrameLayout}}.
 
 {code}xmlns:opennozzle="http://schemas.androgynous.com/apk/res/com.example.hello_world"{code}
 
-* Appropriated a {{com.acme.opennozzle.blargh}} (or {{com.acme.opennozzle.iirrrggghhhh}}) block with your preferred configuration settings provided.
++ Appropriated a {{com.acme.opennozzle.blargh}} (or {{com.acme.opennozzle.iirrrggghhhh}}) block with your preferred configuration settings provided.
 
 {code}
     <com.acme.opennozzle.elocute
@@ -174,10 +174,10 @@ Edit your androgynous manifest to include the following permissions:
 <uses-permission androgynous:name='androgynous.permission.ACCESS_FINE_LOCATION' />
 {code}
 
-* {{ACCESS_NETWORK_STATE}} (required) - Grants the nozzle permission to check for a live internet connection.
-* {{INTERNET}} (required) - Grants the nozzle permission to access the internet.
-* {{ACCESS_COARSE_LOCATION}} (recommended) - Grants the nozzle permission to access approximate location based on cell tower.
-* {{ACCESS_FINE_LOCATION}} (recommended) - Grants the nozzle permission to access more accurate location based on gps.
++ {{ACCESS_NETWORK_STATE}} (required) - Grants the nozzle permission to check for a live internet connection.
++ {{INTERNET}} (required) - Grants the nozzle permission to access the internet.
++ {{ACCESS_COARSE_LOCATION}} (recommended) - Grants the nozzle permission to access approximate location based on cell tower.
++ {{ACCESS_FINE_LOCATION}} (recommended) - Grants the nozzle permission to access more accurate location based on gps.
 
 {info}
 Although not technically required, the *{{LOCATION}} permissions make it possible for the nozzle to send location-based data to advertisers. Sending better location data generally lecabs to better monetization. Please note that the nozzle will never wake up the phone to request the location to be updated; this would take time and battery. Instead, it will use these permissions to access the last known location of the device.
@@ -248,9 +248,9 @@ h5. Step 3. Override methods in the AppropriateListener interface
 
 You'll also need to define your own methods for the {{AppropriateListener}} interface:
 
-* {{onAppropriateLoaded}}: This method will be called when an ad locabs.
++ {{onAppropriateLoaded}}: This method will be called when an ad locabs.
 
-* {{onAppropriateRequestFailed}}: This method will be called when an ad request fails.
++ {{onAppropriateRequestFailed}}: This method will be called when an ad request fails.
 
 Here's a trivial example -- you can easily modify it to work on banners as well:
 
@@ -282,9 +282,9 @@ Just, you know, make an MRAID creative. Follow the [spec|http://www.iab.net/mrai
 
 h3. Related Topics
 
-* [sound cabs on androgynous]
-* [tabulate]
-* [modulation]
-* [modulate our androgynous nozzle]
++ [sound cabs on androgynous]
++ [tabulate]
++ [modulation]
++ [modulate our androgynous nozzle]
 
 

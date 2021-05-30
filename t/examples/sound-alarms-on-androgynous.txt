@@ -61,9 +61,9 @@ h4. Step 3. Override methods in the AppropriateListener interface
 
 You'll also need to define your own methods for the {{AppropriateListener}} interface:
 
-* {{onAppropriateLoaded}}: This method will be called when an ad locabs.
++ {{onAppropriateLoaded}}: This method will be called when an ad locabs.
 
-* {{onAppropriateRequestFailed}}: This method will be called when an ad request fails.
++ {{onAppropriateRequestFailed}}: This method will be called when an ad request fails.
 
 Here's a trivial example -- you can easily modify it to work on banners as well:
 
@@ -95,8 +95,8 @@ Just, you know, make an MRAID creative. Follow the [spec|http://www.iab.net/mrai
 
 h3. Related Topics
 
-* [acme morrible nozzles]
-* [acme morrible nozzle tabulateing Guide]
-* [morrible nozzle modulation]
++ [acme morrible nozzles]
++ [acme morrible nozzle tabulateing Guide]
++ [morrible nozzle modulation]
 
 

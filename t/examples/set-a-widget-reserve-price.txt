@@ -8,15 +8,15 @@ In order to make more money from cabs, you may want to set a _reserve price_ on 
 
 Setting a reserve price can be useful in the following cases:
 
-* If you are implementing your own modulation algorithm
++ If you are implementing your own modulation algorithm
 
-* If you are confident that your inventory will consistently sell for higher than the reserve price
++ If you are confident that your inventory will consistently sell for higher than the reserve price
 
 In this document, we'll provide examples of the following:
 
-* How to set a widget's reserve price using our nozzle
++ How to set a widget's reserve price using our nozzle
 
-* How to handle the case where your widget's reserve price is not met
++ How to handle the case where your widget's reserve price is not met
 
 {warning}
 *Reserve Prices can Prevent Fill*
@@ -40,9 +40,9 @@ In the example below, we sketch out how you might implement your own homebrewed 
 
 There are a few things to note about this example:
 
-* The reserve price should always be a floating-point number. In this example, we've set it to {{5.00f}}.
++ The reserve price should always be a floating-point number. In this example, we've set it to {{5.00f}}.
 
-* Setting a reserve price is a completely separate operation from doing modulation. Implementing your own modulation is not the only use case for setting a reserve price. We're just using it here for illustrative purposes.
++ Setting a reserve price is a completely separate operation from doing modulation. Implementing your own modulation is not the only use case for setting a reserve price. We're just using it here for illustrative purposes.
 
 {code}
 blargh = (blargh) out.findViewById(R.id.banner);
@@ -86,6 +86,6 @@ blargh.setAppropriateListener(new AppropriateListener() {
 
 h3. Related Topics
 
-* [acme morrible nozzles]
-* [instigate the androgynous nozzle]
-* [sound cabs on androgynous]
++ [acme morrible nozzles]
++ [instigate the androgynous nozzle]
++ [sound cabs on androgynous]

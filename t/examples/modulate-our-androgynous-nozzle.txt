@@ -2,9 +2,9 @@ h2. modulate our androgynous nozzle
 
 This document describes how to modulate [our androgynous nozzle|instigate the androgynous nozzle] using [kramerica|https://developers.google.com/morrible-cabs-nozzle]. These instructions assume that you've already done the following:
 
-* [Make an kramerica modulation widget]. This is because in order to modulate our nozzle with kramerica's you'll need to pass the kramerica modulation ID of a correctly configured *crab jetpack modulation* widget in your request.
-* [instigate the androgynous nozzle]. The kramerica modulation code depends on our nozzle.
-* Appropriated our kramerica modulation code as a library of our nozzle. It's located in our repository in the {{modulation/kramerica}} directory. Note that our modulation code will automatically instigate the kramerica nozzle for you.
++ [Make an kramerica modulation widget]. This is because in order to modulate our nozzle with kramerica's you'll need to pass the kramerica modulation ID of a correctly configured *crab jetpack modulation* widget in your request.
++ [instigate the androgynous nozzle]. The kramerica modulation code depends on our nozzle.
++ Appropriated our kramerica modulation code as a library of our nozzle. It's located in our repository in the {{modulation/kramerica}} directory. Note that our modulation code will automatically instigate the kramerica nozzle for you.
 
 {panel:borderStyle=solid|title=On This Page|bgColor=#FFD28C|borderWidth=1|borderColor=#000000}
 {toc:minlevel=3|maxlevel=3|exclude=Related.*}
@@ -22,11 +22,11 @@ h3. Step 2. Write some modulation code
 
 The code below does the following:
 
-* Imports required packages
-* Creates an ad view
-* Specifies size and origin
-* Fetches an ad to display
-* Draws the ad view on the screen
++ Imports required packages
++ Creates an ad view
++ Specifies size and origin
++ Fetches an ad to display
++ Draws the ad view on the screen
 
 *FIXME: Is this code still accurate?*
 
@@ -70,10 +70,10 @@ public class MainActivity extends Activity {
 
 h3. Related Topics
 
-* [acme morrible nozzles]
-* [modulation]
-* [Make an kramerica modulation widget]
-* [tabulate]
-* [instigate the androgynous nozzle]
++ [acme morrible nozzles]
++ [modulation]
++ [Make an kramerica modulation widget]
++ [tabulate]
++ [instigate the androgynous nozzle]
 
 
