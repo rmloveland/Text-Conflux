@@ -22,3 +22,6 @@ syntaxcheck:
 
 test:
 	prove
+
+bat:
+	pl2bat $(EXE) > $(EXE).bat
