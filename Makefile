@@ -19,3 +19,6 @@ podcheck:
 
 syntaxcheck:
 	perl -wc $(EXE)
+
+test:
+	prove
