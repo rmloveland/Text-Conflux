@@ -264,34 +264,42 @@ s/^[0-9]\. ?(<a href.*<\/a>)([ :\-]?.*)/\<li class="ordered">$1$2<\/li>/g;
         # LI tag so that we can use CSS's TEXT-INDENT to create a nice
         # indentation in the table of contents.
 
-        my $header_pat = "^([*]+) ?(.*)\$";
+        my $header_pat = "^h?([0-9]|[*]+)\.? +(.*)\$";
         if (/$header_pat/) {
+            my $header_level_match = $1;
+            my $header_text_match  = $2;
             my $new;
             my $level;
-            $level = length($1);
-            if ( $add_header_toggles and $level == 2 ) {
+            if ($header_level_match =~ /\*/) {
+                $level = length($header_level_match);
+            }
+            else {
+                $level = $header_level_match;
+            }
+            if ($add_header_toggles and $level == 2) {
                 $toggled_header_seen++;
                 my $rand = int rand 99999;
                 if ($has_toc) {
                     $new = <<"EOF";
-<h$level><a name="$2-TOC"><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</a></h$level>
-<div id="$2" style="display: none">
+<h$level><a name="$header_text_match-TOC"><a href="#-$rand" onclick="toggle_visibility('$header_text_match');">&gt;</a>&nbsp;$header_text_match</a></h$level>
+<div id="$header_text_match" style="display: none">
 EOF
                 }
                 else {
                     $new = <<"EOF2";
-<h$level><a href="#-$rand" onclick="toggle_visibility('$2');">&gt;</a>&nbsp;$2</h$level>
-<div id="$2" style="display: none">
+<h$level><a href="#-$rand" onclick="toggle_visibility('$header_text_match');">&gt;</a>&nbsp;$header_text_match</h$level>
+<div id="$header_text_match" style="display: none">
 EOF2
                 }
                 $new = '</div> ' . $new if $toggled_header_seen > 1;
             }
             else {
-                $new = qq[<h$level><a name="$2-TOC">$2</a></h$level>];
+                $new
+                  = qq[<h$level><a name="$header_text_match-TOC">$header_text_match</a></h$level>];
             }
-            my $toc_line =
-              qq[<li class="h$level"><a href="#$2-TOC">$2</a></li>];
-            push @toc_lines, [ $level, $toc_line ];
+            my $toc_line
+              = qq[<li class="h$level"><a href="#$header_text_match-TOC">$header_text_match</a></li>];
+            push @toc_lines, [$level, $toc_line];
             s/$header_pat/$new/;
         }
 
