@@ -43,7 +43,10 @@ The subset of Confluence markup that we support is defined as follows:
 
 =item Headers
 
-The C<*> header format is supported, as in C<** Introduction>.
+Two types of header syntax are supported: the classic Confluence Wiki
+Markup style headings, e.g., 'h2. My Cool Heading'; and an Emacs
+Outline Mode style heading, e.g., '** My Cool Heading'.
+
 No other formatting inside the header text is supported. For example,
 C<** Introduction to {{confluence2html}}> will not work.
 
@@ -170,9 +173,9 @@ headers matching C<$REGEX> being excluded.
 
 Ordered and unordered lists are supported.  Example:
 
-    * Apple
-    * Banana
-    * Cherry
+    + Apple
+    + Banana
+    + Cherry
 
     1. Rhubarb
     2. Tomato
